@@ -1,0 +1,71 @@
+---
+title: "Quickstart"
+description: "Get up and running with your first crypto payment in minutes"
+---
+
+# Getting Started
+
+Welcome to Orafi! This guide will help you get up and running with your first crypto payment in minutes.
+
+## Account Creation
+
+1. Sign up for an Orafi account at [orafi.app](https://dashboard.orafi.app)
+2. Complete your business profile and onoarding processes
+3. Generate your API keys from the dashboard
+
+## API Key Usage
+
+Orafi uses API keys for authentication. You have separate keys for test and live modes.
+
+- **Test mode**: For development and testing(testnet)
+- **Live mode**: For production payments(mainnet)
+
+Include your API key in the `x-api-key` header for all requests.
+
+## Test vs Live Environments
+
+- **Endpoint**: `https://api.orafi.app`
+Both uses same API
+
+Use test mode for development to avoid real transactions.
+
+## First Payment Example
+
+Let's create your first payment using curl.
+
+### 1. Create a hosted payment
+
+```bash
+curl -X POST https://api.orafi.app/transactions/payment/create \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_test_api_key" \
+  -d '{
+    "amount": 10000,
+    "customer": {
+      "fullname": "John Doe",
+      "email": "john@example.com"
+    },
+    "txRef": "tx_123456789",
+    "redirectUrl": "https://yourapp.com/success"
+  }'
+```
+
+This creates a payment for and returns payment details including a deposit address.
+
+### 2. Check payment status
+
+```bash
+curl -X POST https://api.orafi.app/transactions/payment/verify \
+  -H "Content-Type: application/json" \
+  -d '{
+    "paymentId": "pay_abc123"
+  }'
+```
+
+
+## Next Steps
+
+- Set up webhooks to receive payment notifications
+- Explore paylinks for no-code payment pages
+- Configure settlement accounts for fund withdrawals
+- Review our API reference for all available endpointsd

@@ -1,0 +1,242 @@
+---
+title: "Webhooks"
+description: "Examples for webhook management endpoints"
+---
+
+Manage webhooks
+
+## Available Endpoints
+
+```http
+POST  /webhook/register        # Register Webhook
+GET   /webhook                 # Get Webhook Details
+POST  /webhook/subscribe       # Subscribe to Events
+```
+---
+## Webhook Object
+
+The `Webhook` model represents a webhook configuration registered by a business.
+It defines **where** event notifications are sent, **which events** are delivered, and **how** those events are secured.
+
+Webhooks enable near-real-time communication between OraFi and your backend systems.
+
+---
+
+### Fields
+
+#### `id`
+
+* **Type:** `String`
+* **Primary Key**
+* **Default:** `cuid()`
+* **Database Field:** `_id`
+* **Description:**
+  Unique identifier for the webhook configuration.
+
+---
+
+#### `url`
+
+* **Type:** `String`
+* **Required**
+* **Description:**
+  Publicly accessible HTTPS endpoint where webhook events will be delivered.
+
+---
+
+#### `secret`
+
+* **Type:** `String`
+* **Required**
+* **Description:**
+  Shared secret used to **sign webhook payloads**.
+  This allows your server to verify that incoming webhooks originated from OraFi.
+
+---
+
+#### `events`
+
+* **Type:** `String[]`
+* **Description:**
+  List of event types the webhook is subscribed to.
+  Only events listed here will be delivered to the configured URL.
+
+---
+
+#### `createdAt`
+
+* **Type:** `DateTime`
+* **Default:** `now()`
+* **Description:**
+  Timestamp indicating when the webhook was created.
+
+---
+
+#### `updatedAt`
+
+* **Type:** `DateTime`
+* **Default:** `now()`
+* **Description:**
+  Timestamp indicating the last time the webhook configuration was updated.
+
+---
+
+#### `profileId`
+
+* **Type:** `String`
+* **Unique**
+* **Description:**
+  Identifier of the business profile that owns this webhook configuration.
+  Each business profile can have **only one active webhook**.
+
+---
+
+### Relationships (High-Level)
+
+* **Business Profile**
+  Each webhook belongs to exactly one business profile.
+
+* **Webhook Deliveries**
+  A webhook can generate multiple delivery attempts, each tracked for reliability and retry handling.
+
+---
+
+### Notes
+
+* Webhook deliveries are **asynchronous** and retried on failure.
+* Payloads are signed using the configured `secret` and should always be verified on receipt.
+* Updating the webhook replaces the previous configuration for the business profile.
+
+---
+## Get Webhook Details
+
+> Retrieve webhook configuration.
+
+```bash
+curl -X GET https://api.orafi.app/v1/webhook \
+  -H "x-api-key: your_api_key"
+```
+
+**Response**
+```json
+{       
+      "success":true,
+      "message":"Webhook retrieved successfully",
+      "data":{
+        "id":"cmjh39i5x0000v814e7owtybc",
+        "url":"http://localhost:5000/orafi/webhook",
+        "secret":"whsec_a79ab7ad5d9ae5653ee11ae8b16061080da41031f3fc22811eb2865757a1bcb3",
+        "events":[
+          "payment.success",
+          "payment.failed",
+          ],
+        "createdAt":"2025-12-22T11:44:41.780Z",
+        "updatedAt":"2025-12-22T11:44:41.780Z",
+        "profileId":"84a9f045-8a21-4ce4-a7a0-828265c0021b"
+        }
+}
+```
+---
+
+## Get webhook event types
+
+> Retrieve various webhook events available.
+
+```bash
+curl -X GET https://api.orafi.app/v1/webhook/events \
+  -H "x-api-key: your_api_key"
+```
+
+**Response**
+```json
+{
+      "success":true,
+      "message":"Webhook events fetched successfully",
+      "data":[
+        {
+          "name":"Payment Success",
+          "type":"payment.success"
+        },
+        {
+          "name":"Payment Failed",
+          "type":"payment.failed"
+        }
+        ]
+}
+```
+---
+
+## Register Webhook
+
+> Set up a webhook endpoint.
+
+### Request Body
+
+#### `url`
+- **Type:** `url`
+- **Required**
+- **Description:**  
+  Publicly accessible endpoint to receive webhooks
+
+---
+
+```bash
+curl -X POST https://api.orafi.app/v1/webhook/register \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key" \
+  -d '{
+    "url": "https://yourapp.com/webhooks/orafi"
+  }'
+```
+
+**Response:**
+```json
+{
+    "success":true,
+    "message":"Webhook updated successfully",
+    "data":{"id":"cmjh39i5x0000v814e7owtybc",
+    "url":"https://mystore.com/webhook_orafi",
+    "secret":"whsec_a79ab7ad5d9ae5653ee11ae8b16061080da41031f3fc22811eb2865757a1bcb3",
+    "events":[
+      "payment.success",
+      "payment.failed"],
+      "createdAt":"2025-12-22T11:44:41.780Z",
+      "updatedAt":"2025-12-22T11:44:41.780Z",
+      "profileId":"84a9f045-8a21-4ce4-a7a0-828265c0021b"
+      }
+}
+```
+
+---
+
+## Subscribe to Events
+
+> Subscribe to a webhook event
+
+### Request Body
+
+#### `event`
+- **Type:** `string`
+- **Required**
+- **Description:**  
+  Webhook event to be subscribed.
+
+Add more events to your webhook.
+
+```bash
+curl -X POST https://api.orafi.app/webhook/subscribe \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key" \
+  -d '{
+    "event": "payment.failed"
+      }'
+```
+
+**Response**
+```json
+{"    
+    success":true,
+    "message":"Subscribed to event successfully",
+    "data":null
+}
+```

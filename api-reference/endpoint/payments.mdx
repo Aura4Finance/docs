@@ -1,0 +1,176 @@
+---
+title: "Payments"
+description: "Examples for payment-related endpoints"
+---
+
+## Available Endpoints
+
+```http
+POST /transactions/payment/create           # Create Hosted Payment
+POST /transactions/payment/verify           # Verify Payment
+GET /transactions/payment/retrieve          # Retrieve Payment
+```
+
+---
+
+## Create Hosted Payment
+
+> Create a new hosted checkout payment.
+
+### Request Body
+
+#### `amount`
+- **Type:** `number`
+- **Required**
+- **Minimum:** `1`
+- **Description:**  
+  Amount to be charged for the payment(In naira).
+
+---
+
+#### `customer`
+- **Type:** `object`
+- **Required**
+- **Description:**  
+  Customer information associated with the payment.
+
+---
+
+#### `customer.fullname`
+- **Type:** `string`
+- **Required**
+- **Description:**  
+  Full name of the customer making the payment.
+
+---
+
+#### `customer.email`
+- **Type:** `string`
+- **Required**
+- **Format:** `email`
+- **Description:**  
+  Email address of the customer.
+
+---
+
+#### `txRef`
+- **Type:** `string`
+- **Required**
+- **Description:**  
+  Unique transaction reference issued by the merchant.
+
+---
+
+#### `redirectUrl`
+- **Type:** `string`
+- **Optional**
+- **Description:**  
+  URL to redirect the customer to after payment completion.
+
+---
+
+```bash
+curl -X POST https://api.orafi.app/transactions/payment/create \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key" \
+  -d '{
+    "amount": 10000,
+    "customer": {
+      "fullname": "John Doe",
+      "email": "john@example.com"
+    },
+    "txRef": "order_12345",
+    "type": "HOSTED_CHECKOUT",
+    "redirectUrl": "https://yourapp.com/success"
+  }'
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Payment created successfully",
+    "data": {
+            "payment": {
+                "id": "cmjw65j510001v81cilq0u13v",
+                "depositAddress": "0x02c3624325d9db01b64466dfd90f5cd7adeca13504f1c47638ecd4a076982f66",
+                "amount": 200,
+                "amountInUSDC": 0.1384402540842418,
+                "redirectUrl": "https://mystore.com/purchase/xxxxx"
+            }
+        },
+        "checkoutUrl": "https://checkout.orafi.app/cmjw65j4z0000v81c16vtqj14"
+}
+```
+
+---
+
+## Verify Payment
+
+> Check the status of a payment.
+
+### Request Body
+
+#### `paymentId`
+- **Type:** `string`
+- **Required**
+- **Description:**  
+  Payment transaction identifier.
+
+---
+
+```bash
+curl -X POST https://api.orafi.app/transactions/payment/verify \
+  -H "Content-Type: application/json" \
+  -d '{
+    "paymentId": {paymentId}
+  }'
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Payment verification completed",
+    "data": {
+        "status": "completed",
+        "paymentId": "cmjlzeq0j0001v83g2cuplnbg"
+    }
+}
+```
+
+---
+
+## Retrieve Payment
+
+> Get detailed payment information.
+
+### Query Parameter
+
+#### `paymentId`
+- **Type:** `string`
+- **Required**
+- **Description:**  
+  Payment transaction identifier.
+
+```bash
+curl -X GET "https://api.orafi.app/transactions/payment/retrieve?paymentId={paymentId}" \
+  -H "x-api-key: your_api_key"
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Payment information retrieved successfully!",
+    "data": {
+        "id": "cmjw65j510001v81cilq0u13v",
+        "depositAddress": "0x02c3624325d9db01b64466dfd90f5cd7adeca13504f1c47638ecd4a076982f66",
+        "trasferAddress": "0x02c3624325d9db01b64466dfd90f5cd7adeca13504f1c47638ecd4a076982f66",
+        "businessName": "Chidi Limited",
+        "amount": 200,
+        "amountInUSDC": 0.1384402540842418,
+        "redirectUrl": "https://mystore.com/purchase/xxxxx?oratx=cmjw65j4z0000v81c16vtqj14"
+    }
+}
+```

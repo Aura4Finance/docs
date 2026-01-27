@@ -1,0 +1,111 @@
+---
+title: "Refund"
+description: "Process refunds for transactions"
+---
+
+Refunds allow you to return funds to customers for failed or cancelled transactions.
+
+## Available Endpoints
+
+```http
+POST /transactions/refund               # Creating Refunds
+POST /transactions/refund/retry         # Retrying Failed Refunds
+```
+
+
+## Creating Refunds
+
+> Create a refund transaction
+
+### Request Body
+
+#### `originalTxId`
+- **Type:** `string`
+- **Required**
+- **Description:**  
+ Unique identifier of the original transaction being refunded.
+
+---
+
+#### `to`
+- **Type:** `string`
+- **Required**
+- **Length:** `66` characters
+- **Description:**  
+  Destination address where the refunded amount will be sent.  
+  Must be a valid address matching the supported blockchain format.
+
+---
+
+#### `reason`
+- **Type:** `string`
+- **Optional**
+- **Description:**  
+  Optional note explaining the reason for the refund.
+
+---
+
+```bash
+curl - X POST https://api.orafi.app/v1/transactions/refund \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key" \
+  -d '{
+    originalTxId: {originalTxId},
+    to: ox2,
+    reason: "Customer not satisfied!"
+  }'
+```
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Refund initiated successfully",
+    "data": {
+        "status": "COMPLETED",
+        "amount": 200,
+        "txDigest": "xxx",
+        "executionTime": 2101,
+        "gasFee": 0.0001,
+        "platformFee": null,
+        "amountSent": 0.18,
+    }
+}
+```
+---
+
+## Retrying Failed Refunds
+
+> Retry a refund
+### Request Body
+
+#### `refundId`
+- **Type:** `string`
+- **Required**
+- **Description:**  
+  Unique identifier of the refund transaction.
+
+
+```bash
+curl - X POST https://api.orafi.app/v1/transactions/refund/retry \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key" \
+  -d '{
+    refundId: {refundId}
+  }'
+```
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Refund Payout initiated successfully",
+    "data": {
+        "status": "COMPLETED",
+        "amount": 200,
+        "txDigest": "xxx",
+        "executionTime": 2101,
+        "gasFee": 0.0001,
+        "platformFee": null,
+        "amountSent": 0.18,
+    }
+}
+```

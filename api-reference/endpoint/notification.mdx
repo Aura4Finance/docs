@@ -1,0 +1,29 @@
+---
+title: "Notification"
+description: "Email notifications"
+---
+
+Toggle subscription for email notifications
+
+# Available Endpoints
+
+```http
+POST /notification              
+```
+
+---
+
+> Toggle notification
+
+```bash
+curl -X POST https://api.orafi.app/v1/notification \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key" 
+```
+
+**Response**
+```json 
+{
+    "status": "Success",
+    "message": "Subscription successful"
+}

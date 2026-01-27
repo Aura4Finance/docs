@@ -1,0 +1,269 @@
+---
+title: "Webhook Deliveries"
+description: "Track how webhooks are delivered for registered events"
+---
+
+Monitor webhook deliveries
+
+## Available Endpoints
+
+```http
+GET   /webhook/deliveries      # Get Delivery History
+```
+---
+## Webhook Delivery Object
+
+The `WebhookDelivery` model represents a **single delivery attempt** of a webhook event.
+It is used to track **event payloads**, **delivery status**, and **retry behavior** for reliable webhook execution.
+
+Each delivery record provides full visibility into what was sent, when it was sent, and how the receiving server responded.
+
+---
+
+### Fields
+
+#### `id`
+
+* **Type:** `String`
+* **Primary Key**
+* **Default:** `uuid()`
+* **Database Field:** `_id`
+* **Description:**
+  Unique identifier for the webhook delivery attempt.
+
+---
+
+#### `webhookId`
+
+* **Type:** `String`
+* **Description:**
+  Identifier of the webhook configuration that triggered this delivery.
+
+---
+
+#### `event`
+
+* **Type:** `String`
+* **Description:**
+  The event type that caused this webhook delivery
+  (for example: `payment.success`, `payment.failed`).
+
+---
+
+#### `transactionId`
+
+* **Type:** `String`
+* **Description:**
+  Identifier of the transaction associated with this webhook event.
+
+---
+
+#### `payload`
+
+* **Type:** `Json`
+* **Description:**
+  The exact payload sent to the webhook endpoint.
+  Stored for debugging, auditing, and replay purposes.
+
+---
+
+#### `status`
+
+* **Type:** `TransactionStatus`
+* **Description:**
+  Current delivery status, reflecting whether the webhook was delivered successfully or failed.
+
+---
+
+#### `attemptCount`
+
+* **Type:** `Int`
+* **Description:**
+  Number of delivery attempts made for this webhook event.
+
+---
+
+#### `responseStatus`
+
+* **Type:** `String?`
+* **Nullable**
+* **Description:**
+  HTTP response status returned by the receiving endpoint
+  (for example: `200`, `500`, `timeout`).
+
+---
+
+#### `nextRetryAt`
+
+* **Type:** `DateTime?`
+* **Nullable**
+* **Description:**
+  Scheduled timestamp for the next retry attempt, if delivery failed.
+
+---
+
+#### `createdAt`
+
+* **Type:** `DateTime`
+* **Default:** `now()`
+* **Description:**
+  Timestamp indicating when the webhook delivery record was created.
+
+---
+
+#### `lastAttemptAt`
+
+* **Type:** `DateTime`
+* **Default:** `now()`
+* **Description:**
+  Timestamp of the most recent delivery attempt.
+
+---
+
+### Relationships (High-Level)
+
+* **Webhook**
+  Each delivery is linked to a single webhook configuration.
+
+* **Transaction**
+  Each delivery corresponds to a specific transaction event.
+
+---
+
+### Notes
+
+* Webhook deliveries are **retryable** until a success condition is met or retry limits are exceeded.
+* All attempts are recorded to ensure transparency and debuggability.
+* Stored payloads enable **event replay** and forensic analysis when needed.
+
+
+---
+## Get Webhook Deliveries
+> Retrieve webhook deliveries for a transaction and webhook configuration.
+
+### Query Parameters 
+
+#### `status`
+
+* **Type:** `string`
+* **Allowed Values:** `PENDING`, `COMPLETED`, `FAILED`
+* **Description:**
+  Filters webhook deliveries by their delivery status.
+
+---
+
+#### `transactionId`
+
+* **Type:** `string`
+* **Description:**
+  Returns webhook deliveries associated with a specific transaction.
+
+---
+
+#### `event`
+
+* **Type:** `string`
+* **Allowed Values:**
+
+  * `payment.failed`
+  * `payment.success`
+* **Description:**
+  Filters webhook deliveries by the event that triggered the delivery.
+
+---
+
+#### `date`
+
+* **Type:** `object` (JSON-encoded)
+* **Optional**
+* **Description:**
+  Filters webhook deliveries within a specific date range.
+  This parameter **must be sent as a JSON string**.
+
+##### `date.startDate`
+
+* **Type:** `date`
+* **Description:**
+  Start of the date range (inclusive).
+
+##### `date.endDate`
+
+* **Type:** `date`
+* **Description:**
+  End of the date range (inclusive).
+
+---
+
+### Correct Example Endpoints
+
+**Filter by status and event**
+
+```http
+GET /webhooks/deliveries?status=FAILED&event=payment.failed
+```
+
+**Filter by date (start date only)**
+
+```http
+GET /webhooks/deliveries?date={"startDate":"2024-01-01"}
+```
+
+**Filter by date range**
+
+```http
+GET /webhooks/deliveries?date={"startDate":"2024-01-01","endDate":"2024-01-31"}
+```
+
+**Combined filters**
+
+```http
+GET /webhooks/deliveries?status=FAILED&event=payment.failed&date={"startDate":"2024-01-01","endDate":"2024-01-31"}
+```
+
+---
+
+### Important Notes
+
+* The `date` parameter **must be valid JSON**
+* Invalid JSON will result in a **400 Bad Request**
+* Partial ranges are allowed (`startDate` only or `endDate` only)
+* Always URL-encode the `date` object in production requests
+
+> Retrieve webhook deliveries.
+
+```bash
+curl -X GET https://api.orafi.app/v1/webhook/deliveries \
+  -H "x-api-key: your_api_key"
+```
+
+**Response**
+```json
+{
+    "success": true,
+    "message": "Wehook deliveries retrieved successfully!",
+    "data": [
+        {
+            "id": "811f4c9e-d818-4e07-bfbc-fb0aa73ab82f",
+            "webhookId": "cmjh39i5x0000v814e7owtybc",
+            "event": "payment.failed",
+            "transactionId": "cmjfu1cjv0003v8vsmmxgjk05",
+            "payload": {
+                "event": "payment.failed",
+                "data": {
+                    "transactionId": "cmjfu1cjv0003v8vsmmxgjk05",
+                    "amount": 4000,
+                    "currency": "NGN",
+                    "status": "failed",
+                    "occuredAt": "2025-12-24T10:42:36.842Z"
+                }
+            },
+            "status": "COMPLETED",
+            "attemptCount": 2,
+            "responseStatus": "200",
+            "nextRetryAt": null,
+            "createdAt": "2025-12-24T10:42:37.231Z",
+            "lastAttemptAt": "2025-12-24T10:43:40.347Z"
+        }
+    ]
+}
+```

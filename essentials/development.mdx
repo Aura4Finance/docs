@@ -1,0 +1,52 @@
+---
+title: "Development"
+description: "Set up your development environment and testing"
+---
+
+# Development Environment
+
+Learn how to set up your development environment for safe testing of Orafi integrations.
+
+## Test vs Live Modes
+
+Orafi provides separate environments for development and production:
+
+- **Test environment**
+- **Live environment**
+> Both uses the same API: `https://api.orafi.app`. To toggle between modes, merchants can visit their dashboard, or use proided endpoint.
+
+Use the test environment for all development and testing to avoid real transactions.
+
+## API Keys
+
+You have separate API keys for each environment:
+
+- **Test API Key**: Used for the test environment(testnet)
+- **Live API Key**: Used for production(mainnet)
+
+Keep your live API key secure and never expose it in client-side code.
+
+## Testing Best Practices
+
+### 1. Use Test Mode for Development
+
+Always develop and test your integration using the test environment first.
+To switch to live,  you must complete the onboarding process
+
+### 2. Simulate Different Scenarios
+
+Use our test endpoints to simulate various payment scenarios:
+
+- Successful payments
+- Failed payments
+- Webhook retries
+- Refunds
+
+### 3. Webhook Testing
+
+Set up webhook endpoints for testing:
+
+- Use tools like ngrok or outray for local development
+- Verify webhook signatures in test mode
+- Test webhook retry logic
+

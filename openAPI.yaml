@@ -1,0 +1,1197 @@
+openapi: 3.0.3
+info:
+  title: Orafi API
+  description: Seamless crypto payments API
+  version: 1.0.0
+servers:
+  - url: https://api.orafi.com
+    description: Production server
+  - url: https://test.api.orafi.com
+    description: Test server
+paths:
+  /paylink/create:
+    post:
+      summary: Create a paylink
+      description: Create a new paylink with images
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                payload:
+                  type: string
+                  description: JSON string containing paylink data
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                  description: Image files (1-4 images)
+      responses:
+        '201':
+          description: Paylink created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Paylink'
+        '400':
+          $ref: '#/components/responses/Error'
+  /paylink/{id}:
+    get:
+      summary: Get paylink details
+      description: Retrieve details of a specific paylink
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Paylink details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Paylink'
+        '404':
+          $ref: '#/components/responses/Error'
+    delete:
+      summary: Delete paylink
+      description: Delete a specific paylink
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Paylink deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '404':
+          $ref: '#/components/responses/Error'
+  /paylink:
+    get:
+      summary: Get all paylinks
+      description: Retrieve all paylinks for the authenticated user
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of paylinks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Paylink'
+  /transactions/payment/retrieve:
+    get:
+      summary: Retrieve payment information
+      description: Get information about a payment
+      parameters:
+        - name: payment_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Payment'
+  /transactions/payment/create:
+    post:
+      summary: Create hosted payment
+      description: Create a new hosted payment
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequest'
+      responses:
+        '201':
+          description: Payment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Payment'
+  /transactions/payment/paylink/create:
+    post:
+      summary: Create paylink payment
+      description: Create a payment for a paylink
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaylinkPaymentRequest'
+      responses:
+        '201':
+          description: Payment created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Payment'
+  /transactions/payment/verify:
+    post:
+      summary: Verify payment
+      description: Verify a payment transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyPaymentRequest'
+      responses:
+        '200':
+          description: Payment verified
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Payment'
+  /webhook/register:
+    post:
+      summary: Register webhook
+      description: Register a webhook URL
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                secret:
+                  type: string
+                events:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Webhook registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Webhook'
+  /webhook:
+    get:
+      summary: Get webhook details
+      description: Get the registered webhook details
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Webhook details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Webhook'
+  /webhook/events:
+    get:
+      summary: Get webhook event types
+      description: Get available webhook event types
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Event types
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: string
+  /webhook/deliveries:
+    get:
+      summary: Get webhook deliveries
+      description: Get webhook delivery history
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Delivery history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WebhookDelivery'
+  /webhook/subscribe:
+    post:
+      summary: Subscribe to events
+      description: Subscribe to specific webhook events
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                events:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Subscribed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /business/mode:
+    post:
+      summary: Switch business mode
+      description: Switch between test and live mode
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mode:
+                  type: string
+                  enum: [test, live]
+      responses:
+        '200':
+          description: Mode switched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /transactions:
+    get:
+      summary: Get all transactions
+      description: Retrieve all transactions for the authenticated user
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: List of transactions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+  /transactions/{txId}:
+    get:
+      summary: Get transaction by ID
+      description: Retrieve a specific transaction
+      security:
+        - apiKey: []
+      parameters:
+        - name: txId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Transaction details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Transaction'
+  /transactions/payout/balances:
+    get:
+      summary: Get payout balances
+      description: Retrieve available balances for payout
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Balance information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      crypto:
+                        type: object
+                      fiat:
+                        type: object
+  /transactions/payout/crypto:
+    post:
+      summary: Create crypto payout
+      description: Initiate a cryptocurrency payout
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                walletAddress:
+                  type: string
+      responses:
+        '201':
+          description: Payout created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Payout'
+  /transactions/payout/crypto/retry:
+    post:
+      summary: Retry crypto payout
+      description: Retry a failed crypto payout
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payoutId:
+                  type: string
+      responses:
+        '200':
+          description: Retry initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /transactions/refund:
+    post:
+      summary: Create refund
+      description: Initiate a refund for a transaction
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                transactionId:
+                  type: string
+                amount:
+                  type: number
+      responses:
+        '201':
+          description: Refund created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Refund'
+  /transactions/refund/retry:
+    post:
+      summary: Retry refund
+      description: Retry a failed refund
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refundId:
+                  type: string
+      responses:
+        '200':
+          description: Retry initiated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+  /profile:
+    get:
+      summary: Get profile
+      description: Retrieve business profile information
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Profile information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/BusinessProfile'
+  /profile/request-email-change:
+    post:
+      summary: Request email change
+      description: Initiate email address change
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newEmail:
+                  type: string
+      responses:
+        '200':
+          description: Email change requested
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /profile/verify-email-change:
+    post:
+      summary: Verify email change
+      description: Confirm email address change
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      responses:
+        '200':
+          description: Email changed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /settlement/crypto/add:
+    post:
+      summary: Add crypto settlement account
+      description: Add a cryptocurrency wallet for settlements
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                chain:
+                  type: string
+      responses:
+        '201':
+          description: Settlement account added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /settlement/crypto:
+    get:
+      summary: Get crypto settlement accounts
+      description: Retrieve all crypto settlement accounts
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Settlement accounts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CryptoAccount'
+  /settlement/crypto/delete/{id}:
+    delete:
+      summary: Delete crypto settlement account
+      description: Remove a crypto settlement account
+      security:
+        - apiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Account deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /settlement/fiat/bank-list:
+    get:
+      summary: Get bank list
+      description: Retrieve available banks for fiat settlements
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Bank list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        code:
+                          type: string
+  /settlement/fiat:
+    get:
+      summary: Get fiat settlement accounts
+      description: Retrieve all fiat settlement accounts
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Settlement accounts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FiatAccount'
+  /settlement/fiat/add:
+    post:
+      summary: Add fiat settlement account
+      description: Add a bank account for fiat settlements
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bankName:
+                  type: string
+                bankCode:
+                  type: string
+                accountNumber:
+                  type: string
+      responses:
+        '201':
+          description: Settlement account added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /settlement/fiat/{id}:
+    delete:
+      summary: Delete fiat settlement account
+      description: Remove a fiat settlement account
+      security:
+        - apiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Account deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+    patch:
+      summary: Update fiat settlement account
+      description: Update a fiat settlement account
+      security:
+        - apiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bankName:
+                  type: string
+                bankCode:
+                  type: string
+                accountNumber:
+                  type: string
+      responses:
+        '200':
+          description: Account updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+  /customers/create:
+    post:
+      summary: Create customer
+      description: Create a new customer
+      security:
+        - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: Customer created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Customer'
+  /customers:
+    get:
+      summary: Get all customers
+      description: Retrieve all customers
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: List of customers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Customer'
+  /customers/{customerId}:
+    get:
+      summary: Get customer by ID
+      description: Retrieve a specific customer
+      security:
+        - apiKey: []
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Customer details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Customer'
+  /customers/{id}:
+    delete:
+      summary: Delete customer
+      description: Delete a customer
+      security:
+        - apiKey: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Customer deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+components:
+  schemas:
+    Paylink:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        amount:
+          type: number
+        imageBlobIds:
+          type: array
+          items:
+            type: string
+        mode:
+          type: string
+          enum: [test, live]
+        profileId:
+          type: string
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+        amount:
+          type: number
+        amountInUSDC:
+          type: number
+        token:
+          type: string
+        depositAddress:
+          type: string
+        txRef:
+          type: string
+        status:
+          type: string
+          enum: [INITIALIZED, CONFIRMED, FAILED]
+        paymentMethod:
+          type: string
+          enum: [PAYMENT_LINK, HOSTED_CHECKOUT]
+        redirectUrl:
+          type: string
+        paylinkId:
+          type: string
+        customerId:
+          type: string
+        transactionId:
+          type: string
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        totalSpent:
+          type: number
+    CreatePaymentRequest:
+      type: object
+      required:
+        - amount
+        - customer
+        - txRef
+        - type
+      properties:
+        amount:
+          type: number
+          description: Amount in the smallest unit
+        customer:
+          type: object
+          properties:
+            fullname:
+              type: string
+            email:
+              type: string
+        txRef:
+          type: string
+          description: Transaction reference
+        type:
+          type: string
+          enum: [PAYMENT_LINK, HOSTED_CHECKOUT]
+        redirectUrl:
+          type: string
+    CreatePaylinkPaymentRequest:
+      type: object
+      required:
+        - paylinkId
+        - customer
+      properties:
+        paylinkId:
+          type: string
+        customer:
+          type: object
+          properties:
+            fullname:
+              type: string
+            email:
+              type: string
+    VerifyPaymentRequest:
+      type: object
+      required:
+        - paymentId
+      properties:
+        paymentId:
+          type: string
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+        secret:
+          type: string
+        events:
+          type: array
+          items:
+            type: string
+    WebhookDelivery:
+      type: object
+      properties:
+        id:
+          type: string
+        event:
+          type: string
+        payload:
+          type: object
+        status:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        amount:
+          type: number
+        status:
+          type: string
+        type:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    Payout:
+      type: object
+      properties:
+        id:
+          type: string
+        method:
+          type: string
+          enum: [CRYPTO, FIAT]
+        amount:
+          type: string
+        status:
+          type: string
+          enum: [INITIALIZED, CONFIRMED, FAILED]
+        walletAddress:
+          type: string
+        txDigest:
+          type: string
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+        amount:
+          type: number
+        status:
+          type: string
+        transactionId:
+          type: string
+    BusinessProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        businessName:
+          type: string
+        businessSector:
+          type: string
+        country:
+          type: string
+        websiteLink:
+          type: string
+        isLive:
+          type: boolean
+    CryptoAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        address:
+          type: string
+        chain:
+          type: string
+    FiatAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        bankName:
+          type: string
+        bankCode:
+          type: string
+        accountNumber:
+          type: string
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+  responses:
+    Error:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key

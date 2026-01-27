@@ -1,0 +1,218 @@
+---
+title: "Profile"
+description: "API endpoints for business profile management"
+---
+
+Your business profile contains information about your company and settings.
+
+## Available Endpoints
+
+```bash
+GET  /profile                                #Retrieving Profile
+POST /profile/request-email-change           # Request email change
+POST /profile/verify-email-change            #Verify email change
+```
+
+## Profile Object
+
+The `BusinessProfile` model represents a business entity on the platform.  
+It serves as the **core ownership layer** for transactions, API keys, wallets, payment links, and settlement accounts.
+
+Each user can have **one business profile**, which controls whether operations are executed in test or live mode.
+
+---
+
+### Fields
+
+#### `id`
+- **Type:** `String`
+- **Primary Key**
+- **Default:** `uuid()`
+- **Database Field:** `_id`
+- **Description:**  
+  Unique identifier for the business profile.
+
+---
+
+#### `userId`
+- **Type:** `String`
+- **Unique**
+- **Description:**  
+  Identifier of the user that owns this business profile.
+
+---
+
+#### `businessName`
+- **Type:** `String`
+- **Description:**  
+  Registered name of the business.
+
+---
+
+#### `businessSector`
+- **Type:** `String`
+- **Description:**  
+  Industry or sector in which the business operates.
+
+---
+
+#### `country`
+- **Type:** `String`
+- **Description:**  
+  Country where the business is registered or primarily operates.
+
+---
+
+#### `websiteLink`
+- **Type:** `String?`
+- **Nullable**
+- **Description:**  
+  Official website URL of the business.
+
+---
+
+#### `onboarded`
+- **Type:** `Boolean`
+- **Default:** `false`
+- **Description:**  
+  Indicates whether the business has completed the onboarding process.
+
+---
+
+#### `isLive`
+- **Type:** `Boolean`
+- **Default:** `false`
+- **Description:**  
+  Determines whether the business is operating in **live mode** or **test mode**.
+
+---
+
+## Relationships (High-Level)
+
+> These relationships define ownership and operational scope but are not required for basic profile reads.
+
+- **User**  
+  Each business profile is owned by a single user.
+
+- **API Keys**  
+  A business can have multiple API keys for authentication and access control.
+
+- **Wallets**  
+  Stores wallets associated with the business.
+
+- **Webhook**  
+  Configuration for webhook event delivery.
+
+- **Customers**  
+  Customers associated with the business.
+
+- **Transactions**  
+  All financial transactions performed by the business.
+
+- **Payment Links**  
+  Payment links created and managed by the business.
+
+- **Fiat Accounts**  
+  Linked fiat settlement accounts.
+
+- **Crypto Accounts**  
+  Linked crypto settlement accounts.
+
+---
+
+## Notes
+
+- A business profile is required before any transaction can be processed.
+- `onboarded` and `isLive` together control operational readiness.
+- Switching to live mode typically requires completed onboarding and verification.
+
+---
+
+## Retrieving Profile
+
+> Get user profile
+
+```bash
+curl -X GET https://api.orafi.app/v1/profile \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key" 
+```
+
+**Response**
+```json 
+{ 
+  "success":true,
+  "message":"User profile retrived successfully!",
+  "data":{
+    "profile":
+    {"id":"a6012dba-dfe2-45ea-851e-726c3b4ebde5",
+    "firstname":"Covenant",
+    "lastname":"Ogowale",
+    "email":"emmachid@outlook.com",
+    "provider":"LOCAL",
+    "emailVerified":true,
+    "businessProfile":{
+      "id":"84a9f045-8a21-4ce4-a7a0-828265c0021b",
+      "userId":"a6012dba-dfe2-45ea-851e-726c3b4ebde5",
+      "businessName":"",
+      "businessSector":"",
+      "country":"",
+      "websiteLink":"",
+      "onboarded":false,
+      "isLive":false,
+      "wallet":[{
+        "pubKey":"0xc4b22d6367ce0dc2dfcc8c4998ade95ebf515b866e9493346688ae6afe49205d"
+        }]
+          }
+            }
+              }}
+```
+
+---
+
+## Email Changes
+
+> Request email change
+
+### Request body
+
+#### `email`
+  - **Required**  
+  - **Type:** `string`
+  - **Description**:
+  Merchant's new email address
+
+```bash
+curl -X GET https://api.orafi.app/v1/profile/request-email-change \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key" 
+  -d '{
+    email: "example@gmail.com"
+  }'
+```
+
+Verify email change:
+
+### Request body
+
+#### `email`
+  - **Required**  
+  - **Type:** `string`
+  - **Description**:
+  Merchant's new email address
+
+#### `OTP`
+  - **Required**  
+  - **Type:** `string`
+  - **Description**:
+  One-time password sent to new email address.
+
+```bash
+curl -X GET https://api.orafi.app/v1/profile/verify-email-change \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key" 
+  -d '{
+    email: "example@gmail.com"
+    "otp": "23432
+  }'
+```

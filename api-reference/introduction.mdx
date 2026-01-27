@@ -1,0 +1,52 @@
+---
+title: 'API Reference'
+description: 'Complete API documentation for Orafi'
+---
+
+## Getting Started
+
+The Orafi API is organized around REST. Our API has predictable resource-oriented URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes.
+
+## Authentication
+
+All API requests require authentication using API keys. Include your API key in the `x-api-key` header:
+
+```
+x-api-key: ora_live_your_api_key_here
+```
+
+## Base URLs
+
+- `https://api.orafi.app`
+
+## Response Format
+
+All responses follow a consistent format:
+
+```json
+{
+  "success": true,
+  "message": "Operation successful",
+  "data": { ... }
+}
+```
+
+## Error Handling
+
+Errors return appropriate HTTP status codes with error details:
+
+
+## Rate Limiting
+
+API requests are rate limited. Check the response headers for limit information:
+
+- `X-RateLimit-Limit`: Maximum requests per hour
+- `X-RateLimit-Remaining`: Remaining requests
+- `X-RateLimit-Reset`: Time when limit resets
+
+## Support
+
+Need help? Contact our support team:
+
+- **Email**: support@orafi.app
+- **Documentation**: [docs.orafi.com](https://docs.orafi.app)

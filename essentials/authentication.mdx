@@ -1,0 +1,21 @@
+---
+title: "Authentication"
+description: "Learn how to authenticate with the Orafi API"
+---
+
+
+Orafi uses API keys for authenticating requests to the public API. Include your API key in the `x-api-key` header for all API requests.
+
+### Example
+
+```bash
+curl -X GET https://api.orafi.app/transactions/payment/retrieve?payment_id=pay_123 \
+  -H "x-api-key: ora_live_1234567890abcdef"
+```
+
+### API Key Format
+
+- **Live keys**: `ora_live_` followed by 32 characters
+- **Test keys**: `ora_test_` followed by 32 characters
+
+Keep your API keys secure. Never expose them in client-side code or public repositories.

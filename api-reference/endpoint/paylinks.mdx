@@ -1,0 +1,251 @@
+---
+title: "Paylinks"
+description: "Endpoints for paylink management"
+---
+
+## Available Endpoints
+
+```http
+POST   /paylink/create               # Create Paylink
+GET    /paylink/{id}                 # Get Paylink Details
+GET    /paylink                      # List Paylinks
+DELETE /paylink/{id}                 # Delete Paylink
+```
+
+## Paylink Object
+
+The `Paylink` model represents a **shareable payment link** that allows customers to make payments without a custom checkout integration.
+
+Paylinks are commonly used for:
+- One-off payments
+- Invoices
+- Social or link-based payments
+- Simple checkout flows
+
+Each paylink belongs to a single business profile and can operate in either test or live mode.
+
+---
+
+## Fields
+
+### `id`
+- **Type:** `String`
+- **Primary Key**
+- **Default:** `cuid()`
+- **Database Field:** `_id`
+- **Description:**  
+  Unique identifier for the paylink.
+
+---
+
+### `title`
+- **Type:** `String`
+- **Description:**  
+  Short title displayed to customers for the payment link.
+
+---
+
+### `description`
+- **Type:** `String`
+- **Description:**  
+  Detailed description explaining what the payment is for.
+
+---
+
+### `mode`
+- **Type:** `Mode`
+- **Description:**  
+  Indicates whether the paylink is operating in **test** or **live** mode.
+
+---
+
+### `amount`
+- **Type:** `Int`
+- **Description:**  
+  Amount to be paid when the paylink is used.
+
+---
+
+### `imageBlobIds`
+- **Type:** `String[]`
+- **Description:**  
+  Identifiers for images associated with the paylink, such as product or branding visuals.
+
+---
+
+### `profileId`
+- **Type:** `String`
+- **Description:**  
+  Identifier of the business profile that owns this paylink.
+
+---
+
+## Relationships (High-Level)
+
+> Relationships are listed for clarity but are not required for basic paylink usage.
+
+- **Business Profile**  
+  Each paylink belongs to a single business profile.
+
+- **Payments**  
+  A paylink can be associated with multiple payments made using that link.
+
+---
+
+## Notes
+
+- Paylinks are immutable in ownership once created.
+- The `mode` field ensures test and live payments remain isolated.
+- Images are optional and can be used to improve customer trust and conversion.
+
+## Create Paylink
+
+Create a new paylink with product details.
+
+### Request Body
+#### `title`
+  - **Required**  
+  - **Type**: string
+  - **Description**
+   Short title displayed to customers for the payment link.
+
+#### `description`
+  - **Required**  
+  - **Type**: string
+  - **Description**
+    Detailed description explaining what the payment is for.
+
+#### `amount`
+  - **Required**  
+  - **Type**: number
+  - **Description**
+    Amount to be paid when the paylink is used.
+
+```bash
+curl -X POST https://api.orafi.app/v1/paylink/create \
+  -H "x-api-key: your_api_key"
+  -F 'payload={
+    "title": "Chidi and Co.",
+    "description": "I sell battery and spare parts",
+    "amount": 4000
+  }' \
+  -F 'images=@product2.jpg'
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Paylink successfully created",
+    "data": {
+        "id": "cmjwxuwpl0000v8fwozati4d1",
+        "title": "Chidi and Co.",
+        "description": "I sell battery and spare parts",
+        "mode": "test",
+        "amount": 4000,
+        "imageBlobIds": [
+            "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
+        ],
+        "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
+    }
+}
+```
+
+## Get Paylink Details
+
+Retrieve paylink information.
+
+### Parameters
+#### `paylinkId`
+  - **Required**  
+  - **Description**
+  Unique identifier for payment link
+
+```bash
+curl -X GET https://api.orafi.app/v1/paylink/paylink_abc123 \
+  -H "x-api-key: your_api_key"
+```
+
+**Response:**
+```json
+{   
+  "success":true,
+  "message":"Paylink retrieved successfully",
+  "data":{
+    "id":"cmjwxuwpl0000v8fwozati4d1",
+    "title":"Chidi and Co.",
+    "description":"I sell battery and spare parts",
+    "mode":"test",
+    "amount":4000,
+    "imageBlobIds":[
+      "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
+      ],
+    }}
+```
+
+## List Paylinks
+
+Get all your paylinks.
+
+```bash
+curl -X GET https://api.orafi.app/paylink \
+  -H "x-api-key: your_api_key"
+```
+
+**Response**
+```json
+{
+    "success": true,
+    "message": "Paylinks retrived successfully",
+    "data": [
+        {
+            "id": "cmjftyjne0002v8vsgi1j8k8f",
+            "title": "Chidi and Co.",
+            "description": "I sell battery and spare parts",
+            "mode": "test",
+            "amount": 4000,
+            "imageBlobIds": [
+                "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
+            ],
+            "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
+        },
+        {
+            "id": "cmjwxuwpl0000v8fwozati4d1",
+            "title": "Chidi and Co.",
+            "description": "I sell battery and spare parts",
+            "mode": "test",
+            "amount": 4000,
+            "imageBlobIds": [
+                "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
+            ],
+            "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
+        },
+        {
+            "id": "cmjwy25tk0001v8fwjkia7xdr",
+            "title": "Chidi and Co.",
+            "description": "I sell battery and spare parts",
+            "mode": "test",
+            "amount": 4000,
+            "imageBlobIds": [
+                "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
+            ],
+            "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
+        }
+    ]
+}
+```
+
+## Delete Paylink
+
+Remove a paylink.
+
+### Parameters
+#### `paylinkId`
+  - **Required**  
+  - **Description**
+  Unique identifier for payment link
+
+```bash
+curl -X DELETE https://api.orafi.com/paylink/paylink_abc123 \
+  -H "x-api-key: your_api_key"
+```

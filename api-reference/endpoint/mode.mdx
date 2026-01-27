@@ -1,0 +1,31 @@
+---
+title: "Mode"
+description: "API endpoints for business mode management"
+---
+
+Toggle business mode
+
+## Available Endpoints
+
+```http
+POST /business/mode             # Change business mode
+```
+---
+
+## Modes
+There are 2 available modes during operation: test(testnet) and live(mainnet).
+
+Toggle Business Mode: 
+
+```bash
+curl -X POST https://api.orafi.app/v1/business/mode \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key" 
+```
+**Response**
+```json 
+{
+    "status": "Error",
+    "message": "Complete onboarding process to switch to live mode"
+}
+```

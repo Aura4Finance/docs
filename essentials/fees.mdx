@@ -1,0 +1,126 @@
+---
+title: Fee Collection & Charges
+description: How platform charges are collected for payments, payouts, and refunds on OraFi.
+---
+
+## Overview
+
+OraFi collects platform charges directly at the **smart contract level** using a **basis-points fee model**.  
+Fees are deducted automatically during **payments** and **payouts** before funds reach the merchant.
+
+All fee logic is enforced **on-chain**, making it transparent, deterministic, and non-bypassable.
+
+---
+
+## Fee Model
+
+- OraFi uses a **percentage-based fee system**
+- Fees are calculated using **basis points** for accuracy
+- The current platform fee is **1% per transaction**
+- Fees are always deducted **before settlement**
+
+This ensures consistent and predictable charges across all supported flows.
+
+---
+
+## Platform Fee Wallet
+
+- All collected fees are transferred directly to a **platform-controlled admin wallet**
+- Fee transfers occur **within the same transaction** as the payment or payout
+- This guarantees atomic execution and prevents partial settlement
+
+---
+
+## Payment Charges
+
+### How Payments Work
+
+1. A payment request is created for a specific amount
+2. The customer completes the payment with the exact required value
+3. OraFi automatically:
+   - Validates the payment amount
+   - Calculates the platform fee
+   - Deducts the fee
+   - Sends the remaining balance to the merchant
+
+The merchant never needs to manually calculate or send fees.
+
+---
+
+### Payment Fee Flow
+
+- **1%** is deducted from the total payment amount
+- The deducted fee is sent to the **platform wallet**
+- The remaining **99%** is sent to the **merchant**
+- The payment context is finalized after settlement
+
+---
+
+### Example
+
+| Payment Amount | Platform Fee (1%) | Merchant Receives |
+|---------------|------------------|------------------|
+| 1,000 USDC | 10 USDC | 990 USDC |
+
+---
+
+## Payout Charges
+
+Payouts occur when funds are withdrawn from a platform-controlled balance to a merchant’s external wallet.
+
+---
+
+### How Payouts Work
+
+1. A payout request is initiated for a specified amount
+2. The platform validates available balance
+3. OraFi automatically:
+   - Calculates the platform fee
+   - Deducts the fee
+   - Sends the remaining amount to the destination wallet
+
+---
+
+### Payout Fee Flow
+
+- **1%** is deducted from the payout amount
+- The fee is sent to the **platform wallet**
+- The remaining balance is transferred to the **merchant**
+
+---
+
+### Example
+
+| Payout Amount | Platform Fee (1%) | Merchant Receives |
+|--------------|------------------|------------------|
+| 500 USDC | 5 USDC | 495 USDC |
+
+---
+
+## Refund Charges
+
+### Refund Behavior
+
+- **Refunds are not charged**
+- The full refunded amount is returned to the customer
+- No platform fee is deducted during refunds
+
+This ensures fair customer reimbursement and avoids double-charging.
+
+---
+
+## Summary
+
+| Transaction Type | Fee Applied | Fee Rate | On-Chain Enforcement |
+|-----------------|-----------|----------|---------------------|
+| Payment | Yes | 1% | ✅ |
+| Payout | Yes | 1% | ✅ |
+| Refund | No | 0% | ❌ |
+
+---
+
+## Notes
+
+- All fees are calculated using **precise integer arithmetic**
+- Only **USDC** is currently supported
+- Any change to the fee rate requires a **protocol update** and will be publicly announced

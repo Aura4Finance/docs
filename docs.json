@@ -1,0 +1,96 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Orafi",
+"colors": {
+  "primary": "#2563EB",
+  "light": "#60A5FA",
+  "dark": "#1E40AF"
+},
+  "favicon": "./logos/logo-svg.png",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              "essentials/index",
+              "essentials/quickstart",
+              "essentials/development",
+              "essentials/authentication",
+              "essentials/errors",
+              "essentials/fees"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "API documentation",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Endpoint examples",
+            "pages": [
+              "api-reference/endpoint/profile",
+              "api-reference/endpoint/mode",
+              "api-reference/endpoint/transactions",
+              "api-reference/endpoint/payments",
+              "api-reference/endpoint/refunds",
+              "api-reference/endpoint/payouts",
+              "api-reference/endpoint/paylinks",
+              "api-reference/endpoint/customers",
+              "api-reference/endpoint/crypto-settlements",
+              "api-reference/endpoint/fiat-settlements",
+              "api-reference/endpoint/webhooks",
+              "api-reference/endpoint/webhook-deliveries",
+              "api-reference/endpoint/notification"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Dashboard",
+          "href": "https://dashboard.orafi.app",
+          "icon": "book-open-cover"
+        },
+        {
+          "anchor": "Support",
+          "href": "mailto:support@orafi.app",
+          "icon": "envelope"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "./logos/image-logo.png",
+    "dark": "./logos/image-logo.png"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:support@orafi.app"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://dashboard.orafi.app"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/orafi"
+    }
+  }
+}
