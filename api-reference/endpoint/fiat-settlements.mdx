@@ -1,19 +1,25 @@
 ---
 title: "Fiat Settlements"
-description: "API endpoints for fiat settlement account management"
+description: "Manage bank accounts for fiat payouts and withdrawals."
 ---
 
-Settlement accounts are where you receive payouts from Orafi.
+## Fiat settlement accounts
 
-## Available Endpoints
+Fiat settlement accounts let you receive payouts directly to a bank account.
 
-```http
-GET    /settlement/fiat/bank-list      # Getting Bank List
-POST   /settlement/fiat/add            # Adding Fiat Accounts
-GET    /settlement/fiat                # Get Fiat Accounts
-PATCH  /settlement/fiat/{id}           # Update Fiat Account
-DELETE /settlement/fiat/{id}           # Delete Fiat Account
-```
+<Note>
+  Fiat settlements are **coming soon**. The endpoints below are planned and not yet available.
+</Note>
 
-Coming soon!
+### Planned endpoints
+
+| Method   | Endpoint                        | Description              |
+| -------- | ------------------------------- | ------------------------ |
+| `GET`    | `/settlement/fiat/bank-list`    | List supported banks     |
+| `POST`   | `/settlement/fiat/add`          | Add a bank account       |
+| `GET`    | `/settlement/fiat`              | List saved bank accounts |
+| `PATCH`  | `/settlement/fiat/{id}`         | Update a bank account    |
+| `DELETE` | `/settlement/fiat/{id}`         | Remove a bank account    |
+
+Stay tuned --- we will update this page when fiat settlements launch. In the meantime, use [Crypto Settlements](/api-reference/endpoint/crypto-settlements) for payouts.
 

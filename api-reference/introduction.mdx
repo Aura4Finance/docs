@@ -1,29 +1,45 @@
 ---
-title: 'API Reference'
-description: 'Complete API documentation for Orafi'
+title: "API Reference"
+description: "Complete reference for every Orafi API endpoint — with examples, schemas, and response codes."
+sidebarTitle: "Overview"
 ---
 
-## Getting Started
+The Orafi API is organized around [REST](https://en.wikipedia.org/wiki/REST). It accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP status codes and verbs.
 
-The Orafi API is organized around REST. Our API has predictable resource-oriented URLs, accepts JSON-encoded request bodies, returns JSON-encoded responses, and uses standard HTTP response codes.
+---
+
+## Base URL
+
+```
+https://api.orafi.app
+```
+
+Both test and live requests use the same base URL. Your API key determines the mode.
+
+---
 
 ## Authentication
 
-All API requests require authentication using API keys. Include your API key in the `x-api-key` header:
+Authenticate every request by including your API key in the `x-api-key` header:
 
+```bash
+curl https://api.orafi.app/transactions \
+  -H "x-api-key: ora_test_your_api_key"
 ```
-x-api-key: ora_live_your_api_key_here
-```
 
-## Base URLs
+See the [Authentication guide](/essentials/authentication) for details on key formats and security best practices.
 
-- `https://api.orafi.app`
+---
 
-## Response Format
+## Request & response format
 
-All responses follow a consistent format:
+All request bodies must be `application/json` (except file uploads which use `multipart/form-data`).
 
-```json
+Every response follows a consistent envelope:
+
+<CodeGroup>
+
+```json Success
 {
   "success": true,
   "message": "Operation successful",
@@ -31,22 +47,78 @@ All responses follow a consistent format:
 }
 ```
 
-## Error Handling
+```json Error
+{
+  "success": false,
+  "message": "A human-readable error description"
+}
+```
 
-Errors return appropriate HTTP status codes with error details:
+</CodeGroup>
 
+---
 
-## Rate Limiting
+## HTTP status codes
 
-API requests are rate limited. Check the response headers for limit information:
+| Code | Description |
+| --- | --- |
+| `200` | Request succeeded |
+| `201` | Resource created |
+| `400` | Bad request — invalid parameters |
+| `401` | Unauthorized — missing or invalid API key |
+| `403` | Forbidden — insufficient permissions |
+| `404` | Not found — resource doesn't exist |
+| `429` | Too many requests — rate limited |
+| `500` | Internal server error |
 
-- `X-RateLimit-Limit`: Maximum requests per hour
-- `X-RateLimit-Remaining`: Remaining requests
-- `X-RateLimit-Reset`: Time when limit resets
+---
 
-## Support
+## Rate limiting
 
-Need help? Contact our support team:
+API requests are rate-limited. Inspect these response headers to monitor your usage:
 
-- **Email**: support@orafi.app
-- **Documentation**: [docs.orafi.com](https://docs.orafi.app)
+| Header | Description |
+| --- | --- |
+| `X-RateLimit-Limit` | Max requests per window |
+| `X-RateLimit-Remaining` | Requests remaining |
+| `X-RateLimit-Reset` | Time when the window resets |
+
+If you hit the limit, back off and retry after `X-RateLimit-Reset`.
+
+---
+
+## Pagination
+
+List endpoints use **cursor-based pagination** for consistent performance:
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `limit` | `number` | Max items per page (default `20`) |
+| `cursor` | `string` | Cursor from a previous response to fetch the next page |
+
+Response includes `nextCursor` and `hasNextPage` to indicate whether more data is available.
+
+---
+
+## Explore endpoints
+
+<CardGroup cols={2}>
+  <Card title="Payments" icon="credit-card" href="/api-reference/endpoint/payments">
+    Create, verify, and retrieve payments.
+  </Card>
+  <Card title="Paylinks" icon="link" href="/api-reference/endpoint/paylinks">
+    Shareable no-code payment pages.
+  </Card>
+  <Card title="Transactions" icon="list" href="/api-reference/endpoint/transactions">
+    Query your full transaction history.
+  </Card>
+  <Card title="Payouts" icon="money-bill-transfer" href="/api-reference/endpoint/payouts">
+    Withdraw funds to crypto or fiat.
+  </Card>
+  <Card title="Webhooks" icon="bell" href="/api-reference/endpoint/webhooks">
+    Register endpoints and subscribe to events.
+  </Card>
+  <Card title="Customers" icon="users" href="/api-reference/endpoint/customers">
+    Manage customer records.
+  </Card>
+</CardGroup>

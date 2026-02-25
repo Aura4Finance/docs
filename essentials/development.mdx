@@ -1,52 +1,89 @@
 ---
 title: "Development"
-description: "Set up your development environment and testing"
+description: "Set up your local development environment and test your Orafi integration safely."
 ---
 
-# Development Environment
+## Base URL
 
-Learn how to set up your development environment for safe testing of Orafi integrations.
+All API requests — both test and live — use a single base URL:
 
-## Test vs Live Modes
+```
+https://api.orafi.app
+```
 
-Orafi provides separate environments for development and production:
+Your API key determines whether you're operating on testnet or mainnet. There are no separate environment URLs to manage.
 
-- **Test environment**
-- **Live environment**
-> Both uses the same API: `https://api.orafi.app`. To toggle between modes, merchants can visit their dashboard, or use proided endpoint.
+---
 
-Use the test environment for all development and testing to avoid real transactions.
+## Test vs live mode
 
-## API Keys
+| | Test mode | Live mode |
+| --- | --- | --- |
+| **Blockchain** | Testnet | Mainnet |
+| **Real funds** | No | Yes |
+| **API key prefix** | `ora_test_` | `ora_live_` |
+| **Onboarding required** | No | Yes |
+| **Webhooks** | Delivered normally | Delivered normally |
 
-You have separate API keys for each environment:
+<Warning>
+  Always use **test mode** during development. Switch to live mode only after your integration is fully tested and your onboarding is complete.
+</Warning>
 
-- **Test API Key**: Used for the test environment(testnet)
-- **Live API Key**: Used for production(mainnet)
+---
 
-Keep your live API key secure and never expose it in client-side code.
+## Switching modes
 
-## Testing Best Practices
+You can switch between test and live mode in two ways:
 
-### 1. Use Test Mode for Development
+1. **Dashboard** — Toggle the mode switch in your [Orafi Dashboard](https://dashboard.orafi.app).
+2. **API** — Call the [Mode endpoint](/api-reference/endpoint/mode) programmatically.
 
-Always develop and test your integration using the test environment first.
-To switch to live,  you must complete the onboarding process
+<Note>
+  Switching to live mode requires completed onboarding and business verification.
+</Note>
 
-### 2. Simulate Different Scenarios
+---
 
-Use our test endpoints to simulate various payment scenarios:
+## Local webhook testing
 
-- Successful payments
-- Failed payments
-- Webhook retries
-- Refunds
+Webhooks are delivered to publicly accessible HTTPS URLs. For local development, use a tunneling tool to expose your local server:
 
-### 3. Webhook Testing
+<Steps>
+  <Step title="Start a tunnel">
+    Use a tool like [ngrok](https://ngrok.com) or [localtunnel](https://theboroer.github.io/localtunnel-www/) to create a public URL that forwards to your local server.
+    ```bash
+    ngrok http 3000
+    ```
+  </Step>
+  <Step title="Register the webhook URL">
+    Use the tunnel URL as your webhook endpoint.
+    ```bash
+    curl -X POST https://api.orafi.app/v1/webhook/register \
+      -H "Content-Type: application/json" \
+      -H "x-api-key: ora_test_your_api_key" \
+      -d '{ "url": "https://abc123.ngrok.io/webhooks/orafi" }'
+    ```
+  </Step>
+  <Step title="Trigger a test payment">
+    Create a payment with your test API key. Once confirmed, the webhook will be delivered to your local server via the tunnel.
+  </Step>
+</Steps>
 
-Set up webhook endpoints for testing:
+---
 
-- Use tools like ngrok or outray for local development
-- Verify webhook signatures in test mode
-- Test webhook retry logic
+## Testing best practices
 
+<AccordionGroup>
+  <Accordion title="Use idempotent transaction references">
+    Always generate a unique `txRef` for each payment. If you retry with the same `txRef`, Orafi returns the original payment instead of creating a duplicate.
+  </Accordion>
+  <Accordion title="Simulate different scenarios">
+    Create payments, trigger refunds, and initiate payouts in test mode to cover your integration's happy and error paths.
+  </Accordion>
+  <Accordion title="Verify webhook signatures">
+    Every webhook payload is signed with your webhook secret. Always verify the signature before processing events — even in test mode.
+  </Accordion>
+  <Accordion title="Test webhook retries">
+    If your endpoint returns a non-2xx status, Orafi retries delivery automatically. Make sure your handler is idempotent so duplicate deliveries don't cause issues.
+  </Accordion>
+</AccordionGroup>

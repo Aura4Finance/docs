@@ -1,71 +1,198 @@
 ---
 title: "Quickstart"
-description: "Get up and running with your first crypto payment in minutes"
+description: "Create your first crypto payment in under 5 minutes."
 ---
 
-# Getting Started
+## Prerequisites
 
-Welcome to Orafi! This guide will help you get up and running with your first crypto payment in minutes.
+Before you begin, make sure you have:
 
-## Account Creation
+1. An Orafi account — [sign up here](https://dashboard.orafi.app)
+2. A completed business profile (onboarding)
+3. Your **test** API key from the dashboard
 
-1. Sign up for an Orafi account at [orafi.app](https://dashboard.orafi.app)
-2. Complete your business profile and onoarding processes
-3. Generate your API keys from the dashboard
+<Info>
+Both test and live environments use the same base URL: `https://api.orafi.app`. Your API key determines which mode you're operating in.
+</Info>
 
-## API Key Usage
+---
 
-Orafi uses API keys for authentication. You have separate keys for test and live modes.
+## Step 1 — Create a payment
 
-- **Test mode**: For development and testing(testnet)
-- **Live mode**: For production payments(mainnet)
+Use the hosted checkout flow to create a payment. Orafi returns a `checkoutUrl` that you redirect your customer to.
 
-Include your API key in the `x-api-key` header for all requests.
+<CodeGroup>
 
-## Test vs Live Environments
-
-- **Endpoint**: `https://api.orafi.app`
-Both uses same API
-
-Use test mode for development to avoid real transactions.
-
-## First Payment Example
-
-Let's create your first payment using curl.
-
-### 1. Create a hosted payment
-
-```bash
+```bash cURL
 curl -X POST https://api.orafi.app/transactions/payment/create \
   -H "Content-Type: application/json" \
-  -H "x-api-key: your_test_api_key" \
+  -H "x-api-key: ora_test_your_api_key" \
   -d '{
     "amount": 10000,
     "customer": {
       "fullname": "John Doe",
       "email": "john@example.com"
     },
-    "txRef": "tx_123456789",
-    "redirectUrl": "https://yourapp.com/success"
+    "txRef": "order_12345",
+    "redirectUrl": "https://yourapp.com/payment/success"
   }'
 ```
 
-This creates a payment for and returns payment details including a deposit address.
+```javascript Node.js
+const response = await fetch("https://api.orafi.app/transactions/payment/create", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": "ora_test_your_api_key"
+  },
+  body: JSON.stringify({
+    amount: 10000,
+    customer: {
+      fullname: "John Doe",
+      email: "john@example.com"
+    },
+    txRef: "order_12345",
+    redirectUrl: "https://yourapp.com/payment/success"
+  })
+});
 
-### 2. Check payment status
+const data = await response.json();
+console.log(data);
+```
 
-```bash
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.orafi.app/transactions/payment/create",
+    headers={
+        "Content-Type": "application/json",
+        "x-api-key": "ora_test_your_api_key"
+    },
+    json={
+        "amount": 10000,
+        "customer": {
+            "fullname": "John Doe",
+            "email": "john@example.com"
+        },
+        "txRef": "order_12345",
+        "redirectUrl": "https://yourapp.com/payment/success"
+    }
+)
+
+print(response.json())
+```
+
+</CodeGroup>
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Payment created successfully",
+  "data": {
+    "payment": {
+      "id": "cmjw65j510001v81cilq0u13v",
+      "depositAddress": "0x02c362...82f66",
+      "amount": 10000,
+      "amountInUSDC": 6.92,
+      "redirectUrl": "https://yourapp.com/payment/success"
+    },
+    "checkoutUrl": "https://checkout.orafi.app/cmjw65j4z0000v81c16vtqj14"
+  }
+}
+```
+
+Redirect your customer to the `checkoutUrl`. They'll complete the payment there, then be sent back to your `redirectUrl`.
+
+---
+
+## Step 2 — Verify the payment
+
+Once the customer is redirected back, verify the payment status server-side.
+
+<CodeGroup>
+
+```bash cURL
 curl -X POST https://api.orafi.app/transactions/payment/verify \
   -H "Content-Type: application/json" \
   -d '{
-    "paymentId": "pay_abc123"
+    "paymentId": "cmjw65j510001v81cilq0u13v"
   }'
 ```
 
+```javascript Node.js
+const verification = await fetch("https://api.orafi.app/transactions/payment/verify", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    paymentId: "cmjw65j510001v81cilq0u13v"
+  })
+});
 
-## Next Steps
+const result = await verification.json();
+console.log(result);
+```
 
-- Set up webhooks to receive payment notifications
-- Explore paylinks for no-code payment pages
-- Configure settlement accounts for fund withdrawals
-- Review our API reference for all available endpointsd
+</CodeGroup>
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Payment verification completed",
+  "data": {
+    "status": "completed",
+    "paymentId": "cmjw65j510001v81cilq0u13v"
+  }
+}
+```
+
+---
+
+## Step 3 — Listen for webhooks (recommended)
+
+Instead of polling, register a webhook to get notified in real-time when payments complete or fail.
+
+```bash
+curl -X POST https://api.orafi.app/v1/webhook/register \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: ora_test_your_api_key" \
+  -d '{
+    "url": "https://yourapp.com/webhooks/orafi"
+  }'
+```
+
+Then subscribe to events:
+
+```bash
+curl -X POST https://api.orafi.app/webhook/subscribe \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: ora_test_your_api_key" \
+  -d '{
+    "event": "payment.success"
+  }'
+```
+
+See the [Webhooks guide](/api-reference/endpoint/webhooks) for full setup details.
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Set up webhooks" icon="bell" href="/api-reference/endpoint/webhooks">
+    Receive real-time payment notifications.
+  </Card>
+  <Card title="Create paylinks" icon="link" href="/api-reference/endpoint/paylinks">
+    No-code shareable payment pages.
+  </Card>
+  <Card title="Configure payouts" icon="money-bill-transfer" href="/api-reference/endpoint/payouts">
+    Withdraw settled funds to crypto or fiat.
+  </Card>
+  <Card title="Full API reference" icon="code" href="/api-reference/introduction">
+    Explore every endpoint.
+  </Card>
+</CardGroup>

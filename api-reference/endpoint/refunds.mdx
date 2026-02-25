@@ -1,111 +1,158 @@
 ---
-title: "Refund"
-description: "Process refunds for transactions"
+title: "Refunds"
+description: "Return funds to customers for completed transactions."
 ---
 
-Refunds allow you to return funds to customers for failed or cancelled transactions.
+## The refund object
 
-## Available Endpoints
+A refund returns funds from a completed payment back to the customer's wallet. Refunds are free — no platform fee is deducted.
 
-```http
-POST /transactions/refund               # Creating Refunds
-POST /transactions/refund/retry         # Retrying Failed Refunds
-```
+<ResponseField name="id" type="string">
+  Unique identifier for the refund.
+</ResponseField>
 
+<ResponseField name="amount" type="number">
+  Refund amount in NGN.
+</ResponseField>
 
-## Creating Refunds
+<ResponseField name="status" type="string">
+  Refund status. One of `COMPLETED` or `FAILED`.
+</ResponseField>
 
-> Create a refund transaction
+<ResponseField name="reason" type="string">
+  Reason for the refund, if provided.
+</ResponseField>
 
-### Request Body
+<ResponseField name="walletAddress" type="string">
+  Destination address where the refund was sent.
+</ResponseField>
 
-#### `originalTxId`
-- **Type:** `string`
-- **Required**
-- **Description:**  
- Unique identifier of the original transaction being refunded.
+<ResponseField name="txDigest" type="string">
+  On-chain transaction hash for the refund.
+</ResponseField>
+
+<ResponseField name="executionTime" type="number">
+  Time taken to execute the refund (in milliseconds).
+</ResponseField>
+
+<ResponseField name="gasFee" type="number">
+  Network gas fee for the transaction.
+</ResponseField>
+
+<ResponseField name="amountSent" type="number">
+  Actual USDC amount sent to the customer.
+</ResponseField>
 
 ---
 
-#### `to`
-- **Type:** `string`
-- **Required**
-- **Length:** `66` characters
-- **Description:**  
-  Destination address where the refunded amount will be sent.  
-  Must be a valid address matching the supported blockchain format.
+## Create a refund
 
----
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/transactions/refund`
+</div>
 
-#### `reason`
-- **Type:** `string`
-- **Optional**
-- **Description:**  
+Initiates a refund for a previously completed transaction. The full amount is returned to the specified wallet address.
+
+### Request body
+
+<ParamField body="originalTxId" type="string" required>
+  Unique identifier of the original transaction to refund.
+</ParamField>
+
+<ParamField body="to" type="string" required>
+  Destination wallet address for the refund. Must be a valid 66-character blockchain address.
+</ParamField>
+
+<ParamField body="reason" type="string">
   Optional note explaining the reason for the refund.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.orafi.app/v1/transactions/refund \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: ora_test_your_api_key" \
+  -d '{
+    "originalTxId": "cmjlzeq0j0001v83g2cuplnbg",
+    "to": "0xc9f89b41c8e9a4f1d1cf16477500cc303fe9720f5c3b55211d4694a5ebcd1ad9",
+    "reason": "Customer not satisfied"
+  }'
+```
+```javascript Node.js
+const response = await fetch("https://api.orafi.app/v1/transactions/refund", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": "ora_test_your_api_key"
+  },
+  body: JSON.stringify({
+    originalTxId: "cmjlzeq0j0001v83g2cuplnbg",
+    to: "0xc9f89b41c8e9a4f1d1cf16477500cc303fe9720f5c3b55211d4694a5ebcd1ad9",
+    reason: "Customer not satisfied"
+  })
+});
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 — Success
+{
+  "success": true,
+  "message": "Refund initiated successfully",
+  "data": {
+    "status": "COMPLETED",
+    "amount": 200,
+    "txDigest": "2MHzMhPt...9ttY",
+    "executionTime": 2101,
+    "gasFee": 0.0001,
+    "platformFee": null,
+    "amountSent": 0.18
+  }
+}
+```
+</ResponseExample>
 
 ---
 
-```bash
-curl - X POST https://api.orafi.app/v1/transactions/refund \
+## Retry a failed refund
+
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/transactions/refund/retry`
+</div>
+
+Retries a previously failed refund.
+
+### Request body
+
+<ParamField body="refundId" type="string" required>
+  Unique identifier of the failed refund to retry.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.orafi.app/v1/transactions/refund/retry \
   -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key" \
+  -H "x-api-key: ora_test_your_api_key" \
   -d '{
-    originalTxId: {originalTxId},
-    to: ox2,
-    reason: "Customer not satisfied!"
+    "refundId": "cmjr6ixla0005v84wlfust2mn"
   }'
 ```
-**Response:**
-```json
+</RequestExample>
+
+<ResponseExample>
+```json 200 — Success
 {
-    "success": true,
-    "message": "Refund initiated successfully",
-    "data": {
-        "status": "COMPLETED",
-        "amount": 200,
-        "txDigest": "xxx",
-        "executionTime": 2101,
-        "gasFee": 0.0001,
-        "platformFee": null,
-        "amountSent": 0.18,
-    }
+  "success": true,
+  "message": "Refund Payout initiated successfully",
+  "data": {
+    "status": "COMPLETED",
+    "amount": 200,
+    "txDigest": "3NKzNiQt...8uuZ",
+    "executionTime": 2101,
+    "gasFee": 0.0001,
+    "platformFee": null,
+    "amountSent": 0.18
+  }
 }
 ```
----
-
-## Retrying Failed Refunds
-
-> Retry a refund
-### Request Body
-
-#### `refundId`
-- **Type:** `string`
-- **Required**
-- **Description:**  
-  Unique identifier of the refund transaction.
-
-
-```bash
-curl - X POST https://api.orafi.app/v1/transactions/refund/retry \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key" \
-  -d '{
-    refundId: {refundId}
-  }'
-```
-**Response:**
-```json
-{
-    "success": true,
-    "message": "Refund Payout initiated successfully",
-    "data": {
-        "status": "COMPLETED",
-        "amount": 200,
-        "txDigest": "xxx",
-        "executionTime": 2101,
-        "gasFee": 0.0001,
-        "platformFee": null,
-        "amountSent": 0.18,
-    }
-}
-```
+</ResponseExample>

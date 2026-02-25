@@ -1,21 +1,79 @@
 ---
 title: "Authentication"
-description: "Learn how to authenticate with the Orafi API"
+description: "Authenticate requests to the Orafi API using API keys."
 ---
 
+All requests to the Orafi API must include a valid API key in the `x-api-key` header. Your API key identifies your business and determines whether requests run in **test** or **live** mode.
 
-Orafi uses API keys for authenticating requests to the public API. Include your API key in the `x-api-key` header for all API requests.
+---
 
-### Example
+## API key format
 
-```bash
-curl -X GET https://api.orafi.app/transactions/payment/retrieve?payment_id=pay_123 \
-  -H "x-api-key: ora_live_1234567890abcdef"
+| Environment | Prefix | Example |
+| --- | --- | --- |
+| Test | `ora_test_` | `ora_test_a1b2c3d4e5f6...` |
+| Live | `ora_live_` | `ora_live_x9y8z7w6v5u4...` |
+
+Both test and live keys are 32+ characters and available in your [Dashboard](https://dashboard.orafi.app).
+
+---
+
+## Making authenticated requests
+
+Include your API key in the `x-api-key` header on every request:
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET https://api.orafi.app/transactions \
+  -H "x-api-key: ora_test_your_api_key"
 ```
 
-### API Key Format
+```javascript Node.js
+const response = await fetch("https://api.orafi.app/transactions", {
+  headers: {
+    "x-api-key": "ora_test_your_api_key"
+  }
+});
+```
 
-- **Live keys**: `ora_live_` followed by 32 characters
-- **Test keys**: `ora_test_` followed by 32 characters
+```python Python
+import requests
 
-Keep your API keys secure. Never expose them in client-side code or public repositories.
+response = requests.get(
+    "https://api.orafi.app/transactions",
+    headers={"x-api-key": "ora_test_your_api_key"}
+)
+```
+
+</CodeGroup>
+
+<Warning>
+  Requests without a valid `x-api-key` header return a **401 Unauthorized** error.
+</Warning>
+
+---
+
+## Test vs live mode
+
+Your API key controls which mode you operate in. Both modes use the same base URL (`https://api.orafi.app`), so there's no environment-specific endpoint to remember.
+
+| Feature | Test mode | Live mode |
+| --- | --- | --- |
+| Real funds | No (testnet) | Yes (mainnet) |
+| Webhooks | Delivered normally | Delivered normally |
+| Onboarding required | No | Yes |
+| API key prefix | `ora_test_` | `ora_live_` |
+
+<Tip>
+  Always develop and test your integration using test-mode keys first. Switch to live keys only after your integration is verified.
+</Tip>
+
+---
+
+## Keeping keys secure
+
+- **Never** expose API keys in client-side code, mobile apps, or public repositories.
+- Store keys in environment variables or a secrets manager.
+- Rotate keys immediately if you suspect they have been compromised.
+- Use test keys for all development and CI/CD pipelines.

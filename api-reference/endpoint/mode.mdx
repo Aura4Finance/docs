@@ -1,31 +1,50 @@
 ---
 title: "Mode"
-description: "API endpoints for business mode management"
+description: "Switch your business between test (testnet) and live (mainnet) mode."
 ---
 
-Toggle business mode
+## Toggle business mode
 
-## Available Endpoints
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/business/mode`
+</div>
 
-```http
-POST /business/mode             # Change business mode
-```
----
+Switches the authenticated business between **test** and **live** mode. Live mode requires completed onboarding.
 
-## Modes
-There are 2 available modes during operation: test(testnet) and live(mainnet).
+| Mode | Network | Real funds |
+| --- | --- | --- |
+| `test` | Testnet | No |
+| `live` | Mainnet | Yes |
 
-Toggle Business Mode: 
+<Warning>
+  You must complete the onboarding process before switching to live mode. If onboarding is incomplete, the API returns an error.
+</Warning>
 
-```bash
+<RequestExample>
+```bash cURL
 curl -X POST https://api.orafi.app/v1/business/mode \
   -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key" 
+  -H "x-api-key: ora_test_your_api_key"
 ```
-**Response**
-```json 
+```javascript Node.js
+const response = await fetch("https://api.orafi.app/v1/business/mode", {
+  method: "POST",
+  headers: { "x-api-key": "ora_test_your_api_key" }
+});
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 — Success
 {
-    "status": "Error",
-    "message": "Complete onboarding process to switch to live mode"
+  "success": true,
+  "message": "Mode switched to live successfully"
 }
 ```
+```json 400 — Onboarding incomplete
+{
+  "status": "Error",
+  "message": "Complete onboarding process to switch to live mode"
+}
+```
+</ResponseExample>

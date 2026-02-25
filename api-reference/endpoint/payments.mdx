@@ -1,78 +1,82 @@
 ---
 title: "Payments"
-description: "Examples for payment-related endpoints"
+description: "Create hosted checkout payments, verify payment status, and retrieve payment details."
 ---
 
-## Available Endpoints
+## The payment object
 
-```http
-POST /transactions/payment/create           # Create Hosted Payment
-POST /transactions/payment/verify           # Verify Payment
-GET /transactions/payment/retrieve          # Retrieve Payment
-```
+A payment represents a single charge initiated by a customer. Payments are created via the API and completed through Orafi's hosted checkout flow.
 
----
+<ResponseField name="id" type="string">
+  Unique identifier for the payment.
+</ResponseField>
 
-## Create Hosted Payment
+<ResponseField name="depositAddress" type="string">
+  On-chain address the customer sends funds to.
+</ResponseField>
 
-> Create a new hosted checkout payment.
+<ResponseField name="amount" type="number">
+  Payment amount in NGN (the currency the merchant specified).
+</ResponseField>
 
-### Request Body
+<ResponseField name="amountInUSDC" type="number">
+  Equivalent amount in USDC at the time of creation.
+</ResponseField>
 
-#### `amount`
-- **Type:** `number`
-- **Required**
-- **Minimum:** `1`
-- **Description:**  
-  Amount to be charged for the payment(In naira).
+<ResponseField name="redirectUrl" type="string">
+  URL the customer is redirected to after payment.
+</ResponseField>
 
----
+<ResponseField name="checkoutUrl" type="string">
+  Orafi-hosted checkout page URL. Redirect your customer here to complete payment.
+</ResponseField>
 
-#### `customer`
-- **Type:** `object`
-- **Required**
-- **Description:**  
-  Customer information associated with the payment.
-
----
-
-#### `customer.fullname`
-- **Type:** `string`
-- **Required**
-- **Description:**  
-  Full name of the customer making the payment.
+<ResponseField name="status" type="string" default="INITIALIZED">
+  Current payment status. One of `INITIALIZED`, `CONFIRMED`, or `FAILED`.
+</ResponseField>
 
 ---
 
-#### `customer.email`
-- **Type:** `string`
-- **Required**
-- **Format:** `email`
-- **Description:**  
-  Email address of the customer.
+## Create a payment
 
----
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/transactions/payment/create`
+</div>
 
-#### `txRef`
-- **Type:** `string`
-- **Required**
-- **Description:**  
-  Unique transaction reference issued by the merchant.
+Creates a hosted checkout payment. Returns a `checkoutUrl` to redirect the customer to.
 
----
+### Request body
 
-#### `redirectUrl`
-- **Type:** `string`
-- **Optional**
-- **Description:**  
-  URL to redirect the customer to after payment completion.
+<ParamField body="amount" type="number" required>
+  Amount to charge in NGN. Minimum `1`.
+</ParamField>
 
----
+<ParamField body="customer" type="object" required>
+  Customer information for this payment.
 
-```bash
+  <Expandable title="child attributes">
+    <ParamField body="fullname" type="string" required>
+      Full name of the customer.
+    </ParamField>
+    <ParamField body="email" type="string" required>
+      Email address of the customer.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="txRef" type="string" required>
+  Unique transaction reference from your system. Acts as an idempotency key — duplicate `txRef` values return the original payment.
+</ParamField>
+
+<ParamField body="redirectUrl" type="string">
+  URL to redirect the customer to after checkout. If omitted, the customer stays on the Orafi checkout page.
+</ParamField>
+
+<RequestExample>
+```bash cURL
 curl -X POST https://api.orafi.app/transactions/payment/create \
   -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key" \
+  -H "x-api-key: ora_test_your_api_key" \
   -d '{
     "amount": 10000,
     "customer": {
@@ -80,97 +84,163 @@ curl -X POST https://api.orafi.app/transactions/payment/create \
       "email": "john@example.com"
     },
     "txRef": "order_12345",
-    "type": "HOSTED_CHECKOUT",
     "redirectUrl": "https://yourapp.com/success"
   }'
 ```
+```javascript Node.js
+const response = await fetch("https://api.orafi.app/transactions/payment/create", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": "ora_test_your_api_key"
+  },
+  body: JSON.stringify({
+    amount: 10000,
+    customer: {
+      fullname: "John Doe",
+      email: "john@example.com"
+    },
+    txRef: "order_12345",
+    redirectUrl: "https://yourapp.com/success"
+  })
+});
+```
+```python Python
+import requests
 
-**Response:**
-```json
-{
-    "success": true,
-    "message": "Payment created successfully",
-    "data": {
-            "payment": {
-                "id": "cmjw65j510001v81cilq0u13v",
-                "depositAddress": "0x02c3624325d9db01b64466dfd90f5cd7adeca13504f1c47638ecd4a076982f66",
-                "amount": 200,
-                "amountInUSDC": 0.1384402540842418,
-                "redirectUrl": "https://mystore.com/purchase/xxxxx"
-            }
+response = requests.post(
+    "https://api.orafi.app/transactions/payment/create",
+    headers={
+        "Content-Type": "application/json",
+        "x-api-key": "ora_test_your_api_key"
+    },
+    json={
+        "amount": 10000,
+        "customer": {
+            "fullname": "John Doe",
+            "email": "john@example.com"
         },
-        "checkoutUrl": "https://checkout.orafi.app/cmjw65j4z0000v81c16vtqj14"
+        "txRef": "order_12345",
+        "redirectUrl": "https://yourapp.com/success"
+    }
+)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 201 — Created
+{
+  "success": true,
+  "message": "Payment created successfully",
+  "data": {
+    "payment": {
+      "id": "cmjw65j510001v81cilq0u13v",
+      "depositAddress": "0x02c362...82f66",
+      "amount": 10000,
+      "amountInUSDC": 6.92,
+      "redirectUrl": "https://yourapp.com/success"
+    },
+    "checkoutUrl": "https://checkout.orafi.app/cmjw65j4z0000v81c16vtqj14"
+  }
 }
 ```
+```json 400 — Bad Request
+{
+  "success": false,
+  "message": "Invalid request parameters"
+}
+```
+</ResponseExample>
 
 ---
 
-## Verify Payment
+## Verify a payment
 
-> Check the status of a payment.
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/transactions/payment/verify`
+</div>
 
-### Request Body
+Verifies the current status of a payment. Call this after the customer is redirected back to your application.
 
-#### `paymentId`
-- **Type:** `string`
-- **Required**
-- **Description:**  
-  Payment transaction identifier.
+### Request body
 
----
+<ParamField body="paymentId" type="string" required>
+  The payment ID returned when the payment was created.
+</ParamField>
 
-```bash
+<RequestExample>
+```bash cURL
 curl -X POST https://api.orafi.app/transactions/payment/verify \
   -H "Content-Type: application/json" \
   -d '{
-    "paymentId": {paymentId}
+    "paymentId": "cmjw65j510001v81cilq0u13v"
   }'
 ```
+```javascript Node.js
+const response = await fetch("https://api.orafi.app/transactions/payment/verify", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ paymentId: "cmjw65j510001v81cilq0u13v" })
+});
+```
+</RequestExample>
 
-**Response:**
-```json
+<ResponseExample>
+```json 200 — Success
 {
-    "success": true,
-    "message": "Payment verification completed",
-    "data": {
-        "status": "completed",
-        "paymentId": "cmjlzeq0j0001v83g2cuplnbg"
-    }
+  "success": true,
+  "message": "Payment verification completed",
+  "data": {
+    "status": "completed",
+    "paymentId": "cmjw65j510001v81cilq0u13v"
+  }
 }
 ```
+</ResponseExample>
 
 ---
 
-## Retrieve Payment
+## Retrieve a payment
 
-> Get detailed payment information.
+<div className="api-method-box">
+  <span className="api-method get">GET</span> `/transactions/payment/retrieve`
+</div>
 
-### Query Parameter
+Fetches full details of a payment including deposit address, business name, and amounts.
 
-#### `paymentId`
-- **Type:** `string`
-- **Required**
-- **Description:**  
-  Payment transaction identifier.
+### Query parameters
 
-```bash
-curl -X GET "https://api.orafi.app/transactions/payment/retrieve?paymentId={paymentId}" \
-  -H "x-api-key: your_api_key"
+<ParamField query="paymentId" type="string" required>
+  The payment ID to retrieve.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -X GET "https://api.orafi.app/transactions/payment/retrieve?paymentId=cmjw65j510001v81cilq0u13v" \
+  -H "x-api-key: ora_test_your_api_key"
 ```
+```javascript Node.js
+const response = await fetch(
+  "https://api.orafi.app/transactions/payment/retrieve?paymentId=cmjw65j510001v81cilq0u13v",
+  { headers: { "x-api-key": "ora_test_your_api_key" } }
+);
+```
+</RequestExample>
 
-**Response:**
-```json
+<ResponseExample>
+```json 200 — Success
 {
-    "success": true,
-    "message": "Payment information retrieved successfully!",
-    "data": {
-        "id": "cmjw65j510001v81cilq0u13v",
-        "depositAddress": "0x02c3624325d9db01b64466dfd90f5cd7adeca13504f1c47638ecd4a076982f66",
-        "trasferAddress": "0x02c3624325d9db01b64466dfd90f5cd7adeca13504f1c47638ecd4a076982f66",
-        "businessName": "Chidi Limited",
-        "amount": 200,
-        "amountInUSDC": 0.1384402540842418,
-        "redirectUrl": "https://mystore.com/purchase/xxxxx?oratx=cmjw65j4z0000v81c16vtqj14"
-    }
+  "success": true,
+  "message": "Payment information retrieved successfully!",
+  "data": {
+    "id": "cmjw65j510001v81cilq0u13v",
+    "depositAddress": "0x02c362...82f66",
+    "transferAddress": "0x02c362...82f66",
+    "businessName": "Acme Corp",
+    "amount": 10000,
+    "amountInUSDC": 6.92,
+    "redirectUrl": "https://yourapp.com/success?oratx=cmjw65j4z0000v81c16vtqj14"
+  }
 }
 ```
+</ResponseExample>

@@ -1,135 +1,148 @@
 ---
 title: "Errors & Retries"
-description: "Handle errors and implement retry logic properly"
+description: "Understand Orafi error codes, response formats, and how to implement safe retry logic."
 ---
 
+The Orafi API uses conventional HTTP status codes and returns a consistent JSON error body so you can handle failures programmatically.
 
-Understanding how Orafi handles errors and implementing proper retry logic is crucial for building reliable integrations.
+---
 
-## Error Categories
+## Error response format
 
-### Client Errors (4xx)
+Every error response follows this structure:
 
-- **400 Bad Request**: Invalid request data or parameters
-- **401 Unauthorized**: Missing or invalid API key
-- **403 Forbidden**: Insufficient permissions
-- **404 Not Found**: Resource doesn't exist
-- **429 Too Many Requests**: Rate limit exceeded
+```json
+{
+  "success": false,
+  "message": "A human-readable explanation of the error."
+}
+```
 
-### Server Errors (5xx)
+---
 
-- **500 Internal Server Error**: Unexpected server error
-- **502 Bad Gateway**: Upstream service error
-- **503 Service Unavailable**: Service temporarily unavailable
+## HTTP status codes
 
-## Common Failure Cases
+### Client errors (4xx)
 
-### Payment Failures
+| Code | Meaning | What to do |
+| --- | --- | --- |
+| `400` | **Bad Request** — Invalid parameters or malformed body. | Check the request payload against the docs. |
+| `401` | **Unauthorized** — Missing or invalid API key. | Verify the `x-api-key` header. |
+| `403` | **Forbidden** — Your account lacks permission. | Complete onboarding or check mode. |
+| `404` | **Not Found** — The resource doesn't exist. | Verify the ID or path. |
+| `429` | **Too Many Requests** — Rate limit exceeded. | Back off and retry after the `Retry-After` header. |
 
-- **Insufficient funds**: Merchant request to refund or payout above current balance
-- **Network congestion**: On-chain network
-- **Expired payment**: Payment not completed within 24 hours
-- **Invalid address**: Incorrect deposit address used
+### Server errors (5xx)
 
-### API Failures
+| Code | Meaning | What to do |
+| --- | --- | --- |
+| `500` | **Internal Server Error** — Unexpected failure on our side. | Retry with exponential backoff. |
+| `502` | **Bad Gateway** — An upstream dependency failed. | Retry after a short delay. |
+| `503` | **Service Unavailable** — Temporary maintenance. | Retry after a short delay. |
 
-- **Rate limiting**: Too many requests per minute
-- **Invalid parameters**: Malformed request data
-- **Authentication errors**: Invalid or expired API keys
+<Note>
+  **Never retry 4xx errors automatically** (except `429`). Fix the request first.
+</Note>
 
-## Safe Retry Logic
+---
 
-### Idempotency Keys
+## Common failure scenarios
 
-Use transaction references (`txRef`) as idempotency keys. Duplicate requests with the same `txRef` return the same result.
+### Payment failures
 
-```javascript
-async function createPaymentWithRetry(paymentData, maxRetries = 3) {
+| Scenario | Cause | Resolution |
+| --- | --- | --- |
+| Insufficient balance | Payout or refund exceeds available funds. | Check balances before initiating. |
+| Network congestion | On-chain confirmation delayed. | Wait and poll or rely on webhooks. |
+| Expired payment | Customer didn't pay within the time window. | Create a new payment. |
+| Invalid address | Deposit address format incorrect. | Verify the address before submitting. |
+
+---
+
+## Retry strategy
+
+### Idempotency via `txRef`
+
+Every payment accepts a `txRef` (transaction reference) that acts as an **idempotency key**. Sending the same `txRef` twice returns the original payment — no duplicate charge is created.
+
+### Exponential backoff
+
+For server errors (`5xx`) and rate limits (`429`), implement exponential backoff:
+
+<CodeGroup>
+
+```javascript Node.js
+async function createPaymentWithRetry(payload, maxRetries = 3) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      const response = await fetch('/transactions/payment/create', {
-        method: 'POST',
+      const res = await fetch("https://api.orafi.app/transactions/payment/create", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': process.env.ORAFI_API_KEY
+          "Content-Type": "application/json",
+          "x-api-key": process.env.ORAFI_API_KEY,
         },
-        body: JSON.stringify(paymentData)
+        body: JSON.stringify(payload),
       });
-      
-      if (response.ok) {
-        return await response.json();
+
+      if (res.ok) return await res.json();
+
+      // Don't retry client errors (except 429)
+      if (res.status >= 400 && res.status < 500 && res.status !== 429) {
+        throw new Error(`Client error ${res.status}: ${(await res.json()).message}`);
       }
-      
-      const error = await response.json();
-      
-      // Don't retry client errors
-      if (response.status >= 400 && response.status < 500) {
-        throw new Error(`Client error: ${error.message}`);
-      }
-      
-      // Retry server errors
+
       if (attempt === maxRetries) {
-        throw new Error(`Max retries exceeded: ${error.message}`);
+        throw new Error(`Max retries reached (${res.status})`);
       }
-      
-      // Exponential backoff
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
-      
-    } catch (error) {
-      if (attempt === maxRetries) {
-        throw error;
-      }
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+
+      await new Promise((r) => setTimeout(r, Math.pow(2, attempt) * 1000));
+    } catch (err) {
+      if (attempt === maxRetries) throw err;
+      await new Promise((r) => setTimeout(r, Math.pow(2, attempt) * 1000));
     }
   }
 }
 ```
 
-### Webhook Retries
+```python Python
+import time, requests
 
-Orafi automatically retries failed webhooks. Ensure your endpoint:
+def create_payment_with_retry(payload, max_retries=3):
+    for attempt in range(1, max_retries + 1):
+        try:
+            res = requests.post(
+                "https://api.orafi.app/transactions/payment/create",
+                headers={
+                    "Content-Type": "application/json",
+                    "x-api-key": ORAFI_API_KEY,
+                },
+                json=payload,
+            )
 
-- Returns 2xx status for successful processing
-- Handles duplicate events gracefully
-- Processes events within 10 seconds
+            if res.ok:
+                return res.json()
 
-### Payment Verification Retries
+            if 400 <= res.status_code < 500 and res.status_code != 429:
+                raise Exception(f"Client error {res.status_code}: {res.json()['message']}")
 
-For payment verification, implement exponential backoff:
+            if attempt == max_retries:
+                raise Exception(f"Max retries reached ({res.status_code})")
 
-```javascript
-async function verifyPaymentWithRetry(paymentId, maxRetries = 5) {
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      const response = await fetch('/transactions/payment/verify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ paymentId })
-      });
-      
-      const result = await response.json();
-      
-      if (result.data.status === 'CONFIRMED') {
-        return result;
-      }
-      
-      if (result.data.status === 'FAILED') {
-        throw new Error('Payment failed');
-      }
-      
-      // Still pending, wait and retry
-      if (attempt < maxRetries) {
-        await new Promise(resolve => setTimeout(resolve, attempt * 2000));
-      }
-      
-    } catch (error) {
-      if (attempt === maxRetries) {
-        throw error;
-      }
-      await new Promise(resolve => setTimeout(resolve, attempt * 2000));
-    }
-  }
-}
+            time.sleep(2 ** attempt)
+        except Exception:
+            if attempt == max_retries:
+                raise
+            time.sleep(2 ** attempt)
 ```
+
+</CodeGroup>
+
+---
+
+## Webhook retry behavior
+
+Orafi automatically retries failed webhook deliveries. To ensure reliable processing:
+
+- **Return a `2xx` status** within 10 seconds to acknowledge receipt.
+- **Handle duplicates** — your handler should be idempotent. Use the `transactionId` to deduplicate.
+- **Check delivery history** — Use the [Webhook Deliveries](/api-reference/endpoint/webhook-deliveries) endpoint to inspect attempt counts and response statuses.

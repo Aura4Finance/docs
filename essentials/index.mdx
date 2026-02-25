@@ -1,68 +1,82 @@
 ---
 title: "Introduction"
-description: "Welcome to Orafi - Seamless crypto payments API"
+description: "Welcome to Orafi — the seamless crypto payments API for modern businesses."
 ---
 
 ## What is Orafi?
 
-Orafi is a seamless crypto payments API that enables businesses to accept cryptocurrency payments with ease. Built for developers, Orafi provides a simple, secure, and reliable way to integrate crypto payments into your applications.
+Orafi is a crypto payments infrastructure that enables businesses to accept cryptocurrency payments with zero blockchain complexity. Our API handles wallets, on-chain transactions, settlements, and webhooks — so you can focus on building your product.
 
-<Card
-  title="Get started"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our quickstart guide to create your first payment.
-</Card>
-
-## Key Features
-
-<Columns cols={2}>
+<CardGroup cols={2}>
   <Card
-    title="Simple API"
+    title="Quickstart"
+    icon="rocket"
+    href="/essentials/quickstart"
+  >
+    Create your first payment in under 5 minutes.
+  </Card>
+  <Card
+    title="API Reference"
     icon="code"
     href="/api-reference/introduction"
   >
-    Clean RESTful API for easy integration.
+    Explore every endpoint with examples and response schemas.
   </Card>
   <Card
-    title="Multiple Cryptocurrencies"
-    icon="coins"
+    title="Authentication"
+    icon="key"
+    href="/essentials/authentication"
   >
-    Support for various cryptocurrencies.
+    Learn how API keys and environments work.
   </Card>
   <Card
-    title="Webhook Notifications"
+    title="Webhooks"
     icon="bell"
+    href="/api-reference/endpoint/webhooks"
   >
-    Real-time updates on payment status.
+    Get real-time notifications for payment events.
   </Card>
-  <Card
-    title="Test & Live Modes"
-    icon="flask"
-  >
-    Safe testing environment before going live.
-  </Card>
-</Columns>
+</CardGroup>
+
+---
+
+## How it works
+
+Orafi sits between your application and the blockchain. When a customer initiates a payment:
+
+<Steps>
+  <Step title="Create a payment">
+    Your server calls the Orafi API to create a payment with the amount, customer details, and a transaction reference.
+  </Step>
+  <Step title="Customer pays">
+    Orafi generates a unique deposit address and a hosted checkout URL. The customer can transfer crypto directly or sign a transaction with their wallet.
+  </Step>
+  <Step title="Payment confirmed">
+    Orafi verifies the on-chain transaction, settles funds to your account (minus a 1% platform fee), and sends a webhook to your server.
+  </Step>
+  <Step title="Funds available">
+    Withdraw settled funds at any time via crypto or fiat payout endpoints.
+  </Step>
+</Steps>
+
+---
+
+## Key capabilities
+
+| Capability | Description |
+| --- | --- |
+| **Hosted Checkout** | Pre-built payment page — no front-end work required. |
+| **Paylinks** | Shareable payment links for invoices, social commerce, and one-off charges. |
+| **Webhooks** | Real-time `payment.success` and `payment.failed` events. |
+| **Payouts** | Withdraw to any crypto wallet or bank account. |
+| **Refunds** | Return funds to customers with a single API call. |
+| **Test & Live Modes** | Full testnet environment that mirrors production. |
+| **On-chain Fees** | Transparent 1% fee enforced at the smart-contract level. |
+
+---
 
 ## Who is it for?
 
-Orafi is designed for:
-
-- **Merchants** who want to accept crypto payments without dealing with blockchain complexities
-- **Developers** looking for a simple API to integrate payments
-- **Businesses** that need reliable, scalable payment processing
-
-## High-level architecture
-
-Orafi sits between your application and the blockchain networks. When a customer initiates a payment:
-
-1. Your application creates a payment request via Orafi's API
-2. Orafi generates a unique deposit address, a wallet address and transaction details. This provides users with options to transfer cryptocurrencies directly or sign transaction with their wallet. 
-3. The customer retrives transaction information Orafi's checkout URL and signs payment transaction with their wallet or transfers.
-4. Checkout URL redirects back to application to verify transaction status
-5. Your application receives webhook notifications about payment status
-6. Funds are settled according to your configuration
-
-This architecture ensures that you never handle private keys or direct blockchain interactions, while maintaining full control over the payment flow.
+- **Merchants** who want to accept crypto without managing wallets or nodes.
+- **Developers** who need a clean, RESTful payments API.
+- **Platforms** that require programmatic payouts and settlement routing.

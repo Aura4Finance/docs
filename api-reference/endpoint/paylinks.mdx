@@ -1,251 +1,289 @@
 ---
 title: "Paylinks"
-description: "Endpoints for paylink management"
+description: "Create shareable payment links for one-off charges, invoices, and simple checkout flows."
 ---
 
-## Available Endpoints
+## The paylink object
 
-```http
-POST   /paylink/create               # Create Paylink
-GET    /paylink/{id}                 # Get Paylink Details
-GET    /paylink                      # List Paylinks
-DELETE /paylink/{id}                 # Delete Paylink
-```
+A paylink is a shareable payment URL that allows customers to pay without requiring a custom checkout integration. Ideal for invoices, social commerce, and quick payments.
 
-## Paylink Object
-
-The `Paylink` model represents a **shareable payment link** that allows customers to make payments without a custom checkout integration.
-
-Paylinks are commonly used for:
-- One-off payments
-- Invoices
-- Social or link-based payments
-- Simple checkout flows
-
-Each paylink belongs to a single business profile and can operate in either test or live mode.
-
----
-
-## Fields
-
-### `id`
-- **Type:** `String`
-- **Primary Key**
-- **Default:** `cuid()`
-- **Database Field:** `_id`
-- **Description:**  
+<ResponseField name="id" type="string">
   Unique identifier for the paylink.
+</ResponseField>
 
----
+<ResponseField name="title" type="string">
+  Short title displayed to customers on the payment page.
+</ResponseField>
 
-### `title`
-- **Type:** `String`
-- **Description:**  
-  Short title displayed to customers for the payment link.
-
----
-
-### `description`
-- **Type:** `String`
-- **Description:**  
+<ResponseField name="description" type="string">
   Detailed description explaining what the payment is for.
+</ResponseField>
 
----
+<ResponseField name="mode" type="string">
+  Environment mode. Either `test` or `live`.
+</ResponseField>
 
-### `mode`
-- **Type:** `Mode`
-- **Description:**  
-  Indicates whether the paylink is operating in **test** or **live** mode.
-
----
-
-### `amount`
-- **Type:** `Int`
-- **Description:**  
+<ResponseField name="amount" type="number">
   Amount to be paid when the paylink is used.
+</ResponseField>
 
----
-
-### `imageBlobIds`
-- **Type:** `String[]`
-- **Description:**  
+<ResponseField name="imageBlobIds" type="string[]">
   Identifiers for images associated with the paylink, such as product or branding visuals.
+</ResponseField>
+
+<ResponseField name="profileId" type="string">
+  Business profile that owns this paylink.
+</ResponseField>
 
 ---
 
-### `profileId`
-- **Type:** `String`
-- **Description:**  
-  Identifier of the business profile that owns this paylink.
+## Create a paylink
 
----
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/paylink/create`
+</div>
 
-## Relationships (High-Level)
+Creates a new paylink. Send the request as `multipart/form-data` to include product images.
 
-> Relationships are listed for clarity but are not required for basic paylink usage.
+### Request body
 
-- **Business Profile**  
-  Each paylink belongs to a single business profile.
+<ParamField body="title" type="string" required>
+  Short title displayed to customers.
+</ParamField>
 
-- **Payments**  
-  A paylink can be associated with multiple payments made using that link.
+<ParamField body="description" type="string" required>
+  Description of the product or service.
+</ParamField>
 
----
+<ParamField body="amount" type="number" required>
+  Amount to charge.
+</ParamField>
 
-## Notes
+<ParamField body="images" type="file">
+  Optional product image(s) to display on the payment page.
+</ParamField>
 
-- Paylinks are immutable in ownership once created.
-- The `mode` field ensures test and live payments remain isolated.
-- Images are optional and can be used to improve customer trust and conversion.
-
-## Create Paylink
-
-Create a new paylink with product details.
-
-### Request Body
-#### `title`
-  - **Required**  
-  - **Type**: string
-  - **Description**
-   Short title displayed to customers for the payment link.
-
-#### `description`
-  - **Required**  
-  - **Type**: string
-  - **Description**
-    Detailed description explaining what the payment is for.
-
-#### `amount`
-  - **Required**  
-  - **Type**: number
-  - **Description**
-    Amount to be paid when the paylink is used.
-
-```bash
-curl -X POST https://api.orafi.app/v1/paylink/create \
-  -H "x-api-key: your_api_key"
+<RequestExample>
+```bash cURL
+curl -X POST https://api.orafi.app/paylink/create \
+  -H "x-api-key: ora_test_your_api_key" \
   -F 'payload={
     "title": "Chidi and Co.",
-    "description": "I sell battery and spare parts",
+    "description": "Battery and spare parts",
     "amount": 4000
   }' \
-  -F 'images=@product2.jpg'
+  -F 'images=@product.jpg'
 ```
+```javascript Node.js
+const formData = new FormData();
+formData.append("payload", JSON.stringify({
+  title: "Chidi and Co.",
+  description: "Battery and spare parts",
+  amount: 4000
+}));
+formData.append("images", fileBlob, "product.jpg");
 
-**Response:**
-```json
-{
-    "success": true,
-    "message": "Paylink successfully created",
-    "data": {
-        "id": "cmjwxuwpl0000v8fwozati4d1",
-        "title": "Chidi and Co.",
-        "description": "I sell battery and spare parts",
-        "mode": "test",
-        "amount": 4000,
-        "imageBlobIds": [
-            "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
-        ],
-        "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
+const response = await fetch("https://api.orafi.app/paylink/create", {
+  method: "POST",
+  headers: { "x-api-key": "ora_test_your_api_key" },
+  body: formData
+});
+```
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.orafi.app/paylink/create",
+    headers={"x-api-key": "ora_test_your_api_key"},
+    files={"images": open("product.jpg", "rb")},
+    data={
+        "payload": '{"title":"Chidi and Co.","description":"Battery and spare parts","amount":4000}'
     }
-}
+)
 ```
+</RequestExample>
 
-## Get Paylink Details
-
-Retrieve paylink information.
-
-### Parameters
-#### `paylinkId`
-  - **Required**  
-  - **Description**
-  Unique identifier for payment link
-
-```bash
-curl -X GET https://api.orafi.app/v1/paylink/paylink_abc123 \
-  -H "x-api-key: your_api_key"
-```
-
-**Response:**
-```json
-{   
-  "success":true,
-  "message":"Paylink retrieved successfully",
-  "data":{
-    "id":"cmjwxuwpl0000v8fwozati4d1",
-    "title":"Chidi and Co.",
-    "description":"I sell battery and spare parts",
-    "mode":"test",
-    "amount":4000,
-    "imageBlobIds":[
-      "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
-      ],
-    }}
-```
-
-## List Paylinks
-
-Get all your paylinks.
-
-```bash
-curl -X GET https://api.orafi.app/paylink \
-  -H "x-api-key: your_api_key"
-```
-
-**Response**
-```json
+<ResponseExample>
+```json 200
 {
-    "success": true,
-    "message": "Paylinks retrived successfully",
-    "data": [
-        {
-            "id": "cmjftyjne0002v8vsgi1j8k8f",
-            "title": "Chidi and Co.",
-            "description": "I sell battery and spare parts",
-            "mode": "test",
-            "amount": 4000,
-            "imageBlobIds": [
-                "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
-            ],
-            "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
-        },
-        {
-            "id": "cmjwxuwpl0000v8fwozati4d1",
-            "title": "Chidi and Co.",
-            "description": "I sell battery and spare parts",
-            "mode": "test",
-            "amount": 4000,
-            "imageBlobIds": [
-                "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
-            ],
-            "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
-        },
-        {
-            "id": "cmjwy25tk0001v8fwjkia7xdr",
-            "title": "Chidi and Co.",
-            "description": "I sell battery and spare parts",
-            "mode": "test",
-            "amount": 4000,
-            "imageBlobIds": [
-                "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
-            ],
-            "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
-        }
-    ]
+  "success": true,
+  "message": "Paylink successfully created",
+  "data": {
+    "id": "cmjwxuwpl0000v8fwozati4d1",
+    "title": "Chidi and Co.",
+    "description": "Battery and spare parts",
+    "mode": "test",
+    "amount": 4000,
+    "imageBlobIds": [
+      "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
+    ],
+    "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
+  }
 }
 ```
+</ResponseExample>
 
-## Delete Paylink
+---
 
-Remove a paylink.
+## Retrieve a paylink
 
-### Parameters
-#### `paylinkId`
-  - **Required**  
-  - **Description**
-  Unique identifier for payment link
+<div className="api-method-box">
+  <span className="api-method get">GET</span> `/paylink/{id}`
+</div>
 
-```bash
-curl -X DELETE https://api.orafi.com/paylink/paylink_abc123 \
-  -H "x-api-key: your_api_key"
+Returns the details of an existing paylink.
+
+### Path parameters
+
+<ParamField path="id" type="string" required>
+  The paylink ID to retrieve.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -X GET https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1 \
+  -H "x-api-key: ora_test_your_api_key"
 ```
+```javascript Node.js
+const response = await fetch(
+  "https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1",
+  { headers: { "x-api-key": "ora_test_your_api_key" } }
+);
+```
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1",
+    headers={"x-api-key": "ora_test_your_api_key"}
+)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "success": true,
+  "message": "Paylink retrieved successfully",
+  "data": {
+    "id": "cmjwxuwpl0000v8fwozati4d1",
+    "title": "Chidi and Co.",
+    "description": "Battery and spare parts",
+    "mode": "test",
+    "amount": 4000,
+    "imageBlobIds": [
+      "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
+    ]
+  }
+}
+```
+</ResponseExample>
+
+---
+
+## List paylinks
+
+<div className="api-method-box">
+  <span className="api-method get">GET</span> `/paylink`
+</div>
+
+Returns all paylinks belonging to the authenticated business profile.
+
+<RequestExample>
+```bash cURL
+curl -X GET https://api.orafi.app/paylink \
+  -H "x-api-key: ora_test_your_api_key"
+```
+```javascript Node.js
+const response = await fetch("https://api.orafi.app/paylink", {
+  headers: { "x-api-key": "ora_test_your_api_key" }
+});
+```
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.orafi.app/paylink",
+    headers={"x-api-key": "ora_test_your_api_key"}
+)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "success": true,
+  "message": "Paylinks retrieved successfully",
+  "data": [
+    {
+      "id": "cmjftyjne0002v8vsgi1j8k8f",
+      "title": "Chidi and Co.",
+      "description": "Battery and spare parts",
+      "mode": "test",
+      "amount": 4000,
+      "imageBlobIds": ["AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"],
+      "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
+    },
+    {
+      "id": "cmjwxuwpl0000v8fwozati4d1",
+      "title": "Chidi and Co.",
+      "description": "Battery and spare parts",
+      "mode": "test",
+      "amount": 4000,
+      "imageBlobIds": ["AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"],
+      "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
+    }
+  ]
+}
+```
+</ResponseExample>
+
+---
+
+## Delete a paylink
+
+<div className="api-method-box">
+  <span className="api-method delete">DELETE</span> `/paylink/{id}`
+</div>
+
+Permanently deletes a paylink. This action cannot be undone.
+
+### Path parameters
+
+<ParamField path="id" type="string" required>
+  The paylink ID to delete.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -X DELETE https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1 \
+  -H "x-api-key: ora_test_your_api_key"
+```
+```javascript Node.js
+const response = await fetch(
+  "https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1",
+  {
+    method: "DELETE",
+    headers: { "x-api-key": "ora_test_your_api_key" }
+  }
+);
+```
+```python Python
+import requests
+
+response = requests.delete(
+    "https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1",
+    headers={"x-api-key": "ora_test_your_api_key"}
+)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "success": true,
+  "message": "Paylink deleted successfully",
+  "data": null
+}
+```
+</ResponseExample>

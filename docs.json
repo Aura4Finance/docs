@@ -2,78 +2,42 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Orafi",
-"colors": {
-  "primary": "#2563EB",
-  "light": "#60A5FA",
-  "dark": "#1E40AF"
-},
-  "favicon": "./logos/logo-svg.png",
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Getting started",
-            "pages": [
-              "essentials/index",
-              "essentials/quickstart",
-              "essentials/development",
-              "essentials/authentication",
-              "essentials/errors",
-              "essentials/fees"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API reference",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/profile",
-              "api-reference/endpoint/mode",
-              "api-reference/endpoint/transactions",
-              "api-reference/endpoint/payments",
-              "api-reference/endpoint/refunds",
-              "api-reference/endpoint/payouts",
-              "api-reference/endpoint/paylinks",
-              "api-reference/endpoint/customers",
-              "api-reference/endpoint/crypto-settlements",
-              "api-reference/endpoint/fiat-settlements",
-              "api-reference/endpoint/webhooks",
-              "api-reference/endpoint/webhook-deliveries",
-              "api-reference/endpoint/notification"
-            ]
-          }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Dashboard",
-          "href": "https://dashboard.orafi.app",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Support",
-          "href": "mailto:support@orafi.app",
-          "icon": "envelope"
-        }
-      ]
+  "colors": {
+    "primary": "#2563EB",
+    "light": "#60A5FA",
+    "dark": "#1E40AF",
+    "background": {
+      "dark": "#0B1120",
+      "light": "#FFFFFF"
     }
   },
+  "favicon": "./logos/logo-svg.png",
   "logo": {
     "light": "./logos/image-logo.png",
-    "dark": "./logos/image-logo.png"
+    "dark": "./logos/image-logo.png",
+    "href": "https://orafi.app"
+  },
+  "api": {
+    "baseUrl": ["https://api.orafi.app"],
+    "auth": {
+      "method": "key",
+      "name": "x-api-key"
+    },
+    "playground": {
+      "mode": "simple"
+    }
+  },
+  "openapi": "openAPI.yaml",
+  "seo": {
+    "indexHiddenPages": false
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "search": {
+    "prompt": "Search Orafi docs..."
   },
   "navbar": {
     "links": [
@@ -88,9 +52,104 @@
       "href": "https://dashboard.orafi.app"
     }
   },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "essentials/index",
+              "essentials/quickstart",
+              "essentials/development"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "essentials/authentication",
+              "essentials/errors",
+              "essentials/fees"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Payments",
+            "pages": [
+              "api-reference/endpoint/payments",
+              "api-reference/endpoint/paylinks",
+              "api-reference/endpoint/refunds"
+            ]
+          },
+          {
+            "group": "Transactions & Payouts",
+            "pages": [
+              "api-reference/endpoint/transactions",
+              "api-reference/endpoint/payouts"
+            ]
+          },
+          {
+            "group": "Customers",
+            "pages": [
+              "api-reference/endpoint/customers"
+            ]
+          },
+          {
+            "group": "Webhooks",
+            "pages": [
+              "api-reference/endpoint/webhooks",
+              "api-reference/endpoint/webhook-deliveries"
+            ]
+          },
+          {
+            "group": "Settings",
+            "pages": [
+              "api-reference/endpoint/profile",
+              "api-reference/endpoint/mode",
+              "api-reference/endpoint/notification",
+              "api-reference/endpoint/crypto-settlements",
+              "api-reference/endpoint/fiat-settlements"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "API Reference",
+          "href": "/api-reference/introduction",
+          "icon": "code"
+        },
+        {
+          "anchor": "Dashboard",
+          "href": "https://dashboard.orafi.app",
+          "icon": "gauge-max"
+        },
+        {
+          "anchor": "Support",
+          "href": "mailto:support@orafi.app",
+          "icon": "envelope"
+        }
+      ]
+    }
+  },
   "footer": {
     "socials": {
-      "github": "https://github.com/orafi"
+      "github": "https://github.com/orafi",
+      "website": "https://orafi.app"
     }
-  }
+  },
+  "rounded": "default"
 }

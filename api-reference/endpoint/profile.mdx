@@ -1,218 +1,178 @@
 ---
 title: "Profile"
-description: "API endpoints for business profile management"
+description: "Retrieve your business profile and manage email changes."
 ---
 
-Your business profile contains information about your company and settings.
+## The profile object
 
-## Available Endpoints
+Your business profile is the core identity for your Orafi account. It controls API keys, wallets, transactions, and whether you operate in test or live mode.
 
-```bash
-GET  /profile                                #Retrieving Profile
-POST /profile/request-email-change           # Request email change
-POST /profile/verify-email-change            #Verify email change
-```
-
-## Profile Object
-
-The `BusinessProfile` model represents a business entity on the platform.  
-It serves as the **core ownership layer** for transactions, API keys, wallets, payment links, and settlement accounts.
-
-Each user can have **one business profile**, which controls whether operations are executed in test or live mode.
-
----
-
-### Fields
-
-#### `id`
-- **Type:** `String`
-- **Primary Key**
-- **Default:** `uuid()`
-- **Database Field:** `_id`
-- **Description:**  
+<ResponseField name="id" type="string">
   Unique identifier for the business profile.
+</ResponseField>
 
----
+<ResponseField name="userId" type="string">
+  Identifier of the user that owns this profile.
+</ResponseField>
 
-#### `userId`
-- **Type:** `String`
-- **Unique**
-- **Description:**  
-  Identifier of the user that owns this business profile.
-
----
-
-#### `businessName`
-- **Type:** `String`
-- **Description:**  
+<ResponseField name="businessName" type="string">
   Registered name of the business.
+</ResponseField>
+
+<ResponseField name="businessSector" type="string">
+  Industry or sector the business operates in.
+</ResponseField>
+
+<ResponseField name="country" type="string">
+  Country where the business is registered.
+</ResponseField>
+
+<ResponseField name="websiteLink" type="string">
+  Official website URL of the business. Nullable.
+</ResponseField>
+
+<ResponseField name="onboarded" type="boolean" default="false">
+  Whether the business has completed the onboarding process.
+</ResponseField>
+
+<ResponseField name="isLive" type="boolean" default="false">
+  Whether the business is operating in live mode (`true`) or test mode (`false`).
+</ResponseField>
+
+<Note>
+  A business profile is required before any transaction can be processed. Switching to live mode requires completed onboarding and verification.
+</Note>
 
 ---
 
-#### `businessSector`
-- **Type:** `String`
-- **Description:**  
-  Industry or sector in which the business operates.
+## Retrieve profile
 
----
+<div className="api-method-box">
+  <span className="api-method get">GET</span> `/profile`
+</div>
 
-#### `country`
-- **Type:** `String`
-- **Description:**  
-  Country where the business is registered or primarily operates.
+Returns the authenticated user's profile including business information and wallet details.
 
----
-
-#### `websiteLink`
-- **Type:** `String?`
-- **Nullable**
-- **Description:**  
-  Official website URL of the business.
-
----
-
-#### `onboarded`
-- **Type:** `Boolean`
-- **Default:** `false`
-- **Description:**  
-  Indicates whether the business has completed the onboarding process.
-
----
-
-#### `isLive`
-- **Type:** `Boolean`
-- **Default:** `false`
-- **Description:**  
-  Determines whether the business is operating in **live mode** or **test mode**.
-
----
-
-## Relationships (High-Level)
-
-> These relationships define ownership and operational scope but are not required for basic profile reads.
-
-- **User**  
-  Each business profile is owned by a single user.
-
-- **API Keys**  
-  A business can have multiple API keys for authentication and access control.
-
-- **Wallets**  
-  Stores wallets associated with the business.
-
-- **Webhook**  
-  Configuration for webhook event delivery.
-
-- **Customers**  
-  Customers associated with the business.
-
-- **Transactions**  
-  All financial transactions performed by the business.
-
-- **Payment Links**  
-  Payment links created and managed by the business.
-
-- **Fiat Accounts**  
-  Linked fiat settlement accounts.
-
-- **Crypto Accounts**  
-  Linked crypto settlement accounts.
-
----
-
-## Notes
-
-- A business profile is required before any transaction can be processed.
-- `onboarded` and `isLive` together control operational readiness.
-- Switching to live mode typically requires completed onboarding and verification.
-
----
-
-## Retrieving Profile
-
-> Get user profile
-
-```bash
+<RequestExample>
+```bash cURL
 curl -X GET https://api.orafi.app/v1/profile \
   -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key" 
+  -H "x-api-key: ora_test_your_api_key"
 ```
+```javascript Node.js
+const response = await fetch("https://api.orafi.app/v1/profile", {
+  headers: { "x-api-key": "ora_test_your_api_key" }
+});
+```
+</RequestExample>
 
-**Response**
-```json 
-{ 
-  "success":true,
-  "message":"User profile retrived successfully!",
-  "data":{
-    "profile":
-    {"id":"a6012dba-dfe2-45ea-851e-726c3b4ebde5",
-    "firstname":"Covenant",
-    "lastname":"Ogowale",
-    "email":"emmachid@outlook.com",
-    "provider":"LOCAL",
-    "emailVerified":true,
-    "businessProfile":{
-      "id":"84a9f045-8a21-4ce4-a7a0-828265c0021b",
-      "userId":"a6012dba-dfe2-45ea-851e-726c3b4ebde5",
-      "businessName":"",
-      "businessSector":"",
-      "country":"",
-      "websiteLink":"",
-      "onboarded":false,
-      "isLive":false,
-      "wallet":[{
-        "pubKey":"0xc4b22d6367ce0dc2dfcc8c4998ade95ebf515b866e9493346688ae6afe49205d"
-        }]
+<ResponseExample>
+```json 200 — Success
+{
+  "success": true,
+  "message": "User profile retrieved successfully!",
+  "data": {
+    "profile": {
+      "id": "a6012dba-dfe2-45ea-851e-726c3b4ebde5",
+      "firstname": "Covenant",
+      "lastname": "Ogowale",
+      "email": "user@example.com",
+      "provider": "LOCAL",
+      "emailVerified": true,
+      "businessProfile": {
+        "id": "84a9f045-8a21-4ce4-a7a0-828265c0021b",
+        "userId": "a6012dba-dfe2-45ea-851e-726c3b4ebde5",
+        "businessName": "Acme Corp",
+        "businessSector": "Technology",
+        "country": "NG",
+        "websiteLink": "https://acme.com",
+        "onboarded": true,
+        "isLive": false,
+        "wallet": [
+          {
+            "pubKey": "0xc4b22d63...d9"
           }
-            }
-              }}
+        ]
+      }
+    }
+  }
+}
 ```
+</ResponseExample>
 
 ---
 
-## Email Changes
+## Request email change
 
-> Request email change
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/profile/request-email-change`
+</div>
 
-### Request body
-
-#### `email`
-  - **Required**  
-  - **Type:** `string`
-  - **Description**:
-  Merchant's new email address
-
-```bash
-curl -X GET https://api.orafi.app/v1/profile/request-email-change \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key" 
-  -d '{
-    email: "example@gmail.com"
-  }'
-```
-
-Verify email change:
+Initiates an email address change. An OTP is sent to the new email for verification.
 
 ### Request body
 
-#### `email`
-  - **Required**  
-  - **Type:** `string`
-  - **Description**:
-  Merchant's new email address
+<ParamField body="email" type="string" required>
+  The new email address.
+</ParamField>
 
-#### `OTP`
-  - **Required**  
-  - **Type:** `string`
-  - **Description**:
-  One-time password sent to new email address.
-
-```bash
-curl -X GET https://api.orafi.app/v1/profile/verify-email-change \
+<RequestExample>
+```bash cURL
+curl -X POST https://api.orafi.app/v1/profile/request-email-change \
   -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key" 
+  -H "x-api-key: ora_test_your_api_key" \
   -d '{
-    email: "example@gmail.com"
-    "otp": "23432
+    "email": "newemail@example.com"
   }'
 ```
+</RequestExample>
+
+<ResponseExample>
+```json 200 — Success
+{
+  "success": true,
+  "message": "OTP sent to new email address"
+}
+```
+</ResponseExample>
+
+---
+
+## Verify email change
+
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/profile/verify-email-change`
+</div>
+
+Confirms the email change using the OTP sent to the new address.
+
+### Request body
+
+<ParamField body="email" type="string" required>
+  The new email address (must match the one from the request step).
+</ParamField>
+
+<ParamField body="otp" type="string" required>
+  One-time password sent to the new email address.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -X POST https://api.orafi.app/v1/profile/verify-email-change \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: ora_test_your_api_key" \
+  -d '{
+    "email": "newemail@example.com",
+    "otp": "123456"
+  }'
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200 — Success
+{
+  "success": true,
+  "message": "Email changed successfully"
+}
+```
+</ResponseExample>

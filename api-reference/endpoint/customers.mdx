@@ -1,30 +1,39 @@
 ---
 title: "Customers"
-description: "API endpoints for customer management"
+description: "Create, list, retrieve, and delete customer records associated with your business."
 ---
 
-Customers represent your buyers in the Orafi system.
+## The customer object
 
-## Available Endpoints
+A customer represents a buyer who has interacted with your business through Orafi. Customers are typically created automatically during payment flows.
 
-```http
-POST /customers/create        # Creating Customers
-GET /customers                # Get all customers
-GET /customers/{id}           # Get specific customer
-DELETE /customers/{id}        # Deleting Customers
-```
+<ResponseField name="id" type="string">
+  Unique identifier for the customer.
+</ResponseField>
 
+<ResponseField name="firstname" type="string">
+  Customer's first name.
+</ResponseField>
 
-## Customer Object
+<ResponseField name="lastname" type="string">
+  Customer's last name.
+</ResponseField>
 
-The `Customer` model represents an end user who interacts with a merchant on OraFi.
-It is used to track identity, spending behavior, and financial activity across payments, refunds, and transactions.
+<ResponseField name="email" type="string">
+  Customer's email address.
+</ResponseField>
 
-A customer may exist in **test**, **live**, or both environments and can be linked to multiple business profiles over time.
+<ResponseField name="mode" type="string[]">
+  Environments the customer has interacted in. Contains `test`, `live`, or both.
+</ResponseField>
+
+<ResponseField name="totalSpent" type="number" default="0">
+  Aggregate amount the customer has spent across all completed transactions.
+</ResponseField>
 
 ---
 
-### Fields
+## Create a customer
 
 #### `id`
 
