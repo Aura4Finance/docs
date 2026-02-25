@@ -147,3 +147,97 @@ pre[data-language="json 400 — Bad Request"],
 pre[data-language="json 400 — Onboarding incomplete"] {
   border-left: 3px solid #ef4444;
 }
+
+/* ============================================
+   Mobile Responsiveness
+   ============================================ */
+
+/* Tablets and smaller (max-width: 768px) */
+@media screen and (max-width: 768px) {
+  .api-method-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.375rem;
+  }
+
+  .api-method-box code {
+    font-size: 0.8rem;
+    max-width: 100%;
+    overflow-x: auto;
+    display: block;
+  }
+
+  /* Response fields stack better on mobile */
+  [data-testid="response-field"] {
+    padding-left: 0.75rem;
+  }
+
+  /* Reduce margins on mobile */
+  hr {
+    margin: 1.5rem 0;
+  }
+}
+
+/* Small phones (max-width: 480px) */
+@media screen and (max-width: 480px) {
+  .api-method {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    min-width: 3rem;
+  }
+
+  .api-method-box {
+    padding: 0.375rem 0;
+  }
+
+  .api-method-box code {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  /* Ensure code blocks scroll horizontally */
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Tables scroll horizontally */
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Expandable sections work well on touch */
+  [data-testid="expandable"] {
+    padding: 0.5rem;
+  }
+}
+
+/* Ensure long URLs/paths wrap correctly */
+code {
+  word-break: break-all;
+}
+
+/* Prevent content overflow */
+.prose,
+article,
+main {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Code groups responsive tabs */
+@media screen and (max-width: 640px) {
+  [data-testid="code-group"] [role="tablist"] {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  [data-testid="code-group"] [role="tab"] {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.5rem;
+  }
+}
