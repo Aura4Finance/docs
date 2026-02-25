@@ -27,6 +27,38 @@ A payout represents a withdrawal of settled funds from your Orafi account to an 
   On-chain transaction digest, available after the payout is processed.
 </ResponseField>
 
+<ResponseField name="method" type="string">
+  Payout method. One of `CRYPTO` or `FIAT`.
+</ResponseField>
+
+<ResponseField name="transactionId" type="string">
+  ID of the parent transaction record.
+</ResponseField>
+
+<ResponseField name="cryptoAccountId" type="string">
+  ID of the crypto settlement account used, if applicable.
+</ResponseField>
+
+<ResponseField name="fiatAccountId" type="string">
+  ID of the fiat settlement account used, if applicable.
+</ResponseField>
+
+<ResponseExample>
+```json The payout object
+{
+  "id": "cmjpayout001",
+  "amount": 5.00,
+  "status": "COMPLETED",
+  "walletAddress": "0x871cf48ff1847e7a...55c2d3",
+  "txDigest": "5kRmC7nV...",
+  "method": "CRYPTO",
+  "transactionId": "cmjfu1cjv0002v8vsabc12345",
+  "cryptoAccountId": "854da716-03bf-4bcf-9eba-3302208f8f36",
+  "fiatAccountId": null
+}
+```
+</ResponseExample>
+
 ---
 
 ## Check available balances

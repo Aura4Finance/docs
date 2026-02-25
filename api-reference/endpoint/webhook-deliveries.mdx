@@ -51,6 +51,32 @@ A webhook delivery represents a single attempt to send an event payload to your 
   Timestamp of the most recent delivery attempt.
 </ResponseField>
 
+<ResponseExample>
+```json The delivery object
+{
+  "id": "811f4c9e-d818-4e07-bfbc-fb0aa73ab82f",
+  "webhookId": "cmjh39i5x0000v814e7owtybc",
+  "event": "payment.failed",
+  "transactionId": "cmjfu1cjv0003v8vsmmxgjk05",
+  "payload": {
+    "event": "payment.failed",
+    "data": {
+      "transactionId": "cmjfu1cjv0003v8vsmmxgjk05",
+      "amount": 4000,
+      "currency": "NGN",
+      "status": "failed"
+    }
+  },
+  "status": "COMPLETED",
+  "attemptCount": 2,
+  "responseStatus": "200",
+  "nextRetryAt": null,
+  "createdAt": "2025-12-24T10:42:37.231Z",
+  "lastAttemptAt": "2025-12-24T10:43:40.347Z"
+}
+```
+</ResponseExample>
+
 ---
 
 ## List deliveries

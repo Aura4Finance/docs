@@ -3,9 +3,53 @@ title: "Fiat Settlements"
 description: "Manage bank accounts for fiat payouts and withdrawals."
 ---
 
-## Fiat settlement accounts
+## The fiat account object
 
-Fiat settlement accounts let you receive payouts directly to a bank account.
+A fiat settlement account is a saved bank account linked to your business profile. Once added, it can be used as a payout destination for fiat withdrawals.
+
+<ResponseField name="id" type="string">
+  Unique identifier for the fiat settlement account.
+</ResponseField>
+
+<ResponseField name="bankName" type="string">
+  Name of the bank (e.g. "Access Bank").
+</ResponseField>
+
+<ResponseField name="bankCode" type="string">
+  Bank code used for transfers (e.g. "044").
+</ResponseField>
+
+<ResponseField name="accountName" type="string">
+  Name on the bank account.
+</ResponseField>
+
+<ResponseField name="accountNumber" type="string">
+  Bank account number.
+</ResponseField>
+
+<ResponseField name="isPrimary" type="boolean">
+  Whether this is the primary settlement account for the profile. Only one account can be primary.
+</ResponseField>
+
+<ResponseField name="profileId" type="string">
+  Business profile that owns this settlement account.
+</ResponseField>
+
+<ResponseExample>
+```json The fiat account object
+{
+  "id": "f3a1b2c4-5d6e-7f8a-9b0c-1d2e3f4a5b6c",
+  "bankName": "Access Bank",
+  "bankCode": "044",
+  "accountName": "Chidi and Co.",
+  "accountNumber": "0123456789",
+  "isPrimary": true,
+  "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
+}
+```
+</ResponseExample>
+
+---
 
 <Note>
   Fiat settlements are **coming soon**. The endpoints below are planned and not yet available.
@@ -21,5 +65,5 @@ Fiat settlement accounts let you receive payouts directly to a bank account.
 | `PATCH`  | `/settlement/fiat/{id}`         | Update a bank account    |
 | `DELETE` | `/settlement/fiat/{id}`         | Remove a bank account    |
 
-Stay tuned --- we will update this page when fiat settlements launch. In the meantime, use [Crypto Settlements](/api-reference/endpoint/crypto-settlements) for payouts.
+Stay tuned — we will update this page when fiat settlements launch. In the meantime, use [Crypto Settlements](/api-reference/endpoint/crypto-settlements) for payouts.
 

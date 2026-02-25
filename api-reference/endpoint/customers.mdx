@@ -31,376 +31,301 @@ A customer represents a buyer who has interacted with your business through Oraf
   Aggregate amount the customer has spent across all completed transactions.
 </ResponseField>
 
+<ResponseField name="createdAt" type="datetime">
+  When the customer record was created.
+</ResponseField>
+
+<ResponseField name="updatedAt" type="datetime">
+  When the customer record was last updated.
+</ResponseField>
+
+<ResponseExample>
+```json The customer object
+{
+  "id": "cmjr4c7qq0000v8hozkzz4em5",
+  "firstname": "Melvin",
+  "lastname": "Charles",
+  "email": "mekus@orafi.app",
+  "mode": ["test"],
+  "totalSpent": 0,
+  "createdAt": "2025-12-29T12:12:29.615Z",
+  "updatedAt": "2025-12-29T12:12:29.615Z"
+}
+```
+</ResponseExample>
+
 ---
 
 ## Create a customer
 
-#### `id`
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/customers/create`
+</div>
 
-* **Type:** `String`
-* **Primary Key**
-* **Default:** `cuid()`
-* **Database Field:** `_id`
-* **Description:**
-  Unique identifier for the customer record.
-
----
-
-#### `firstname`
-
-* **Type:** `String`
-* **Description:**
-  Customer’s first name.
-
----
-
-#### `lastname`
-
-* **Type:** `String`
-* **Description:**
-  Customer’s last name.
-
----
-
-#### `email`
-
-* **Type:** `String`
-* **Description:**
-  Customer’s email address.
-  Used for identification, receipts, and customer lookup.
-
----
-
-#### `mode`
-
-* **Type:** `Mode[]`
-* **Description:**
-  Indicates the environment(s) in which the customer has interacted.
-  A customer may exist in:
-
-  * Test mode
-  * Live mode
-  * Both environments
-
----
-
-#### `totalSpent`
-
-* **Type:** `Int`
-* **Default:** `0`
-* **Description:**
-  Aggregate amount spent by the customer across all completed transactions.
-  Used for analytics, segmentation, and filtering.
-
----
-
-## Relationships (High-Level)
-
-> These relationships exist for tracking activity and ownership but are not required for basic customer reads.
-
-* **Business Profiles**
-  A customer may be associated with one or more business profiles through interactions.
-
-* **Transactions**
-  Tracks all financial transactions linked to the customer.
-
-
----
-
-### Notes
-
-* Customers are typically **created automatically** during successful payments.
-* Manual customer creation is intended for **edge cases** such as migrations or enterprise workflows.
-* Customer records are **merchant-scoped** and cannot be accessed across businesses.
-* `totalSpent` reflects **successful, finalized transactions only**.
-
-
-
-## Creating Customers
+Manually creates a customer record.
 
 <Note>
-Creating customers manually is intended for **rare and specific use cases**.  
-In most situations, customers are created **automatically** during payment flows and do not need to be managed directly.
+  In most flows, customers are created **automatically** when a payment is completed. Manual creation is intended for pre-registration, data migrations, or account-based billing.
 </Note>
 
-### When to Create Customers Manually
+### Request body
 
-Manual customer creation may be appropriate in the following cases:
+<ParamField body="firstname" type="string" required>
+  Customer's first name.
+</ParamField>
 
-- **Pre-registration**  
-  When you want to create customer records before any payment is made.
+<ParamField body="lastname" type="string" required>
+  Customer's last name.
+</ParamField>
 
-- **Offline or External Payments**  
-  If a payment occurs outside the platform and needs to be linked to an existing customer.
+<ParamField body="email" type="string" required>
+  Customer's email address.
+</ParamField>
 
-- **Customer Data Migration**  
-  When importing customers from another system or legacy database.
-
-- **Recurring or Account-Based Billing**  
-  When a persistent customer identity is required before initiating future charges.
-
-- **Customer Support & Reconciliation**  
-  To resolve disputes, track payment history, or reconcile transactions tied to a known customer.
-
-### Recommendation
-
-For standard checkout, payment links, and hosted payment flows, **do not create customers manually**.  
-Let OraFi automatically handle customer creation to ensure consistency and reduce errors.
-
-
-> Create a customer
-### Request Body
-
-#### `firstname`
-- **Type:** `string`
-- **Required**
-- **Description:**  
-  Customer’s first name.
-
-
-#### `lastname`
-- **Type:** `string`
-- **Required**
-- **Description:**  
-  Customer’s last name.
-
-
-#### `email`
-- **Type:** `string`
-- **Required**
-- **Format:** `email`
-- **Description:**  
-  Customer’s email address. Used for identification, receipts, and transaction records.
-
-
-```bash
-curl -X POST https://api.orafi.app/v1/customers/create \
+<RequestExample>
+```bash cURL
+curl -X POST https://api.orafi.app/customers/create \
   -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key" \
+  -H "x-api-key: ora_test_your_api_key" \
   -d '{
     "firstname": "John",
     "lastname": "Doe",
     "email": "john@example.com"
   }'
 ```
+```javascript Node.js
+const response = await fetch("https://api.orafi.app/customers/create", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": "ora_test_your_api_key"
+  },
+  body: JSON.stringify({
+    firstname: "John",
+    lastname: "Doe",
+    email: "john@example.com"
+  })
+});
+```
+```python Python
+import requests
 
-**Response**
-```json
-{
-    "success": true,
-    "message": "Customer created successfully",
-    "data": {
-        "id": "cmjx0kiie0003v86cfqsve9fj",
-        "firstname": "Melvin",
-        "lastname": "Charles",
-        "email": "akachi@orafi.app",
-        "mode": [
-            "test"
-        ],
-        "totalSpent": 0
+response = requests.post(
+    "https://api.orafi.app/customers/create",
+    headers={
+        "Content-Type": "application/json",
+        "x-api-key": "ora_test_your_api_key"
+    },
+    json={
+        "firstname": "John",
+        "lastname": "Doe",
+        "email": "john@example.com"
     }
+)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "success": true,
+  "message": "Customer created successfully",
+  "data": {
+    "id": "cmjx0kiie0003v86cfqsve9fj",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "john@example.com",
+    "mode": ["test"],
+    "totalSpent": 0
+  }
 }
 ```
-
-
-## Retrieving Customers
-
-The **Get Customers** endpoint allows you to filter customers based on their spending behavior, environment mode, and pagination controls.
-All query parameters are optional
+</ResponseExample>
 
 ---
 
-> Get all customers
+## List customers
 
-### Query Parameters
+<div className="api-method-box">
+  <span className="api-method get">GET</span> `/customers`
+</div>
 
-#### `amountSpent`
-- **Type:** `string`
-- **Allowed Values:**
-  - `BELOW10USDT`
-  - `FROM10TO30USDT`
-  - `FROM30TO100USDT`
-  - `FROM100TO200USDT`
-  - `FROM200TO500USDT`
-  - `ABOVE500USDT`
-- **Description:**  
-  Filters customers based on their total amount spent within predefined ranges.
+Returns a paginated list of customers. All query parameters are optional.
 
----
+### Query parameters
 
-#### `mode`
-- **Type:** `string`
-- **Allowed Values:** `live`, `test`
-- **Optional**
-- **Description:**  
-  Filters customers by environment mode.
+<ParamField query="amountSpent" type="string">
+  Filter by spending range. One of `BELOW10USDT`, `FROM10TO30USDT`, `FROM30TO100USDT`, `FROM100TO200USDT`, `FROM200TO500USDT`, `ABOVE500USDT`.
+</ParamField>
 
----
+<ParamField query="mode" type="string">
+  Filter by environment. `test` or `live`.
+</ParamField>
 
-#### `limit`
-- **Type:** `number`
-- **Default:** `20`
-- **Description:**  
-  Maximum number of customers returned per request.
+<ParamField query="limit" type="number" default="20">
+  Maximum number of results per page.
+</ParamField>
 
----
+<ParamField query="cursor" type="string">
+  Pagination cursor. Results start after the referenced customer.
+</ParamField>
 
-#### `cursor`
-- **Type:** `string`
-- **Description:**  
-  Cursor used for pagination.  
-  When provided, results start after the referenced customer.
-
-
-```bash
-curl -X GET https://api.orafi.app/v1/customers/ \
-  -H "x-api-key: your_api_key" 
+<RequestExample>
+```bash cURL
+curl -X GET "https://api.orafi.app/customers?mode=test&limit=10" \
+  -H "x-api-key: ora_test_your_api_key"
 ```
+```javascript Node.js
+const response = await fetch(
+  "https://api.orafi.app/customers?mode=test&limit=10",
+  { headers: { "x-api-key": "ora_test_your_api_key" } }
+);
+```
+```python Python
+import requests
 
-**Response**
-```json
+response = requests.get(
+    "https://api.orafi.app/customers",
+    headers={"x-api-key": "ora_test_your_api_key"},
+    params={"mode": "test", "limit": 10}
+)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
 {
-    "success": true,
-    "message": "Customers fetched successfully",
-    "data": {
-        "customers": [
-            {
-                "id": "cmjr4c7qq0000v8hozkzz4em5",
-                "firstname": "Melvin",
-                "lastname": "Charles",
-                "email": "mekus@orafi.app",
-                "mode": [
-                    "test"
-                ],
-                "totalSpent": 0,
-                "userCustomers": [
-                    {
-                        "createdAt": "2025-12-29T12:12:29.615Z"
-                    }
-                ]
-            },
-            {
-                "id": "cmjx0jcme0000v86caeyqpy9i",
-                "firstname": "James",
-                "lastname": "King",
-                "email": "aka@orafi.app",
-                "mode": [
-                    "test"
-                ],
-                "totalSpent": 0,
-                "userCustomers": [
-                    {
-                        "createdAt": "2026-01-02T15:12:41.123Z"
-                    }
-                ]
-            },
-            {
-                "id": "cmjx0kiie0003v86cfqsve9fj",
-                "firstname": "Melvin",
-                "lastname": "Charles",
-                "email": "akachi@orafi.app",
-                "mode": [
-                    "test"
-                ],
-                "totalSpent": 0,
-                "userCustomers": [
-                    {
-                        "createdAt": "2026-01-02T15:13:35.414Z"
-                    }
-                ]
-            }
-        ],
-        "count": 3,
-        "nextCursor": null,
-        "hasNextPage": false
-    }
-}
-```
-
-```http
-GET /customers?amountSpent=ABOVE500USDT&mode=live&limit=10
-GET /customers?amountSpent=FROM30TO100USDT
-GET /customers?mode=live
-GET /customers?limit=20&cursor=cus_82jd82jd9
-
-```
-
-Get specific customer: 
-
-> Retrieve information about a specific customer
-
-### Request Body
-
-#### `customerId`
-  - **Type**: string
-  - **Required**
-  - **Description**: 
-  Unique identifier for a customer.
-
-```bash
-curl -X GET https://api.orafi.app/v1/customers/{customerId} \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key" 
-```
-
-**Response**
-
-```json
-{
-    "success": true,
-    "message": "Customer fetched successfully",
-    "data": {
+  "success": true,
+  "message": "Customers fetched successfully",
+  "data": {
+    "customers": [
+      {
         "id": "cmjr4c7qq0000v8hozkzz4em5",
         "firstname": "Melvin",
         "lastname": "Charles",
         "email": "mekus@orafi.app",
-        "mode": [
-            "test"
-        ],
+        "mode": ["test"],
         "totalSpent": 0,
         "userCustomers": [
-            {
-                "createdAt": "2025-12-29T12:12:29.615Z"
-            }
+          { "createdAt": "2025-12-29T12:12:29.615Z" }
         ]
-    }
+      }
+    ],
+    "count": 1,
+    "nextCursor": null,
+    "hasNextPage": false
+  }
 }
 ```
+</ResponseExample>
 
-## Deleting Customers
+---
 
-> Permanently deletes a customer associated with your business profile.
+## Retrieve a customer
 
-<Note>
-Deleting a customer is **irreversible** and should only be used in rare situations such as:
-- Duplicate customer records
-- Customers created by mistake
-- Compliance or legal data-removal requests
+<div className="api-method-box">
+  <span className="api-method get">GET</span> `/customers/{customerId}`
+</div>
 
-In most cases, we recommend keeping customer records for transaction history, audits, and reconciliation.
-</Note>
+Returns the details of a specific customer.
 
-### Request Body
+### Path parameters
 
-#### `customerId`
-  - **Type**: string
-  - **Required**
-  - **Description**: 
-  Unique identifier for a customer.
+<ParamField path="customerId" type="string" required>
+  The customer ID to retrieve.
+</ParamField>
 
-Delete a customer: 
-```bash
-curl -X DELETE https://api.orafi.app/v1/customers/{customerId} \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key"  
+<RequestExample>
+```bash cURL
+curl -X GET https://api.orafi.app/customers/cmjr4c7qq0000v8hozkzz4em5 \
+  -H "x-api-key: ora_test_your_api_key"
 ```
+```javascript Node.js
+const response = await fetch(
+  "https://api.orafi.app/customers/cmjr4c7qq0000v8hozkzz4em5",
+  { headers: { "x-api-key": "ora_test_your_api_key" } }
+);
+```
+```python Python
+import requests
 
-**Response**
+response = requests.get(
+    "https://api.orafi.app/customers/cmjr4c7qq0000v8hozkzz4em5",
+    headers={"x-api-key": "ora_test_your_api_key"}
+)
+```
+</RequestExample>
 
-```json
+<ResponseExample>
+```json 200
 {
-    "success": true,
-    "message": "User Deleted successfully",
-    "data": null
+  "success": true,
+  "message": "Customer fetched successfully",
+  "data": {
+    "id": "cmjr4c7qq0000v8hozkzz4em5",
+    "firstname": "Melvin",
+    "lastname": "Charles",
+    "email": "mekus@orafi.app",
+    "mode": ["test"],
+    "totalSpent": 0,
+    "userCustomers": [
+      { "createdAt": "2025-12-29T12:12:29.615Z" }
+    ]
+  }
 }
 ```
+</ResponseExample>
+
+---
+
+## Delete a customer
+
+<div className="api-method-box">
+  <span className="api-method delete">DELETE</span> `/customers/{customerId}`
+</div>
+
+Permanently deletes a customer record. This action cannot be undone.
+
+<Warning>
+  Deleting a customer is **irreversible**. Only use this for duplicate records, accidental creation, or compliance-related data removal requests. We recommend keeping records for transaction history and reconciliation.
+</Warning>
+
+### Path parameters
+
+<ParamField path="customerId" type="string" required>
+  The customer ID to delete.
+</ParamField>
+
+<RequestExample>
+```bash cURL
+curl -X DELETE https://api.orafi.app/customers/cmjr4c7qq0000v8hozkzz4em5 \
+  -H "x-api-key: ora_test_your_api_key"
+```
+```javascript Node.js
+const response = await fetch(
+  "https://api.orafi.app/customers/cmjr4c7qq0000v8hozkzz4em5",
+  {
+    method: "DELETE",
+    headers: { "x-api-key": "ora_test_your_api_key" }
+  }
+);
+```
+```python Python
+import requests
+
+response = requests.delete(
+    "https://api.orafi.app/customers/cmjr4c7qq0000v8hozkzz4em5",
+    headers={"x-api-key": "ora_test_your_api_key"}
+)
+```
+</RequestExample>
+
+<ResponseExample>
+```json 200
+{
+  "success": true,
+  "message": "User Deleted successfully",
+  "data": null
+}
+```
+</ResponseExample>

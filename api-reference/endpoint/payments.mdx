@@ -35,6 +35,50 @@ A payment represents a single charge initiated by a customer. Payments are creat
   Current payment status. One of `INITIALIZED`, `CONFIRMED`, or `FAILED`.
 </ResponseField>
 
+<ResponseField name="token" type="string" default="USDC">
+  Token used for the payment. Currently always `USDC`.
+</ResponseField>
+
+<ResponseField name="refunded" type="boolean" default="false">
+  Whether this payment has been refunded.
+</ResponseField>
+
+<ResponseField name="paymentMethod" type="string">
+  How the payment was initiated. One of `PAYMENT_LINK` or `HOSTED_CHECKOUT`.
+</ResponseField>
+
+<ResponseField name="txRef" type="string">
+  Merchant-supplied transaction reference. Acts as an idempotency key.
+</ResponseField>
+
+<ResponseField name="transactionId" type="string">
+  ID of the parent transaction record.
+</ResponseField>
+
+<ResponseField name="paylinkId" type="string">
+  Paylink that initiated this payment, if applicable.
+</ResponseField>
+
+<ResponseExample>
+```json The payment object
+{
+  "id": "cmjfu1cjv0003v8vsmmxgjk05",
+  "depositAddress": "0x871cf48ff1847e7a...55c2d3",
+  "amount": 4000,
+  "amountInUSDC": 2.53,
+  "redirectUrl": "https://yourapp.com/payment/complete",
+  "checkoutUrl": "https://checkout.orafi.app/pay/cmjfu1cjv0003v8vsmmxgjk05",
+  "status": "INITIALIZED",
+  "token": "USDC",
+  "refunded": false,
+  "paymentMethod": "HOSTED_CHECKOUT",
+  "txRef": "order_12345",
+  "transactionId": "cmjfu1cjv0002v8vsabc12345",
+  "paylinkId": null
+}
+```
+</ResponseExample>
+
 ---
 
 ## Create a payment

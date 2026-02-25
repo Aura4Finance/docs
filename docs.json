@@ -81,18 +81,18 @@
             ]
           },
           {
-            "group": "Payments",
+            "group": "Transactions",
             "pages": [
+              "api-reference/endpoint/transactions",
               "api-reference/endpoint/payments",
-              "api-reference/endpoint/paylinks",
-              "api-reference/endpoint/refunds"
+              "api-reference/endpoint/refunds",
+              "api-reference/endpoint/payouts"
             ]
           },
           {
-            "group": "Transactions & Payouts",
+            "group": "Paylinks",
             "pages": [
-              "api-reference/endpoint/transactions",
-              "api-reference/endpoint/payouts"
+              "api-reference/endpoint/paylinks"
             ]
           },
           {
@@ -109,13 +109,18 @@
             ]
           },
           {
+            "group": "Settlements",
+            "pages": [
+              "api-reference/endpoint/crypto-settlements",
+              "api-reference/endpoint/fiat-settlements"
+            ]
+          },
+          {
             "group": "Settings",
             "pages": [
               "api-reference/endpoint/profile",
               "api-reference/endpoint/mode",
-              "api-reference/endpoint/notification",
-              "api-reference/endpoint/crypto-settlements",
-              "api-reference/endpoint/fiat-settlements"
+              "api-reference/endpoint/notification"
             ]
           }
         ]

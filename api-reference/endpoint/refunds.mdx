@@ -43,6 +43,32 @@ A refund returns funds from a completed payment back to the customer's wallet. R
   Actual USDC amount sent to the customer.
 </ResponseField>
 
+<ResponseField name="originalTxId" type="string">
+  ID of the original transaction that was refunded.
+</ResponseField>
+
+<ResponseField name="transactionId" type="string">
+  ID of the refund's own transaction record.
+</ResponseField>
+
+<ResponseExample>
+```json The refund object
+{
+  "id": "cmjfu1cjv0007v8vrefund01",
+  "amount": 4000,
+  "status": "COMPLETED",
+  "reason": "Customer requested",
+  "walletAddress": "0x871cf48ff1847e7a...55c2d3",
+  "txDigest": "3xYmB9kT...",
+  "executionTime": 1234,
+  "gasFee": 0.001,
+  "amountSent": 2.53,
+  "originalTxId": "cmjlzeq0j0001v83g2cuplnbg",
+  "transactionId": "cmjr6iwo60004v84wdnwm7qub"
+}
+```
+</ResponseExample>
+
 ---
 
 ## Create a refund

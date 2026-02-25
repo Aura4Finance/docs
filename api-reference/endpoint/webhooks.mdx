@@ -42,6 +42,20 @@ A webhook is a callback configuration that tells Orafi where to deliver event no
 | `payment.success`   | A payment was completed successfully |
 | `payment.failed`    | A payment attempt failed             |
 
+<ResponseExample>
+```json The webhook object
+{
+  "id": "cmjh39i5x0000v814e7owtybc",
+  "url": "https://yourapp.com/webhooks/orafi",
+  "secret": "whsec_a79ab7ad5d9ae565...1bcb3",
+  "events": ["payment.success", "payment.failed"],
+  "createdAt": "2025-12-22T11:44:41.780Z",
+  "updatedAt": "2025-12-22T11:44:41.780Z",
+  "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
+}
+```
+</ResponseExample>
+
 ---
 
 ## Get webhook details
