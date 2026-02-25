@@ -84,7 +84,7 @@
           {
             "group": "Transactions",
             "pages": [
-              "api-reference/endpoint/transactions",
+              "api-reference/endpoint/transactions/overview",
               "api-reference/endpoint/transactions/list",
               "api-reference/endpoint/transactions/retrieve"
             ]
@@ -92,7 +92,7 @@
           {
             "group": "Payments",
             "pages": [
-              "api-reference/endpoint/payments",
+              "api-reference/endpoint/payments/overview",
               "api-reference/endpoint/payments/create",
               "api-reference/endpoint/payments/verify",
               "api-reference/endpoint/payments/retrieve"
@@ -101,14 +101,15 @@
           {
             "group": "Refunds",
             "pages": [
-              "api-reference/endpoint/refunds",
-              "api-reference/endpoint/refunds/create"
+              "api-reference/endpoint/refunds/overview",
+              "api-reference/endpoint/refunds/create",
+              "api-reference/endpoint/refunds/retry"
             ]
           },
           {
             "group": "Payouts",
             "pages": [
-              "api-reference/endpoint/payouts",
+              "api-reference/endpoint/payouts/overview",
               "api-reference/endpoint/payouts/balances",
               "api-reference/endpoint/payouts/create-crypto",
               "api-reference/endpoint/payouts/retry-crypto"
@@ -117,7 +118,7 @@
           {
             "group": "Paylinks",
             "pages": [
-              "api-reference/endpoint/paylinks",
+              "api-reference/endpoint/paylinks/overview",
               "api-reference/endpoint/paylinks/create",
               "api-reference/endpoint/paylinks/list",
               "api-reference/endpoint/paylinks/retrieve",
@@ -127,7 +128,7 @@
           {
             "group": "Customers",
             "pages": [
-              "api-reference/endpoint/customers",
+              "api-reference/endpoint/customers/overview",
               "api-reference/endpoint/customers/create",
               "api-reference/endpoint/customers/list",
               "api-reference/endpoint/customers/retrieve",
@@ -137,7 +138,7 @@
           {
             "group": "Webhooks",
             "pages": [
-              "api-reference/endpoint/webhooks",
+              "api-reference/endpoint/webhooks/overview",
               "api-reference/endpoint/webhooks/get",
               "api-reference/endpoint/webhooks/events",
               "api-reference/endpoint/webhooks/register",
@@ -147,14 +148,14 @@
           {
             "group": "Webhook Deliveries",
             "pages": [
-              "api-reference/endpoint/webhook-deliveries",
+              "api-reference/endpoint/webhook-deliveries/overview",
               "api-reference/endpoint/webhook-deliveries/list"
             ]
           },
           {
             "group": "Crypto Settlements",
             "pages": [
-              "api-reference/endpoint/crypto-settlements",
+              "api-reference/endpoint/crypto-settlements/overview",
               "api-reference/endpoint/crypto-settlements/add",
               "api-reference/endpoint/crypto-settlements/list",
               "api-reference/endpoint/crypto-settlements/delete"
@@ -163,13 +164,13 @@
           {
             "group": "Fiat Settlements",
             "pages": [
-              "api-reference/endpoint/fiat-settlements"
+              "api-reference/endpoint/fiat-settlements/overview"
             ]
           },
           {
             "group": "Profile",
             "pages": [
-              "api-reference/endpoint/profile",
+              "api-reference/endpoint/profile/overview",
               "api-reference/endpoint/profile/retrieve",
               "api-reference/endpoint/profile/request-email-change",
               "api-reference/endpoint/profile/verify-email-change"
@@ -178,14 +179,14 @@
           {
             "group": "Mode",
             "pages": [
-              "api-reference/endpoint/mode",
+              "api-reference/endpoint/mode/overview",
               "api-reference/endpoint/mode/toggle"
             ]
           },
           {
             "group": "Notifications",
             "pages": [
-              "api-reference/endpoint/notification",
+              "api-reference/endpoint/notification/overview",
               "api-reference/endpoint/notification/toggle"
             ]
           }
