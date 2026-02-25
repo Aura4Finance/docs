@@ -69,7 +69,7 @@ A payout represents a withdrawal of settled funds from your Orafi account to an 
 
 Returns your available payout balances by token. Use this to check how much you can withdraw before initiating a payout.
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET https://api.orafi.app/transactions/payout/balances \
   -H "x-api-key: ora_test_your_api_key"
@@ -87,9 +87,6 @@ response = requests.get(
     headers={"x-api-key": "ora_test_your_api_key"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200 — Success
 {
   "success": true,
@@ -152,7 +149,7 @@ Initiates a crypto payout. There are **two supported methods**:
 <ParamField body="save" type="boolean" default="false">
   When `true`, saves the wallet address as a settlement account for future payouts.
 </ParamField>  
-<RequestExample>
+<ResponseExample>
 ```bash cURL (settlement account)
 curl -X POST https://api.orafi.app/transactions/payout/crypto \
   -H "Content-Type: application/json" \
@@ -201,9 +198,6 @@ response = requests.post(
     }
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200 — Success
 {
   "success": true,
@@ -248,7 +242,7 @@ Retries a payout that previously failed. The payout must be in `FAILED` status.
   The ID of the failed payout to retry.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X POST https://api.orafi.app/transactions/payout/crypto/retry \
   -H "Content-Type: application/json" \
@@ -279,9 +273,6 @@ response = requests.post(
     json={"payoutId": "payout_abc123"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200 — Success
 {
   "success": true,

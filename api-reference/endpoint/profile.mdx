@@ -68,7 +68,7 @@ Your business profile is the core identity for your Orafi account. It controls A
 
 Returns the authenticated user's profile including business information and wallet details.
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET https://api.orafi.app/v1/profile \
   -H "Content-Type: application/json" \
@@ -79,9 +79,6 @@ const response = await fetch("https://api.orafi.app/v1/profile", {
   headers: { "x-api-key": "ora_test_your_api_key" }
 });
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200 — Success
 {
   "success": true,
@@ -131,7 +128,7 @@ Initiates an email address change. An OTP is sent to the new email for verificat
   The new email address.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X POST https://api.orafi.app/v1/profile/request-email-change \
   -H "Content-Type: application/json" \
@@ -140,9 +137,6 @@ curl -X POST https://api.orafi.app/v1/profile/request-email-change \
     "email": "newemail@example.com"
   }'
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200 — Success
 {
   "success": true,
@@ -171,7 +165,7 @@ Confirms the email change using the OTP sent to the new address.
   One-time password sent to the new email address.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X POST https://api.orafi.app/v1/profile/verify-email-change \
   -H "Content-Type: application/json" \
@@ -181,9 +175,6 @@ curl -X POST https://api.orafi.app/v1/profile/verify-email-change \
     "otp": "123456"
   }'
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200 — Success
 {
   "success": true,

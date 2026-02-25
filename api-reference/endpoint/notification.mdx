@@ -11,7 +11,7 @@ description: "Toggle email notification preferences for your business account."
 
 Toggles your email notification subscription on or off. When enabled, you receive email alerts for events like successful payments and failed transactions.
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X POST https://api.orafi.app/notification \
   -H "Content-Type: application/json" \
@@ -37,9 +37,6 @@ response = requests.post(
     }
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200 — Subscribed
 {
   "status": "Success",

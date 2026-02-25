@@ -77,7 +77,7 @@ Creates a new paylink. Send the request as `multipart/form-data` to include prod
   Optional product image(s) to display on the payment page.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X POST https://api.orafi.app/paylink/create \
   -H "x-api-key: ora_test_your_api_key" \
@@ -115,9 +115,6 @@ response = requests.post(
     }
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -153,7 +150,7 @@ Returns the details of an existing paylink.
   The paylink ID to retrieve.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1 \
   -H "x-api-key: ora_test_your_api_key"
@@ -172,9 +169,6 @@ response = requests.get(
     headers={"x-api-key": "ora_test_your_api_key"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -203,7 +197,7 @@ response = requests.get(
 
 Returns all paylinks belonging to the authenticated business profile.
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET https://api.orafi.app/paylink \
   -H "x-api-key: ora_test_your_api_key"
@@ -221,9 +215,6 @@ response = requests.get(
     headers={"x-api-key": "ora_test_your_api_key"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -268,7 +259,7 @@ Permanently deletes a paylink. This action cannot be undone.
   The paylink ID to delete.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X DELETE https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1 \
   -H "x-api-key: ora_test_your_api_key"
@@ -290,9 +281,6 @@ response = requests.delete(
     headers={"x-api-key": "ora_test_your_api_key"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,

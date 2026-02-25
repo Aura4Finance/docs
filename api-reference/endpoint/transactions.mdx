@@ -255,7 +255,7 @@ Returns a paginated list of all transactions for the authenticated business. Sup
   Cursor for pagination. Pass the `nextCursor` from a previous response.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET "https://api.orafi.app/v1/transactions?status=COMPLETED&limit=10" \
   -H "x-api-key: ora_test_your_api_key"
@@ -266,9 +266,6 @@ const response = await fetch(
   { headers: { "x-api-key": "ora_test_your_api_key" } }
 );
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200 — Success
 {
   "success": true,
@@ -331,7 +328,7 @@ Fetches full details for a single transaction, including related payment, payout
   Unique identifier of the transaction to retrieve.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET https://api.orafi.app/v1/transactions/cmjr6iwo60004v84wdnwm7qub \
   -H "x-api-key: ora_test_your_api_key"
@@ -342,9 +339,6 @@ const response = await fetch(
   { headers: { "x-api-key": "ora_test_your_api_key" } }
 );
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200 — Success
 {
   "success": true,

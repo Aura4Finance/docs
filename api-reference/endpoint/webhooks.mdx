@@ -66,7 +66,7 @@ A webhook is a callback configuration that tells Orafi where to deliver event no
 
 Returns the current webhook configuration for the authenticated profile.
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET https://api.orafi.app/webhook \
   -H "x-api-key: ora_test_your_api_key"
@@ -84,9 +84,6 @@ response = requests.get(
     headers={"x-api-key": "ora_test_your_api_key"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -114,7 +111,7 @@ response = requests.get(
 
 Returns all event types available for webhook subscriptions.
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET https://api.orafi.app/webhook/events \
   -H "x-api-key: ora_test_your_api_key"
@@ -132,9 +129,6 @@ response = requests.get(
     headers={"x-api-key": "ora_test_your_api_key"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -163,7 +157,7 @@ Registers or updates the webhook endpoint for your business profile. Orafi gener
   Publicly accessible HTTPS URL to receive webhook events.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X POST https://api.orafi.app/webhook/register \
   -H "Content-Type: application/json" \
@@ -196,9 +190,6 @@ response = requests.post(
     json={"url": "https://yourapp.com/webhooks/orafi"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -232,7 +223,7 @@ Adds an event type to your existing webhook subscription.
   The event type to subscribe to (e.g. `payment.failed`).
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X POST https://api.orafi.app/webhook/subscribe \
   -H "Content-Type: application/json" \
@@ -263,9 +254,6 @@ response = requests.post(
     json={"event": "payment.failed"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,

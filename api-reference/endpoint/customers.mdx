@@ -82,7 +82,7 @@ Manually creates a customer record.
   Customer's email address.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X POST https://api.orafi.app/customers/create \
   -H "Content-Type: application/json" \
@@ -123,9 +123,7 @@ response = requests.post(
     }
 )
 ```
-</RequestExample>
 
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -170,7 +168,7 @@ Returns a paginated list of customers. All query parameters are optional.
   Pagination cursor. Results start after the referenced customer.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET "https://api.orafi.app/customers?mode=test&limit=10" \
   -H "x-api-key: ora_test_your_api_key"
@@ -190,9 +188,7 @@ response = requests.get(
     params={"mode": "test", "limit": 10}
 )
 ```
-</RequestExample>
 
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -235,7 +231,7 @@ Returns the details of a specific customer.
   The customer ID to retrieve.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET https://api.orafi.app/customers/cmjr4c7qq0000v8hozkzz4em5 \
   -H "x-api-key: ora_test_your_api_key"
@@ -254,9 +250,7 @@ response = requests.get(
     headers={"x-api-key": "ora_test_your_api_key"}
 )
 ```
-</RequestExample>
 
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -296,7 +290,7 @@ Permanently deletes a customer record. This action cannot be undone.
   The customer ID to delete.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X DELETE https://api.orafi.app/customers/cmjr4c7qq0000v8hozkzz4em5 \
   -H "x-api-key: ora_test_your_api_key"
@@ -318,9 +312,7 @@ response = requests.delete(
     headers={"x-api-key": "ora_test_your_api_key"}
 )
 ```
-</RequestExample>
 
-<ResponseExample>
 ```json 200
 {
   "success": true,

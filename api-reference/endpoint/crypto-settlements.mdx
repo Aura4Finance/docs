@@ -53,7 +53,7 @@ Links a new wallet address to your profile. Requires a signed message to prove w
   Cryptographic signature proving ownership of the wallet.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X POST https://api.orafi.app/settlement/crypto \
   -H "Content-Type: application/json" \
@@ -94,9 +94,6 @@ response = requests.post(
     }
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -116,7 +113,7 @@ response = requests.post(
 
 Returns all saved crypto settlement accounts for the authenticated profile.
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X GET https://api.orafi.app/settlement/crypto \
   -H "x-api-key: ora_test_your_api_key"
@@ -134,9 +131,6 @@ response = requests.get(
     headers={"x-api-key": "ora_test_your_api_key"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,
@@ -173,7 +167,7 @@ Permanently removes a saved wallet address from your settlement accounts.
   ID of the settlement account to delete.
 </ParamField>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X DELETE https://api.orafi.app/settlement/crypto/854da716-03bf-4bcf-9eba-3302208f8f36 \
   -H "x-api-key: ora_test_your_api_key"
@@ -195,9 +189,6 @@ response = requests.delete(
     headers={"x-api-key": "ora_test_your_api_key"}
 )
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200
 {
   "success": true,

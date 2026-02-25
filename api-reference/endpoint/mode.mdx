@@ -20,7 +20,7 @@ Switches the authenticated business between **test** and **live** mode. Live mod
   You must complete the onboarding process before switching to live mode. If onboarding is incomplete, the API returns an error.
 </Warning>
 
-<RequestExample>
+<ResponseExample>
 ```bash cURL
 curl -X POST https://api.orafi.app/v1/business/mode \
   -H "Content-Type: application/json" \
@@ -32,9 +32,6 @@ const response = await fetch("https://api.orafi.app/v1/business/mode", {
   headers: { "x-api-key": "ora_test_your_api_key" }
 });
 ```
-</RequestExample>
-
-<ResponseExample>
 ```json 200 — Success
 {
   "success": true,
