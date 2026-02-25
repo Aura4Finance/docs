@@ -64,138 +64,20 @@ A transaction is the single source of truth for every financial event in Orafi. 
   "createdAt": "2025-12-20T10:30:00.000Z",
   "confirmedAt": "2025-12-20T10:32:15.000Z",
   "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b",
-  "customerId": "cmjr4c7qq0000v8hozkzz4em5"
+  "customerId": "cmjr4c7qq0000v8hozkzz4em5",
+  "payment": { ... },
+  "payout": null,
+  "refund": null
 }
 ```
 </ResponseExample>
 
-### The payment sub-object
-
-When a transaction has `type: "PAYMENT"`, it includes a nested `payment` object with these fields:
-
-<ResponseField name="id" type="string">
-  Unique identifier for the payment.
-</ResponseField>
-
-<ResponseField name="token" type="string" default="USDC">
-  Token used for the payment.
-</ResponseField>
-
-<ResponseField name="refunded" type="boolean" default="false">
-  Whether this payment has been refunded.
-</ResponseField>
-
-<ResponseField name="depositAddress" type="string">
-  On-chain address the customer sent funds to.
-</ResponseField>
-
-<ResponseField name="txRef" type="string">
-  Merchant-supplied transaction reference (idempotency key).
-</ResponseField>
-
-<ResponseField name="paymentMethod" type="string">
-  How the payment was created. One of `PAYMENT_LINK` or `HOSTED_CHECKOUT`.
-</ResponseField>
-
-<ResponseField name="redirectUrl" type="string">
-  URL the customer is redirected to after checkout.
-</ResponseField>
-
-<ResponseField name="paylinkId" type="string">
-  Paylink that initiated this payment, if applicable.
-</ResponseField>
-
-<ResponseExample>
-```json The payment sub-object
-{
-  "id": "cmjfu1cjv0003v8vsmmxgjk05",
-  "token": "USDC",
-  "refunded": false,
-  "depositAddress": "0x871cf48ff1847e7a...55c2d3",
-  "txRef": "order_12345",
-  "paymentMethod": "HOSTED_CHECKOUT",
-  "redirectUrl": "https://yourapp.com/success",
-  "paylinkId": null
-}
-```
-</ResponseExample>
-
-### The refund sub-object
-
-When a transaction has `type: "REFUND"`, it includes a nested `refund` object:
-
-<ResponseField name="id" type="string">
-  Unique identifier for the refund.
-</ResponseField>
-
-<ResponseField name="reason" type="string">
-  Reason for the refund, if provided.
-</ResponseField>
-
-<ResponseField name="walletAddress" type="string">
-  Destination wallet address the refund was sent to.
-</ResponseField>
-
-<ResponseField name="originalTxId" type="string">
-  ID of the original transaction being refunded.
-</ResponseField>
-
-<ResponseField name="txDigest" type="string">
-  On-chain transaction hash for the refund.
-</ResponseField>
-
-<ResponseExample>
-```json The refund sub-object
-{
-  "id": "cmjr6ixla0005v84wlfust2mn",
-  "reason": "Customer not satisfied",
-  "walletAddress": "0xc9f89b41c8e9...1ad9",
-  "originalTxId": "cmjlzeq0j0001v83g2cuplnbg",
-  "txDigest": "3xYmB9kT..."
-}
-```
-</ResponseExample>
-
-### The payout sub-object
-
-When a transaction has `type: "PAYOUT"`, it includes a nested `payout` object:
-
-<ResponseField name="id" type="string">
-  Unique identifier for the payout.
-</ResponseField>
-
-<ResponseField name="method" type="string">
-  Payout method. One of `CRYPTO` or `FIAT`.
-</ResponseField>
-
-<ResponseField name="walletAddress" type="string">
-  Destination wallet address. Present for crypto payouts.
-</ResponseField>
-
-<ResponseField name="txDigest" type="string">
-  On-chain transaction digest. Available after payout is processed.
-</ResponseField>
-
-<ResponseField name="cryptoAccountId" type="string">
-  ID of the crypto settlement account used, if applicable.
-</ResponseField>
-
-<ResponseField name="fiatAccountId" type="string">
-  ID of the fiat settlement account used, if applicable.
-</ResponseField>
-
-<ResponseExample>
-```json The payout sub-object
-{
-  "id": "cmjpayout001",
-  "method": "CRYPTO",
-  "walletAddress": "0x871cf48ff1847e7a...55c2d3",
-  "txDigest": "5kRmC7nV...",
-  "cryptoAccountId": "854da716-03bf-4bcf-9eba-3302208f8f36",
-  "fiatAccountId": null
-}
-```
-</ResponseExample>
+<Note>
+  Depending on the transaction `type`, one of the following sub-objects will be populated:
+  - `type: "PAYMENT"` → includes a nested `payment` object. See [Payments](/api-reference/endpoint/payments#transaction-sub-object).
+  - `type: "PAYOUT"` → includes a nested `payout` object. See [Payouts](/api-reference/endpoint/payouts#transaction-sub-object).
+  - `type: "REFUND"` → includes a nested `refund` object. See [Refunds](/api-reference/endpoint/refunds#transaction-sub-object).
+</Note>
 
 ---
 
