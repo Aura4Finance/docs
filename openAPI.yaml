@@ -374,6 +374,24 @@ paths:
                     type: boolean
                   message:
                     type: string
+  /notification:
+    post:
+      summary: Toggle notifications
+      description: Toggle email notification subscription on or off
+      security:
+        - apiKey: []
+      responses:
+        '200':
+          description: Notification preference updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
   /transactions:
     get:
       summary: Get all transactions
