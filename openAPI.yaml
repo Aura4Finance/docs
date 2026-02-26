@@ -4,10 +4,8 @@ info:
   description: Seamless crypto payments API
   version: 1.0.0
 servers:
-  - url: https://api.orafi.com
+  - url: https://api.orafi.app/v1
     description: Production server
-  - url: https://test.api.orafi.com
-    description: Test server
 paths:
   /paylink/create:
     post:
