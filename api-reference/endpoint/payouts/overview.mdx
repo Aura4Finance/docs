@@ -159,9 +159,10 @@ Initiates a crypto payout. There are **two supported methods**:
     Required fields: `amount`, `cryptoSettlementAccountId`
   </Tab>
   <Tab title="Direct wallet">
-    Send funds to any wallet address. **Requires cryptographic signing** to verify wallet ownership.
+    Send funds to any wallet address.
 
-    Required fields: `amount`, `walletAddress`, `bytes`, `signature`
+    Required fields: `amount`, `walletAddress`, `network`
+    **Get supported networks See [Supported Networks](/api-reference/endpoint/extras/networks)**
   </Tab>
 </Tabs>
 

@@ -189,6 +189,16 @@
               "api-reference/endpoint/notification/overview",
               "api-reference/endpoint/notification/toggle"
             ]
+          },
+          {
+            "group": "Extras",
+            "pages": [
+              "api-reference/endpoint/extras/banks",
+              "api-reference/endpoint/extras/currency",
+              "api-reference/endpoint/extras/rates",
+              "api-reference/endpoint/extras/resolve",
+              "api-reference/endpoint/extras/networks"
+            ]
           }
         ]
       }

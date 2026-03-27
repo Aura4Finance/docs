@@ -1315,6 +1315,30 @@ paths:
                         example: John Doe
         '400':
           $ref: '#/components/responses/BadRequest'
+  /networks:
+    get:
+      tags:
+        - Fiat
+      summary: Get supported networks
+      description: Retrieve list of supported blockchain networks. Public endpoint - no authentication required.
+      responses:
+        '200':
+          description: Supported networks retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Supported networks retrieved successfully!
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Network'
   /rates:
     get:
       tags:

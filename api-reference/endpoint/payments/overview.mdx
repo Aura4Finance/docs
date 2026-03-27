@@ -146,6 +146,10 @@ Creates a hosted checkout payment. Returns a `checkoutUrl` to redirect the custo
   Amount to charge in NGN. Minimum `1`.
 </ParamField>
 
+<ParamField body="customerId" type="string" required>
+  Amount to charge in NGN. Minimum `1`.
+</ParamField>
+
 <ParamField body="customer" type="object" required>
   Customer information for this payment.
 
@@ -158,6 +162,8 @@ Creates a hosted checkout payment. Returns a `checkoutUrl` to redirect the custo
     </ParamField>
   </Expandable>
 </ParamField>
+
+| Either the customerId or the object is required!
 
 <ParamField body="txRef" type="string" required>
   Unique transaction reference from your system. Acts as an idempotency key — duplicate `txRef` values return the original payment.
@@ -291,8 +297,10 @@ const response = await fetch("https://api.orafi.app/transactions/payment/verify"
 
 ## Retrieve a payment
 
+| Retriving a transactionis only valid within the period of expected completion(10 minutes).
+
 <div className="api-method-box">
-  <span className="api-method get">GET</span> `/transactions/payment/retrieve`
+  <span className="api-method get">GET</span> `/transactions/payment`
 </div>
 
 Fetches full details of a payment including deposit address, business name, and amounts.
@@ -305,12 +313,12 @@ Fetches full details of a payment including deposit address, business name, and 
 
 <ResponseExample>
 ```bash cURL
-curl -X GET "https://api.orafi.app/transactions/payment/retrieve?paymentId=cmjw65j510001v81cilq0u13v" \
+curl -X GET "https://api.orafi.app/transactions/payment?paymentId=cmjw65j510001v81cilq0u13v" \
   -H "x-api-key: ora_test_your_api_key"
 ```
 ```javascript Node.js
 const response = await fetch(
-  "https://api.orafi.app/transactions/payment/retrieve?paymentId=cmjw65j510001v81cilq0u13v",
+  "https://api.orafi.app/transactions/payment?paymentId=cmjw65j510001v81cilq0u13v",
   { headers: { "x-api-key": "ora_test_your_api_key" } }
 );
 ```
