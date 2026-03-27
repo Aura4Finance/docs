@@ -310,6 +310,7 @@ paths:
                 customerId:
                   type: string
                   description: Existing customer ID (optional)
+                  example: cmxsds23...
                 currency:
                   type: string
                   description: Payment currency
@@ -322,13 +323,11 @@ paths:
                 txRef:
                   type: string
                   description: Unique transaction reference (optional)
-                type:
-                  type: string
-                  description: Payment type (auto-set based on endpoint)
-                  enum: [PAYMENT_LINK, HOSTED_CHECKOUT]
+                  example: cmxsds...
                 redirectUrl:
                   type: string
-                  description: URL to redirect after payment (optional)
+                  description: URL to redirect after payment
+                  example: www.example.com
       responses:
         '201':
           description: Payment created successfully
