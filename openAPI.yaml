@@ -849,6 +849,61 @@ paths:
         - Transactions
       summary: Get all transactions
       description: Retrieve all transactions for the authenticated merchant
+      parameters:
+        - name: mode
+          in: query
+          schema:
+            type: string
+            enum: [test, live]
+          description: Filter by transaction mode 
+        - name: type
+          in: query
+          schema: 
+            type: string
+            enum: [PAYMENT, REFUND, PAYOUT]
+          description: Filter by transaction type
+        - name: status
+          in: query
+          schema: 
+            type: string
+            enum: [completed, pending, failed]
+          description: Filter by transaction status
+        - name: customerId
+          in: query
+          schema:
+            type: string
+          description: Filter by customer ID
+        - name: paymentMethod
+          in: query
+          schema:
+            type: string
+            enum: [HOSTED_CHECKOUT, PAYMENT_LINK]
+          description: Filter by payment method used
+        - name: currency
+          in: query
+          schema: 
+            type: string
+          description: Filter by currency used to intiate transaction
+        - name: network
+          in: query
+          schema: 
+            type: string
+          description: Filter by network used to initiate transaction
+        - name: paymentLinkId
+          in: query
+          schema: 
+            type: string
+          description: Filter by payment link ID(used only when status is set to PAYMENT)
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          description: Number of records to return
+        - name: cursor
+          in: query
+          schema:
+            type: string
+          description: Pagination cursor
       security:
         - apiKey: []
       responses:
