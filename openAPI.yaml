@@ -1425,7 +1425,7 @@ paths:
                     type: object
         '400':
           $ref: '#/components/responses/BadRequest'
-  /currency:
+  /currencies:
     get:
       tags:
         - Fiat
