@@ -51,19 +51,16 @@ A fiat settlement account is a saved bank account linked to your business profil
 
 ---
 
-<Note>
-  Fiat settlements are **coming soon**. The endpoints below are planned and not yet available.
-</Note>
+## Manage fiat settlement accounts
 
-### Planned endpoints
+Fiat settlements allow you to add and manage bank accounts for receiving payouts.
 
-| Method   | Endpoint                        | Description              |
-| -------- | ------------------------------- | ------------------------ |
-| `GET`    | `/settlement/fiat/bank-list`    | List supported banks     |
-| `POST`   | `/settlement/fiat/add`          | Add a bank account       |
-| `GET`    | `/settlement/fiat`              | List saved bank accounts |
-| `PATCH`  | `/settlement/fiat/{id}`         | Update a bank account    |
-| `DELETE` | `/settlement/fiat/{id}`         | Remove a bank account    |
+| Method   | Endpoint                 | Description                  |
+| -------- | ------------------------ | ---------------------------- |
+| `GET`    | `/settlement/fiat`       | List all fiat accounts       |
+| `POST`   | `/settlement/fiat`       | Add a new bank account       |
+| `PATCH`  | `/settlement/fiat/{id}`  | Update a bank account        |
+| `DELETE` | `/settlement/fiat/{id}`  | Delete a bank account        |
 
-Stay tuned — we will update this page when fiat settlements launch. In the meantime, use [Crypto Settlements](/api-reference/endpoint/crypto-settlements) for payouts.
+See the individual endpoint pages for detailed request and response examples.
 

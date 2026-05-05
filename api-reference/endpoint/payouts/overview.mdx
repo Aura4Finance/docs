@@ -264,9 +264,13 @@ response = requests.post(
 
 ## Create a fiat payout
 
-<Note>
-  Fiat payouts are **coming soon**. You will be able to withdraw directly to a bank account. See [Fiat Settlements](/api-reference/endpoint/fiat-settlements) for planned endpoints.
-</Note>
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/transactions/payout/fiat`
+</div>
+
+Initiates a fiat payout to a saved bank account or a new bank account. See [Fiat Settlements](/api-reference/endpoint/fiat-settlements) to manage your saved accounts.
+
+You can use a saved fiat settlement account or provide bank details directly.
 
 ---
 

@@ -235,9 +235,9 @@ paths:
       tags:
         - Payments
       summary: Retrieve payment information
-      description: Get information about a payment using payment_id query parameter
+      description: Get information about a payment using paymentId query parameter
       parameters:
-        - name: payment_id
+        - name: paymentId
           in: query
           required: true
           schema:
@@ -322,7 +322,7 @@ paths:
                   example: SUI
                 txRef:
                   type: string
-                  description: Unique transaction reference (optional)
+                  description: Unique transaction reference
                   example: cmxsds...
                 redirectUrl:
                   type: string
@@ -469,6 +469,45 @@ paths:
                   message:
                     type: string
                     example: Payment transfer verified successfully
+                  data:
+                    $ref: '#/components/schemas/Payment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /transactions/payment/{paymentId}:
+    patch:
+      tags:
+        - Payments
+      summary: Update payment intent
+      description: Update payment intent to generate either deposit or transfer address for payment completion
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The payment ID to update
+        - name: intent
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [transfer_address, deposit_address]
+            default: transfer_address
+          description: The payment intent type. Default is transfer_address
+      responses:
+        '200':
+          description: Payment intent updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Payment intent updated successfully
                   data:
                     $ref: '#/components/schemas/Payment'
         '400':
@@ -1055,7 +1094,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  /transactions/payout/crypto/retry:
+  /transactions/payout/crypto/{transactionId}/retry:
     post:
       tags:
         - Transactions
@@ -1063,19 +1102,13 @@ paths:
       description: Retry a failed crypto payout
       security:
         - apiKey: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - transactionId
-              properties:
-                transactionId:
-                  type: string
-                  description: ID of the failed transaction to retry
-                  example: tx_123
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the failed transaction to retry
       responses:
         '200':
           description: Crypto payout retry initiated successfully
@@ -1094,12 +1127,12 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  /transactions/refund:
+  /transactions/payout/fiat:
     post:
       tags:
-        - Refunds
-      summary: Create refund
-      description: Initiate a refund for a transaction
+        - Transactions
+      summary: Create fiat payout
+      description: Initiate a fiat payout to a bank account
       security:
         - apiKey: []
       requestBody:
@@ -1109,13 +1142,105 @@ paths:
             schema:
               type: object
               required:
-                - originalTxId
+                - amount
+              properties:
+                amount:
+                  type: number
+                  description: Payout amount
+                  example: 10000
+                accountId:
+                  type: string
+                  description: ID of a saved fiat settlement account
+                  example: fiat_acc_123
+                accountIdentifier:
+                  type: string
+                  description: Bank account number to use when a saved account is not provided
+                  example: '1234567890'
+                bankCode:
+                  type: string
+                  description: Bank code to use with accountIdentifier when a saved account is not provided
+                  example: '044'
+                save:
+                  type: boolean
+                  description: Save the provided bank account for future payouts
+                  example: false
+      responses:
+        '201':
+          description: Fiat payout created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fiat payout initiated successfully
+                  data:
+                    $ref: '#/components/schemas/Payout'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/payout/fiat/{transactionId}/retry:
+    post:
+      tags:
+        - Transactions
+      summary: Retry fiat payout
+      description: Retry a failed fiat payout
+      security:
+        - apiKey: []
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the failed fiat payout transaction to retry
+      responses:
+        '200':
+          description: Fiat payout retry initiated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Fiat payout retry initiated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /transactions/refund/{originalTxId}:
+    post:
+      tags:
+        - Refunds
+      summary: Create refund
+      description: Initiate a refund for a transaction
+      security:
+        - apiKey: []
+      parameters:
+        - name: originalTxId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the original transaction to refund
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
                 - to
               properties:
-                originalTxId:
-                  type: string
-                  description: ID of the original transaction to refund
-                  example: tx_123
                 to:
                   type: string
                   description: Recipient wallet address or account
@@ -1144,7 +1269,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
-  /transactions/refund/retry:
+  /transactions/refund/{transactionId}/retry:
     post:
       tags:
         - Refunds
@@ -1152,19 +1277,13 @@ paths:
       description: Retry a failed refund
       security:
         - apiKey: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - transactionId
-              properties:
-                transactionId:
-                  type: string
-                  description: ID of the failed refund transaction to retry
-                  example: refund_123
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the failed refund transaction to retry
       responses:
         '200':
           description: Refund retry initiated successfully
