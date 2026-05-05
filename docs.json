@@ -94,8 +94,11 @@
             "pages": [
               "api-reference/endpoint/payments/overview",
               "api-reference/endpoint/payments/create",
+              "api-reference/endpoint/payments/create-paylink",
+              "api-reference/endpoint/payments/retrieve",
               "api-reference/endpoint/payments/verify",
-              "api-reference/endpoint/payments/retrieve"
+              "api-reference/endpoint/payments/verify-transfer",
+              "api-reference/endpoint/payments/update"
             ]
           },
           {
@@ -112,7 +115,9 @@
               "api-reference/endpoint/payouts/overview",
               "api-reference/endpoint/payouts/balances",
               "api-reference/endpoint/payouts/create-crypto",
-              "api-reference/endpoint/payouts/retry-crypto"
+              "api-reference/endpoint/payouts/retry-crypto",
+              "api-reference/endpoint/payouts/create-fiat",
+              "api-reference/endpoint/payouts/retry-fiat"
             ]
           },
           {
@@ -122,6 +127,7 @@
               "api-reference/endpoint/paylinks/create",
               "api-reference/endpoint/paylinks/list",
               "api-reference/endpoint/paylinks/retrieve",
+              "api-reference/endpoint/paylinks/edit",
               "api-reference/endpoint/paylinks/delete"
             ]
           },
@@ -164,7 +170,11 @@
           {
             "group": "Fiat Settlements",
             "pages": [
-              "api-reference/endpoint/fiat-settlements/overview"
+              "api-reference/endpoint/fiat-settlements/overview",
+              "api-reference/endpoint/fiat-settlements/add",
+              "api-reference/endpoint/fiat-settlements/list",
+              "api-reference/endpoint/fiat-settlements/delete",
+              "api-reference/endpoint/fiat-settlements/update"
             ]
           },
           {
