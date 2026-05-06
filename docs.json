@@ -115,9 +115,8 @@
               "api-reference/endpoint/payouts/overview",
               "api-reference/endpoint/payouts/balances",
               "api-reference/endpoint/payouts/create-crypto",
-              "api-reference/endpoint/payouts/retry-crypto",
               "api-reference/endpoint/payouts/create-fiat",
-              "api-reference/endpoint/payouts/retry-fiat"
+              "api-reference/endpoint/payouts/retry"
             ]
           },
           {
