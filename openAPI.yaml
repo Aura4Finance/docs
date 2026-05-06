@@ -231,49 +231,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
   /transactions/payment:
-    get:
-      tags:
-        - Payments
-      summary: Retrieve payment information
-      description: Get information about a payment using paymentId query parameter
-      parameters:
-        - name: paymentId
-          in: query
-          required: true
-          schema:
-            type: string
-          description: The payment ID
-      responses:
-        '200':
-          description: Payment information retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: Payment information retrieved successfully
-                  data:
-                    $ref: '#/components/schemas/Payment'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '408':
-          description: Payment session expired
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: false
-                  message:
-                    type: string
-                    example: Payment Session Expired!
     post:
       tags:
         - Payments
@@ -354,6 +311,14 @@ paths:
         - Payments
       summary: Create paylink payment
       description: Create a payment for a specific paylink. Does not require authentication.
+      parameters:
+        - name: payment-link-id
+          in: header
+          required: true
+          schema:
+            type: string
+          description: The paylink ID
+          example: paylink_123
       requestBody:
         required: true
         content:
@@ -361,13 +326,8 @@ paths:
             schema:
               type: object
               required:
-                - paylinkId
                 - customer
               properties:
-                paylinkId:
-                  type: string
-                  description: The paylink ID
-                  example: paylink_123
                 customer:
                   type: object
                   required:
@@ -399,81 +359,51 @@ paths:
                     $ref: '#/components/schemas/Payment'
         '400':
           $ref: '#/components/responses/BadRequest'
-  /transactions/payment/verify:
-    post:
-      tags:
-        - Payments
-      summary: Verify payment
-      description: Verify a payment transaction
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - paymentId
-              properties:
-                paymentId:
-                  type: string
-                  description: The payment ID to verify
-                  example: payment_123
-      responses:
-        '200':
-          description: Payment verified successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: Payment verified successfully
-                  data:
-                    $ref: '#/components/schemas/Payment'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-  /transactions/payment/verify-transfer:
-    post:
-      tags:
-        - Payments
-      summary: Verify payment transfer
-      description: Verify a payment transfer transaction
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - paymentId
-              properties:
-                paymentId:
-                  type: string
-                  description: The payment ID to verify
-                  example: payment_123
-      responses:
-        '200':
-          description: Payment transfer verified successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: Payment transfer verified successfully
-                  data:
-                    $ref: '#/components/schemas/Payment'
-        '400':
-          $ref: '#/components/responses/BadRequest'
   /transactions/payment/{paymentId}:
+    get:
+      tags:
+        - Payments
+      summary: Retrieve payment information
+      description: Get information about a payment using the payment ID as a path parameter
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The payment ID
+          example: payment_123
+      responses:
+        '200':
+          description: Payment information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Payment information retrieved successfully
+                  data:
+                    $ref: '#/components/schemas/Payment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '408':
+          description: Payment session expired
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Payment Session Expired!
     patch:
       tags:
         - Payments
@@ -508,6 +438,70 @@ paths:
                   message:
                     type: string
                     example: Payment intent updated successfully
+                  data:
+                    $ref: '#/components/schemas/Payment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /transactions/payment/{paymentId}/verify:
+    post:
+      tags:
+        - Payments
+      summary: Verify payment
+      description: Verify a payment transaction
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The payment ID to verify
+          example: payment_123
+      responses:
+        '200':
+          description: Payment verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Payment verified successfully
+                  data:
+                    $ref: '#/components/schemas/Payment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /transactions/payment/{paymentId}/verify-transfer:
+    post:
+      tags:
+        - Payments
+      summary: Verify payment transfer
+      description: Verify a payment transfer transaction
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The payment ID to verify
+          example: payment_123
+      responses:
+        '200':
+          description: Payment transfer verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Payment transfer verified successfully
                   data:
                     $ref: '#/components/schemas/Payment'
         '400':
