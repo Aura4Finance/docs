@@ -424,6 +424,14 @@ paths:
             enum: [transfer_address, deposit_address]
             default: transfer_address
           description: The payment intent type. Default is transfer_address
+        - name: token
+          in: query
+          required: false
+          schema:
+            type: string
+            default: USDC
+          description: Optional token/currency to use when updating the payment intent. Defaults to USDC.
+          example: USDC
       responses:
         '200':
           description: Payment intent updated successfully
@@ -488,6 +496,14 @@ paths:
             type: string
           description: The payment ID to verify
           example: payment_123
+        - name: token
+          in: query
+          required: false
+          schema:
+            type: string
+            default: USDC
+          description: Optional token/currency to use for transfer verification. Defaults to USDC.
+          example: USDC
       responses:
         '200':
           description: Payment transfer verified successfully
