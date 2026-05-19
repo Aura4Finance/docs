@@ -116,6 +116,7 @@ paths:
                       $ref: '#/components/schemas/Paylink'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /paylink/{paylinkId}:
     get:
       tags:
@@ -290,6 +291,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/SubscriptionPlan'
+
   /subscriptions/plans/{planId}:
     get:
       tags:
@@ -669,6 +671,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /transactions/payment/paylink:
     post:
       tags:
@@ -907,6 +910,7 @@ paths:
                     $ref: '#/components/schemas/Webhook'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /webhook/events:
     get:
       tags:
@@ -936,6 +940,7 @@ paths:
                       example: payment.success
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /webhook/deliveries:
     get:
       tags:
@@ -1033,6 +1038,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /profile:
     get:
       tags:
@@ -1062,6 +1068,7 @@ paths:
                         $ref: '#/components/schemas/BusinessProfile'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /profile/request-email-change:
     post:
       tags:
@@ -1187,6 +1194,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /notification:
     post:
       tags:
@@ -1209,6 +1217,7 @@ paths:
                     type: object
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /transactions:
     get:
       tags:
@@ -1292,6 +1301,7 @@ paths:
                       $ref: '#/components/schemas/Transaction'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /transactions/{txId}:
     get:
       tags:
@@ -1327,6 +1337,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /transactions/payout/balances:
     get:
       tags:
@@ -1360,6 +1371,7 @@ paths:
                         description: Fiat balances
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /transactions/payout/crypto:
     post:
       tags:
@@ -1421,6 +1433,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /transactions/payout/{transactionId}/retry:
     post:
       tags:
@@ -1457,6 +1470,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /transactions/payout/fiat:
     post:
       tags:
@@ -1567,6 +1581,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /transactions/refund/{transactionId}/retry:
     post:
       tags:
@@ -1679,6 +1694,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /settlement/crypto/{id}:
     delete:
       tags:
@@ -1712,6 +1728,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /banks:
     get:
       tags:
@@ -1786,6 +1803,7 @@ paths:
                         example: John Doe
         '400':
           $ref: '#/components/responses/BadRequest'
+
   /networks:
     get:
       tags:
@@ -1810,6 +1828,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Network'
+
   /rates:
     get:
       tags:
@@ -1842,6 +1861,7 @@ paths:
                     type: object
         '400':
           $ref: '#/components/responses/BadRequest'
+
   /currencies:
     get:
       tags:
@@ -1978,6 +1998,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /settlement/fiat/{id}:
     delete:
       tags:
@@ -2062,6 +2083,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /customers:
     get:
       tags:
@@ -2170,6 +2192,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+
   /customers/{customerId}:
     get:
       tags:
