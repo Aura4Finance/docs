@@ -1,0 +1,65 @@
+---
+title: "Subscriptions"
+description: "Design and lifecycle for OraFi subscriptions (ORAFI model)."
+---
+
+## Overview
+
+OraFi subscriptions follow an email-driven checkout model: we create an internal payment transaction on behalf of a customer and send a checkout URL by email. The customer completes that transaction to activate or renew their subscription.
+
+## Statuses
+
+Subscriptions use the following statuses:
+
+- `PENDING` — Subscription created and the initial (or renewal) payment transaction has been generated and emailed to the customer.
+- `ABANDONED` — The customer did not complete the issued transaction within the transaction session window.
+- `ACTIVE` — The initial transaction completed within the session window and the subscription is active.
+- `CANCELLED` — The subscription was cancelled and will not auto-renew after grace (or was explicitly cancelled).
+- `PAST_DUE` — Renewal payment is overdue but subscription may still be in a temporary grace state.
+
+```yaml
+enum SubscriptionStatus:
+  - PENDING
+  - ABANDONED
+  - ACTIVE
+  - CANCELLED
+  - PAST_DUE
+```
+
+## Lifecycle
+
+1. Creation: when a subscription is created we generate an internal payment transaction and send the checkout URL to the customer via email. The subscription starts in `PENDING`.
+2. Activation: if the customer completes the payment within the transaction session window (10 minutes), the subscription becomes `ACTIVE`. When this happens we emit a `subscription.active` webhook.
+3. Abandonment: if the transaction is not completed within the session window, the subscription moves to `ABANDONED` and a `subscription.abandoned` webhook is emitted.
+4. Renewal notices: 3 days before a subscription expiry we send a renewal email containing the checkout URL. If not renewed, we re-send the email at the expiry date and start a 2-day grace period.
+5. Grace / Past Due: during the 2-day grace period the subscription can still be renewed; if unpaid after the grace period the subscription becomes `CANCELLED` and we emit a `subscription.cancelled` webhook. If the subscription is not renewed but still has a pending state we may mark it `PAST_DUE` while in grace (implementation detail — servers may use `PAST_DUE` while attempting to reconcile payment).
+6. Cancellation by user: when a user cancels, emit `subscription.not_renew` and prevent future renewals.
+
+## Timing and sessions
+
+- Transaction session window: 10 minutes — if the customer completes payment within this timeframe the subscription becomes `ACTIVE`.
+- Renewal reminder: 3 days before expiry — email with checkout URL.
+- Expiry email: on expiry date — email with checkout URL and start 2-day grace.
+- Grace period: 2 days after expiry to allow final completion. If unpaid after grace the subscription becomes `CANCELLED`.
+
+## Webhooks
+
+Emit these webhook events during subscription lifecycle:
+
+- `subscription.created` — when subscription and initial transaction are created.
+- `subscription.active` — when the initial transaction is completed and the subscription becomes `ACTIVE`.
+- `subscription.abandoned` — when the initial transaction is not completed within the session window.
+- `subscription.not_renew` — when a user cancels and chooses not to renew.
+- `subscription.cancelled` — when a subscription is finally cancelled after grace or manual cancellation.
+
+Include subscription id and customer id in webhook payloads, and a concise `status` field matching the `SubscriptionStatus` enum.
+
+## Implementation notes (ORAFI model)
+
+- Because card-on-file charging isn't available, the system uses generated transactions and email checkout links for subscription payments.
+- Design the renewal flow to reuse a single checkout URL per renewal attempt, and track attempts with a small retry policy before moving to `PAST_DUE` / `CANCELLED`.
+- Notify merchants via webhooks and email about renewal failures so they can intervene if needed.
+
+## Examples
+
+Use the API Reference endpoints for programmatic operations; the OpenAPI spec exposes request/response models for subscription creation, retrieval, cancellation and plan management.

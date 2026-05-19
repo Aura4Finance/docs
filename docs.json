@@ -67,7 +67,8 @@
             "pages": [
               "essentials/authentication",
               "essentials/errors",
-              "essentials/fees"
+              "essentials/fees",
+              "essentials/subscriptions"
             ]
           }
         ]
@@ -138,6 +139,21 @@
               "api-reference/endpoint/customers/list",
               "api-reference/endpoint/customers/retrieve",
               "api-reference/endpoint/customers/delete"
+            ]
+          },
+          {
+            "group": "Subscriptions",
+            "pages": [
+              "api-reference/endpoint/subscriptions/overview",
+              "api-reference/endpoint/subscriptions/plans-create",
+              "api-reference/endpoint/subscriptions/plans-list",
+              "api-reference/endpoint/subscriptions/plans-retrieve",
+              "api-reference/endpoint/subscriptions/plans-update",
+              "api-reference/endpoint/subscriptions/plans-delete",
+              "api-reference/endpoint/subscriptions/create",
+              "api-reference/endpoint/subscriptions/retrieve",
+              "api-reference/endpoint/subscriptions/list",
+              "api-reference/endpoint/subscriptions/cancel"
             ]
           },
           {

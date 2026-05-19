@@ -1,0 +1,31 @@
+---
+title: "Subscriptions"
+description: "Subscription management endpoints. See the Essentials guide for full behaviour and lifecycle details."
+---
+
+This section wires the OpenAPI endpoints for subscriptions and subscription plans. For workflow, lifecycle, webhooks and status semantics, see the Essentials -> Subscriptions guide.
+
+## Subscription Plans
+
+Manage subscription plans available to customers:
+
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/subscriptions/plans`
+  <span className="api-method get">GET</span> `/subscriptions/plans`
+  <span className="api-method get">GET</span> `/subscriptions/plans/{planId}`
+  <span className="api-method patch">PATCH</span> `/subscriptions/plans/{planId}`
+  <span className="api-method delete">DELETE</span> `/subscriptions/plans/{planId}`
+</div>
+
+## Customer Subscriptions
+
+Create and manage subscriptions for individual customers:
+
+<div className="api-method-box">
+  <span className="api-method post">POST</span> `/subscriptions`
+  <span className="api-method get">GET</span> `/subscriptions/{subscriptionId}`
+  <span className="api-method get">GET</span> `/subscriptions/customer/{customerId}`
+  <span className="api-method post">POST</span> `/subscriptions/{subscriptionId}/cancel`
+</div>
+
+Endpoints are implemented and described in the OpenAPI specification — use the interactive API reference (try the endpoints) to view request/response schemas.
