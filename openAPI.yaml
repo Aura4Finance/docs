@@ -450,36 +450,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
-  /subscriptions/{subscriptionId}:
-    get:
-      tags:
-        - Subscriptions
-      summary: Get subscription
-      parameters:
-        - name: subscriptionId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Subscription retrieved
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  message:
-                    type: string
-                    example: Subscription retrieved
-                  data:
-                    $ref: '#/components/schemas/Subscription'
-        '404':
-          $ref: '#/components/responses/NotFound'
-
   /subscriptions/customer/{customerId}:
     get:
       tags:
@@ -509,6 +479,36 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Subscription'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /subscriptions/{subscriptionId}:
+    get:
+      tags:
+        - Subscriptions
+      summary: Get subscription
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Subscription retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Subscription retrieved
+                  data:
+                    $ref: '#/components/schemas/Subscription'
         '404':
           $ref: '#/components/responses/NotFound'
   /transactions/payment/{paymentId}:
@@ -2617,21 +2617,27 @@ components:
         status:
           type: string
           enum: [PENDING, ABANDONED, ACTIVE, CANCELLED, PAST_DUE]
+          description: Current subscription status
         startsAt:
           type: string
           format: date-time
+          description: When the subscription starts
         endsAt:
           type: string
           format: date-time
+          description: When the subscription ends
         canceledAt:
           type: string
           format: date-time
+          description: When the subscription was canceled
         createdAt:
           type: string
           format: date-time
+          description: When the subscription was created
         updatedAt:
           type: string
           format: date-time
+          description: When the subscription was last updated
     CreateSubscriptionPlanRequest:
       type: object
       required:
