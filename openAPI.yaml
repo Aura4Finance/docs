@@ -260,6 +260,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/SubscriptionPlan'
+      security:
+        - apiKey: []
       tags:
         - Subscriptions
   /subscriptions/plans/{planId}:
@@ -289,6 +291,8 @@ paths:
                     $ref: '#/components/schemas/SubscriptionPlan'
         '404':
           $ref: '#/components/responses/NotFound'
+      security:
+        - apiKey: []
       tags:
         - Subscriptions
     patch:
@@ -447,6 +451,8 @@ paths:
                       $ref: '#/components/schemas/Subscription'
         '404':
           $ref: '#/components/responses/NotFound'
+      security:
+        - apiKey: []
       tags:
         - Subscriptions
   /subscriptions/{subscriptionId}:
@@ -476,6 +482,8 @@ paths:
                     $ref: '#/components/schemas/Subscription'
         '404':
           $ref: '#/components/responses/NotFound'
+      security:
+        - apiKey: []
       tags:
         - Subscriptions
   /transactions/payment/{paymentId}:
