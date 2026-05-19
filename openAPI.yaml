@@ -290,7 +290,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/SubscriptionPlan'
-
   /subscriptions/plans/{planId}:
     get:
       tags:
@@ -511,6 +510,7 @@ paths:
                     $ref: '#/components/schemas/Subscription'
         '404':
           $ref: '#/components/responses/NotFound'
+
   /transactions/payment/{paymentId}:
     get:
       tags:
@@ -2745,7 +2745,6 @@ components:
           type: string
           format: date-time
           description: Creation timestamp
-
   responses:
     BadRequest:
       description: Bad request - Invalid input or validation error
@@ -2786,7 +2785,6 @@ components:
               message:
                 type: string
                 example: Resource not found
-
   securitySchemes:
     apiKey:
       type: apiKey
