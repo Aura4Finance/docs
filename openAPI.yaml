@@ -2589,6 +2589,10 @@ components:
           description: Plan amount
           type: number
           example: 9.99
+        trialDays:
+          description: Number of days to offer as trial before first payment
+          type: integer
+          example: 5
         currency:
           description: Currency code (3-letter) for the plan
           type: string
