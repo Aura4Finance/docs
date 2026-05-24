@@ -1534,7 +1534,7 @@ paths:
       security:
         - apiKey: []
       tags:
-        - Settlement
+        - Settlements
     post:
       summary: Add crypto settlement account
       description: Add a cryptocurrency wallet for settlements
@@ -1586,7 +1586,7 @@ paths:
       security:
         - apiKey: []
       tags:
-        - Settlement
+        - Settlements
   /settlements/crypto/{id}:
     delete:
       summary: Delete crypto settlement account
@@ -2746,7 +2746,7 @@ tags:
     description: Webhook registration and management
   - name: Profile
     description: Business profile settings
-  - name: Settlement
+  - name: Settlements
     description: Settlement account management
   - name: Fiat
     description: Fiat-related endpoints
