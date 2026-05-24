@@ -12,7 +12,7 @@ servers:
   - url: http://localhost:3000/v1
     description: Local development server
 paths:
-  /paylinks:
+  /paylink:
     post:
       summary: Create a paylink
       description: Create a new paylink with images. Requires API key authentication and supports up to 4 images.
@@ -89,7 +89,7 @@ paths:
         - apiKey: []
       tags:
         - Paylinks
-  /paylinks/{paylinkId}:
+  /paylink/{paylinkId}:
     get:
       summary: Get paylink details
       description: Retrieve details of a specific paylink
@@ -1507,7 +1507,7 @@ paths:
         - apiKey: []
       tags:
         - Refunds
-  /settlements/crypto:
+  /settlement/crypto:
     get:
       summary: Get crypto settlement accounts
       description: Retrieve all cryptocurrency settlement accounts
@@ -1587,7 +1587,7 @@ paths:
         - apiKey: []
       tags:
         - Settlement
-  /settlements/crypto/{id}:
+  /settlement/crypto/{id}:
     delete:
       summary: Delete crypto settlement account
       description: Remove a cryptocurrency settlement account
@@ -1801,7 +1801,7 @@ paths:
                     example: Unable to fetch active currencies
       tags:
         - Fiat
-  /settlements/fiat:
+  /settlement/fiat:
     get:
       summary: Get fiat settlement accounts
       description: Retrieve all fiat (bank) settlement accounts
@@ -1881,7 +1881,7 @@ paths:
         - apiKey: []
       tags:
         - Fiat
-  /settlements/fiat/{id}:
+  /settlement/fiat/{id}:
     delete:
       summary: Delete fiat settlement account
       description: Remove a fiat settlement account
