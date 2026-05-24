@@ -49,12 +49,12 @@ Links a new wallet address to your profile. Requires a signed message to prove w
   Destination wallet address to save.
 </ParamField>
 
-<ParamField body="bytes" type="string" required>
-  Serialized message bytes that were signed by the wallet owner.
+<ParamField body="network" type="string" required>
+  Blockchain network the wallet belongs to.
 </ParamField>
 
-<ParamField body="signature" type="string" required>
-  Cryptographic signature proving ownership of the wallet.
+<ParamField body="alias" type="string" required>
+  Placeholder for wallet.
 </ParamField>
 
 <ResponseExample>
@@ -64,8 +64,8 @@ curl -X POST https://api.orafi.app/settlement/crypto \
   -H "x-api-key: ora_test_your_api_key" \
   -d '{
     "walletAddress": "0x871cf48ff1847e7a796ed69a04250323df16a66d43b25fee5e1619d82f55c2d3",
-    "bytes": "QWRkIGNyeXB0byBhY2NvdW50IGFzIGEgc2V0dGxlbWVudCBhY2NvdW50",
-    "signature": "AEQCjzWKVlM5Ht4Qbwk/ZpPeWbL4YRFFY..."
+    "network": "SUI",
+    "alias": "my_wallet"
   }'
 ```
 ```javascript Node.js

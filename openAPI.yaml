@@ -1839,10 +1839,6 @@ paths:
             schema:
               type: object
               properties:
-                bankName:
-                  description: Bank name
-                  type: string
-                  example: Access Bank
                 bankCode:
                   description: Bank code
                   type: string
@@ -1856,7 +1852,6 @@ paths:
                   type: boolean
                   example: false
               required:
-                - bankName
                 - bankCode
                 - accountNumber
       responses:
