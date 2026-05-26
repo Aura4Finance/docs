@@ -39,7 +39,7 @@ paths:
                 - payload
                 - images
       responses:
-        '201':
+        "201":
           description: Paylink created successfully
           content:
             application/json:
@@ -54,17 +54,17 @@ paths:
                     example: Paylink created successfully
                   data:
                     allOf:
-                      - $ref: '#/components/schemas/Paylink'
+                      - $ref: "#/components/schemas/Paylink"
                       - type: object
                         properties:
                           images:
                             type: array
                             items:
-                              $ref: '#/components/schemas/PaylinkImage'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                              $ref: "#/components/schemas/PaylinkImage"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -73,7 +73,7 @@ paths:
       summary: Get all paylinks
       description: Retrieve all paylinks for the authenticated merchant
       responses:
-        '200':
+        "200":
           description: List of paylinks retrieved successfully
           content:
             application/json:
@@ -90,15 +90,15 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - $ref: '#/components/schemas/Paylink'
+                        - $ref: "#/components/schemas/Paylink"
                         - type: object
                           properties:
                             images:
                               type: array
                               items:
-                                $ref: '#/components/schemas/PaylinkImage'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                                $ref: "#/components/schemas/PaylinkImage"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -115,7 +115,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Paylink details retrieved successfully
           content:
             application/json:
@@ -130,19 +130,19 @@ paths:
                     example: Paylink retrieved successfully
                   data:
                     allOf:
-                      - $ref: '#/components/schemas/Paylink'
+                      - $ref: "#/components/schemas/Paylink"
                       - type: object
                         properties:
                           images:
                             type: array
                             items:
-                              $ref: '#/components/schemas/PaylinkImage'
+                              $ref: "#/components/schemas/PaylinkImage"
                           profile:
-                            $ref: '#/components/schemas/BusinessProfile'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '404':
-          $ref: '#/components/responses/NotFound'
+                            $ref: "#/components/schemas/BusinessProfile"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
       tags:
         - Paylinks
     patch:
@@ -173,7 +173,7 @@ paths:
                     format: binary
                   maxItems: 4
       responses:
-        '200':
+        "200":
           description: Paylink updated successfully
           content:
             application/json:
@@ -187,11 +187,11 @@ paths:
                     type: string
                     example: Paylink updated successfully
                   data:
-                    $ref: '#/components/schemas/Paylink'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/Paylink"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -207,7 +207,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Paylink deleted successfully
           content:
             application/json:
@@ -223,10 +223,10 @@ paths:
                   data:
                     example: null
                     nullable: true
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
       security:
         - apiKey: []
       tags:
@@ -240,9 +240,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateSubscriptionPlanRequest'
+              $ref: "#/components/schemas/CreateSubscriptionPlanRequest"
       responses:
-        '201':
+        "201":
           description: Subscription plan created
           content:
             application/json:
@@ -256,11 +256,11 @@ paths:
                     type: string
                     example: Subscription plan created
                   data:
-                    $ref: '#/components/schemas/SubscriptionPlan'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/SubscriptionPlan"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -269,7 +269,7 @@ paths:
       summary: Get subscription plans
       description: Retrieve all subscription plans
       responses:
-        '200':
+        "200":
           description: List of subscription plans
           content:
             application/json:
@@ -285,7 +285,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/SubscriptionPlan'
+                      $ref: "#/components/schemas/SubscriptionPlan"
       security:
         - apiKey: []
       tags:
@@ -300,7 +300,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Plan retrieved
           content:
             application/json:
@@ -315,7 +315,7 @@ paths:
                     example: Plan retrieved
                   data:
                     allOf:
-                      - $ref: '#/components/schemas/SubscriptionPlan'
+                      - $ref: "#/components/schemas/SubscriptionPlan"
                       - type: object
                         properties:
                           subscriptionCount:
@@ -324,13 +324,13 @@ paths:
                             type: array
                             items:
                               allOf:
-                                - $ref: '#/components/schemas/Subscription'
+                                - $ref: "#/components/schemas/Subscription"
                                 - type: object
                                   properties:
                                     customer:
-                                      $ref: '#/components/schemas/Customer'
-        '404':
-          $ref: '#/components/responses/NotFound'
+                                      $ref: "#/components/schemas/Customer"
+        "404":
+          $ref: "#/components/responses/NotFound"
       security:
         - apiKey: []
       tags:
@@ -348,9 +348,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateSubscriptionPlanRequest'
+              $ref: "#/components/schemas/UpdateSubscriptionPlanRequest"
       responses:
-        '200':
+        "200":
           description: Plan updated
           content:
             application/json:
@@ -364,7 +364,7 @@ paths:
                     type: string
                     example: Plan updated
                   data:
-                    $ref: '#/components/schemas/SubscriptionPlan'
+                    $ref: "#/components/schemas/SubscriptionPlan"
       security:
         - apiKey: []
       tags:
@@ -378,7 +378,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Plan deleted
           content:
             application/json:
@@ -394,8 +394,8 @@ paths:
                   data:
                     example: null
                     nullable: true
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "404":
+          $ref: "#/components/responses/NotFound"
       security:
         - apiKey: []
       tags:
@@ -409,9 +409,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateSubscriptionRequest'
+              $ref: "#/components/schemas/CreateSubscriptionRequest"
       responses:
-        '201':
+        "201":
           description: Subscription created
           content:
             application/json:
@@ -432,15 +432,15 @@ paths:
                         nullable: true
                       subscription:
                         allOf:
-                          - $ref: '#/components/schemas/Subscription'
+                          - $ref: "#/components/schemas/Subscription"
                           - type: object
                             properties:
                               plan:
-                                $ref: '#/components/schemas/SubscriptionPlan'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                                $ref: "#/components/schemas/SubscriptionPlan"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -455,7 +455,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Subscription canceled
           content:
             application/json:
@@ -469,9 +469,9 @@ paths:
                     type: string
                     example: Subscription canceled
                   data:
-                    $ref: '#/components/schemas/Subscription'
-        '404':
-          $ref: '#/components/responses/NotFound'
+                    $ref: "#/components/schemas/Subscription"
+        "404":
+          $ref: "#/components/responses/NotFound"
       security:
         - apiKey: []
       tags:
@@ -486,7 +486,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Subscriptions retrieved
           content:
             application/json:
@@ -503,15 +503,15 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - $ref: '#/components/schemas/Subscription'
+                        - $ref: "#/components/schemas/Subscription"
                         - type: object
                           properties:
                             customer:
-                              $ref: '#/components/schemas/Customer'
+                              $ref: "#/components/schemas/Customer"
                             plan:
-                              $ref: '#/components/schemas/SubscriptionPlan'
-        '404':
-          $ref: '#/components/responses/NotFound'
+                              $ref: "#/components/schemas/SubscriptionPlan"
+        "404":
+          $ref: "#/components/responses/NotFound"
       security:
         - apiKey: []
       tags:
@@ -526,7 +526,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Subscription retrieved
           content:
             application/json:
@@ -541,14 +541,14 @@ paths:
                     example: Subscription retrieved
                   data:
                     allOf:
-                      - $ref: '#/components/schemas/Subscription'
+                      - $ref: "#/components/schemas/Subscription"
                       - type: object
                         properties:
                           customer:
-                            $ref: '#/components/schemas/Customer'
+                            $ref: "#/components/schemas/Customer"
                           plan:
                             allOf:
-                              - $ref: '#/components/schemas/SubscriptionPlan'
+                              - $ref: "#/components/schemas/SubscriptionPlan"
                               - type: object
                                 properties:
                                   profile:
@@ -556,8 +556,8 @@ paths:
                                     properties:
                                       businessName:
                                         type: string
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "404":
+          $ref: "#/components/responses/NotFound"
       security:
         - apiKey: []
       tags:
@@ -592,7 +592,7 @@ paths:
               - transfer_address
               - deposit_address
       responses:
-        '200':
+        "200":
           description: Payment intent updated successfully
           content:
             application/json:
@@ -628,8 +628,8 @@ paths:
                         type: string
                         enum:
                           - SUI
-        '400':
-          $ref: '#/components/responses/BadRequest'
+        "400":
+          $ref: "#/components/responses/BadRequest"
       tags:
         - Payments
   /transactions/payment:
@@ -685,7 +685,7 @@ paths:
                 - currency
                 - network
       responses:
-        '201':
+        "201":
           description: Payment created successfully
           content:
             application/json:
@@ -699,11 +699,11 @@ paths:
                     type: string
                     example: Payment created successfully
                   data:
-                    $ref: '#/components/schemas/Payment'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/Payment"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -740,7 +740,7 @@ paths:
                 - paylinkId
                 - customer
       responses:
-        '201':
+        "201":
           description: Paylink payment created successfully
           content:
             application/json:
@@ -802,8 +802,8 @@ paths:
                                 nullable: true
                       checkoutUrl:
                         type: string
-        '400':
-          $ref: '#/components/responses/BadRequest'
+        "400":
+          $ref: "#/components/responses/BadRequest"
       tags:
         - Payments
   /transactions/payment/{paymentId}/verify:
@@ -819,7 +819,7 @@ paths:
             type: string
           example: payment_123
       responses:
-        '200':
+        "200":
           description: Payment verified successfully
           content:
             application/json:
@@ -833,9 +833,9 @@ paths:
                     type: string
                     example: Payment verified successfully
                   data:
-                    $ref: '#/components/schemas/Payment'
-        '400':
-          $ref: '#/components/responses/BadRequest'
+                    $ref: "#/components/schemas/Payment"
+        "400":
+          $ref: "#/components/responses/BadRequest"
       tags:
         - Payments
   /transactions/payment/{paymentId}/verify-transfer:
@@ -859,7 +859,7 @@ paths:
             default: USDC
           example: USDC
       responses:
-        '200':
+        "200":
           description: Payment transfer verified successfully
           content:
             application/json:
@@ -879,8 +879,8 @@ paths:
                         type: string
                       paymentId:
                         type: string
-        '400':
-          $ref: '#/components/responses/BadRequest'
+        "400":
+          $ref: "#/components/responses/BadRequest"
       tags:
         - Payments
   /webhook/register:
@@ -902,7 +902,7 @@ paths:
               required:
                 - url
       responses:
-        '200':
+        "200":
           description: Webhook registered successfully
           content:
             application/json:
@@ -916,11 +916,11 @@ paths:
                     type: string
                     example: Webhook registered successfully
                   data:
-                    $ref: '#/components/schemas/Webhook'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/Webhook"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -930,7 +930,7 @@ paths:
       summary: Get webhook details
       description: Retrieve registered webhook details
       responses:
-        '200':
+        "200":
           description: Webhook details retrieved successfully
           content:
             application/json:
@@ -945,10 +945,10 @@ paths:
                     example: Webhook details retrieved successfully
                   data:
                     allOf:
-                      - $ref: '#/components/schemas/Webhook'
+                      - $ref: "#/components/schemas/Webhook"
                     nullable: true
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -958,7 +958,7 @@ paths:
       summary: Get webhook event types
       description: Get all available webhook event types that can be subscribed to
       responses:
-        '200':
+        "200":
           description: Event types retrieved successfully
           content:
             application/json:
@@ -980,8 +980,8 @@ paths:
                           type: string
                         type:
                           type: string
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1019,7 +1019,7 @@ paths:
             type: string
             format: date-time
       responses:
-        '200':
+        "200":
           description: Webhook deliveries retrieved successfully
           content:
             application/json:
@@ -1035,11 +1035,11 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/WebhookDelivery'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                      $ref: "#/components/schemas/WebhookDelivery"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1062,7 +1062,7 @@ paths:
               required:
                 - event
       responses:
-        '200':
+        "200":
           description: Successfully subscribed to event
           content:
             application/json:
@@ -1078,10 +1078,10 @@ paths:
                   data:
                     example: null
                     nullable: true
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1091,7 +1091,7 @@ paths:
       summary: Get profile
       description: Retrieve business profile information
       responses:
-        '200':
+        "200":
           description: Profile information retrieved successfully
           content:
             application/json:
@@ -1108,9 +1108,9 @@ paths:
                     type: object
                     properties:
                       profile:
-                        $ref: '#/components/schemas/BusinessProfile'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                        $ref: "#/components/schemas/BusinessProfile"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1134,7 +1134,7 @@ paths:
               required:
                 - email
       responses:
-        '200':
+        "200":
           description: Email change requested successfully
           content:
             application/json:
@@ -1149,10 +1149,10 @@ paths:
                     example: Email change initialised - Check new email for OTP
                   data:
                     nullable: true
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1171,11 +1171,11 @@ paths:
                 token:
                   description: OTP token from email
                   type: string
-                  example: '123456'
+                  example: "123456"
               required:
                 - token
       responses:
-        '200':
+        "200":
           description: Email changed successfully
           content:
             application/json:
@@ -1190,10 +1190,10 @@ paths:
                     example: Email changed successfully
                   data:
                     nullable: true
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1219,7 +1219,7 @@ paths:
               required:
                 - mode
       responses:
-        '200':
+        "200":
           description: Mode switched successfully
           content:
             application/json:
@@ -1234,10 +1234,10 @@ paths:
                     example: Mode switched successfully
                   data:
                     type: object
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1247,7 +1247,7 @@ paths:
       summary: Toggle email notifications
       description: Toggle email notification subscription on or off
       responses:
-        '200':
+        "200":
           description: Notification preference updated
           content:
             application/json:
@@ -1259,8 +1259,8 @@ paths:
                   data:
                     example: null
                     nullable: true
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1389,7 +1389,7 @@ paths:
                   - type
                   - interval
       responses:
-        '200':
+        "200":
           description: List of transactions retrieved successfully
           content:
             application/json:
@@ -1408,7 +1408,7 @@ paths:
                       transactions:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Transaction'
+                          $ref: "#/components/schemas/Transaction"
                       count:
                         type: integer
                       nextCursor:
@@ -1416,8 +1416,8 @@ paths:
                         nullable: true
                       hasNextPage:
                         type: boolean
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1434,7 +1434,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Transaction details retrieved successfully
           content:
             application/json:
@@ -1448,11 +1448,11 @@ paths:
                     type: string
                     example: Transaction retrieved successfully
                   data:
-                    $ref: '#/components/schemas/Transaction'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1462,7 +1462,7 @@ paths:
       summary: Get payout balances
       description: Retrieve available balances for crypto and fiat payouts
       responses:
-        '200':
+        "200":
           description: Balance information retrieved successfully
           content:
             application/json:
@@ -1484,8 +1484,8 @@ paths:
                       fiat:
                         description: Fiat balances
                         type: object
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1508,7 +1508,7 @@ paths:
                 walletAddress:
                   description: Wallet address to send crypto to
                   type: string
-                  example: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+                  example: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
                 alias:
                   description: Alias for wallet address
                   type: string
@@ -1529,7 +1529,7 @@ paths:
                 - amount
                 - network
       responses:
-        '201':
+        "201":
           description: Crypto payout created successfully
           content:
             application/json:
@@ -1543,11 +1543,11 @@ paths:
                     type: string
                     example: Crypto payout initiated successfully
                   data:
-                    $ref: '#/components/schemas/Payout'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/Payout"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1564,7 +1564,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Payout retry initiated successfully
           content:
             application/json:
@@ -1580,10 +1580,10 @@ paths:
                   data:
                     description: Payout retry result details
                     type: object
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1610,11 +1610,11 @@ paths:
                 accountIdentifier:
                   description: Bank account number to use when a saved account is not provided
                   type: string
-                  example: '1234567890'
+                  example: "1234567890"
                 bankCode:
                   description: Bank code to use with accountIdentifier when a saved account is not provided
                   type: string
-                  example: '044'
+                  example: "044"
                 save:
                   description: Save the provided bank account for future payouts
                   type: boolean
@@ -1622,7 +1622,7 @@ paths:
               required:
                 - amount
       responses:
-        '201':
+        "201":
           description: Fiat payout created successfully
           content:
             application/json:
@@ -1636,11 +1636,11 @@ paths:
                     type: string
                     example: Fiat payout initiated successfully
                   data:
-                    $ref: '#/components/schemas/Payout'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/Payout"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1666,7 +1666,7 @@ paths:
                 to:
                   description: Recipient wallet address or account
                   type: string
-                  example: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+                  example: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
                 reason:
                   description: Reason for the refund
                   type: string
@@ -1674,7 +1674,7 @@ paths:
               required:
                 - to
       responses:
-        '201':
+        "201":
           description: Refund created successfully
           content:
             application/json:
@@ -1688,11 +1688,11 @@ paths:
                     type: string
                     example: Refund initiated successfully
                   data:
-                    $ref: '#/components/schemas/Refund'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/Refund"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1709,7 +1709,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Refund retry initiated successfully
           content:
             application/json:
@@ -1722,10 +1722,10 @@ paths:
                   message:
                     type: string
                     example: Refund retry initiated successfully
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1735,7 +1735,7 @@ paths:
       summary: Get crypto settlement accounts
       description: Retrieve all cryptocurrency settlement accounts
       responses:
-        '200':
+        "200":
           description: Crypto settlement accounts retrieved successfully
           content:
             application/json:
@@ -1751,9 +1751,9 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/CryptoAccount'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                      $ref: "#/components/schemas/CryptoAccount"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1771,7 +1771,7 @@ paths:
                 walletAddress:
                   description: Cryptocurrency wallet address
                   type: string
-                  example: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+                  example: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
                 alias:
                   description: Alias or name for this wallet
                   type: string
@@ -1787,7 +1787,7 @@ paths:
                 - alias
                 - network
       responses:
-        '201':
+        "201":
           description: Crypto settlement account added successfully
           content:
             application/json:
@@ -1801,11 +1801,11 @@ paths:
                     type: string
                     example: Settlement account added successfully
                   data:
-                    $ref: '#/components/schemas/CryptoAccount'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/CryptoAccount"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1822,7 +1822,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Crypto settlement account deleted successfully
           content:
             application/json:
@@ -1835,10 +1835,10 @@ paths:
                   message:
                     type: string
                     example: Account deleted successfully
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -1848,7 +1848,7 @@ paths:
       summary: Get bank list
       description: Retrieve available banks for fiat settlements. Public endpoint - no authentication required.
       responses:
-        '200':
+        "200":
           description: Bank list retrieved successfully
           content:
             application/json:
@@ -1873,7 +1873,7 @@ paths:
                           example: Access Bank
                         code:
                           type: string
-                          example: '044'
+                          example: "044"
       tags:
         - Fiat
   /resolve-account:
@@ -1894,7 +1894,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Account resolved successfully
           content:
             application/json:
@@ -1913,8 +1913,8 @@ paths:
                       accountName:
                         type: string
                         example: John Doe
-        '400':
-          $ref: '#/components/responses/BadRequest'
+        "400":
+          $ref: "#/components/responses/BadRequest"
       tags:
         - Fiat
   /networks:
@@ -1922,7 +1922,7 @@ paths:
       summary: Get supported networks
       description: Retrieve list of supported blockchain networks. Public endpoint - no authentication required.
       responses:
-        '200':
+        "200":
           description: Supported networks retrieved successfully
           content:
             application/json:
@@ -1938,7 +1938,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Network'
+                      $ref: "#/components/schemas/Network"
       tags:
         - Fiat
   /rates:
@@ -1954,7 +1954,7 @@ paths:
             type: string
           example: NGN
       responses:
-        '200':
+        "200":
           description: Exchange rates retrieved successfully
           content:
             application/json:
@@ -1969,8 +1969,8 @@ paths:
                     example: Rates retrieved successfully
                   data:
                     type: object
-        '400':
-          $ref: '#/components/responses/BadRequest'
+        "400":
+          $ref: "#/components/responses/BadRequest"
       tags:
         - Fiat
   /currencies:
@@ -1978,7 +1978,7 @@ paths:
       summary: Get available currencies
       description: Retrieve list of available fiat currencies. Public endpoint - no authentication required.
       responses:
-        '200':
+        "200":
           description: Currency list retrieved successfully
           content:
             application/json:
@@ -2009,7 +2009,7 @@ paths:
                           example: $
                         isActive:
                           type: boolean
-        '500':
+        "500":
           description: Unable to fetch currencies
           content:
             application/json:
@@ -2029,7 +2029,7 @@ paths:
       summary: Get fiat settlement accounts
       description: Retrieve all fiat (bank) settlement accounts
       responses:
-        '200':
+        "200":
           description: Fiat settlement accounts retrieved successfully
           content:
             application/json:
@@ -2045,9 +2045,9 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/FiatAccount'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                      $ref: "#/components/schemas/FiatAccount"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -2065,11 +2065,11 @@ paths:
                 bankCode:
                   description: Bank code
                   type: string
-                  example: '044'
+                  example: "044"
                 accountNumber:
                   description: Bank account number
                   type: string
-                  example: '1234567890'
+                  example: "1234567890"
                 isPrimary:
                   description: Set as primary settlement account
                   type: boolean
@@ -2078,7 +2078,7 @@ paths:
                 - bankCode
                 - accountNumber
       responses:
-        '201':
+        "201":
           description: Fiat settlement account added successfully
           content:
             application/json:
@@ -2095,11 +2095,11 @@ paths:
                     type: object
                     properties:
                       revolvedAccount:
-                        $ref: '#/components/schemas/FiatAccount'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                        $ref: "#/components/schemas/FiatAccount"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -2116,7 +2116,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Fiat settlement account deleted successfully
           content:
             application/json:
@@ -2132,10 +2132,10 @@ paths:
                   data:
                     example: null
                     nullable: true
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
       security:
         - apiKey: []
       tags:
@@ -2160,13 +2160,13 @@ paths:
                 bankCode:
                   description: Bank code
                   type: string
-                  example: '044'
+                  example: "044"
                 accountNumber:
                   description: Bank account number
                   type: string
-                  example: '1234567890'
+                  example: "1234567890"
       responses:
-        '200':
+        "200":
           description: Fiat settlement account updated successfully
           content:
             application/json:
@@ -2196,10 +2196,10 @@ paths:
                           type: string
                         isPrimary:
                           type: boolean
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -2240,7 +2240,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Customers retrieved successfully
           content:
             application/json:
@@ -2256,9 +2256,9 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Customer'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                      $ref: "#/components/schemas/Customer"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -2291,7 +2291,7 @@ paths:
                 - lastname
                 - email
       responses:
-        '201':
+        "201":
           description: Customer created successfully
           content:
             application/json:
@@ -2305,11 +2305,11 @@ paths:
                     type: string
                     example: Customer created successfully
                   data:
-                    $ref: '#/components/schemas/Customer'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/Customer"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -2326,7 +2326,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Customer details retrieved successfully
           content:
             application/json:
@@ -2340,11 +2340,11 @@ paths:
                     type: string
                     example: Customer retrieved successfully
                   data:
-                    $ref: '#/components/schemas/Customer'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                    $ref: "#/components/schemas/Customer"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
       security:
         - apiKey: []
       tags:
@@ -2360,7 +2360,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Customer deleted successfully
           content:
             application/json:
@@ -2373,10 +2373,10 @@ paths:
                   message:
                     type: string
                     example: Customer deleted successfully
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
       security:
         - apiKey: []
       tags:
@@ -2455,7 +2455,7 @@ components:
         depositAddress:
           description: Wallet address for deposits
           type: string
-          example: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+          example: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
         txRef:
           description: Transaction reference
           type: string
@@ -2480,7 +2480,7 @@ components:
           description: Associated subscription ID if applicable
           type: string
         subscription:
-          $ref: '#/components/schemas/Subscription'
+          $ref: "#/components/schemas/Subscription"
         redirectUrl:
           description: URL to redirect after payment
           type: string
@@ -2638,7 +2638,7 @@ components:
         walletAddress:
           description: Destination wallet address
           type: string
-          example: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+          example: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
         network:
           description: Blockchain network
           type: string
@@ -2648,7 +2648,7 @@ components:
         amount:
           description: Payout amount
           type: string
-          example: '10.50'
+          example: "10.50"
         status:
           description: Payout status
           type: string
@@ -2885,7 +2885,7 @@ components:
         address:
           description: Cryptocurrency wallet address
           type: string
-          example: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+          example: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
         alias:
           description: Wallet alias/name
           type: string
@@ -2914,11 +2914,11 @@ components:
         bankCode:
           description: Bank code
           type: string
-          example: '044'
+          example: "044"
         accountNumber:
           description: Bank account number
           type: string
-          example: '1234567890'
+          example: "1234567890"
         accountHolder:
           description: Account holder name
           type: string
