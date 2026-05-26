@@ -28,7 +28,12 @@ A paylink is a shareable payment URL that allows customers to pay without requir
 </ResponseField>
 
 <ResponseField name="imageBlobIds" type="string[]">
-  Identifiers for images associated with the paylink, such as product or branding visuals.
+  Identifiers for images associated with the paylink, such as product or
+  branding visuals.
+</ResponseField>
+
+<ResponseField name="images" type="PaylinkImage[]">
+  Image metadata returned alongside the paylink in API responses.
 </ResponseField>
 
 <ResponseField name="profileId" type="string">
@@ -44,6 +49,7 @@ A paylink is a shareable payment URL that allows customers to pay without requir
   "mode": "test",
   "amount": 4000,
   "imageBlobIds": ["AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"],
+  "images": [],
   "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
 }
 ```
@@ -98,11 +104,12 @@ formData.append("payload", JSON.stringify({
 formData.append("images", fileBlob, "product.jpg");
 
 const response = await fetch("https://api.orafi.app/paylink/create", {
-  method: "POST",
-  headers: { "x-api-key": "ora_test_your_api_key" },
-  body: formData
+method: "POST",
+headers: { "x-api-key": "ora_test_your_api_key" },
+body: formData
 });
-```
+
+````
 ```python Python
 import requests
 
@@ -114,7 +121,8 @@ response = requests.post(
         "payload": '{"title":"Chidi and Co.","description":"Battery and spare parts","amount":4000}'
     }
 )
-```
+````
+
 ```json 200
 {
   "success": true,
@@ -125,13 +133,13 @@ response = requests.post(
     "description": "Battery and spare parts",
     "mode": "test",
     "amount": 4000,
-    "imageBlobIds": [
-      "AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"
-    ],
+    "imageBlobIds": ["AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"],
+    "images": [],
     "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
   }
 }
 ```
+
 </ResponseExample>
 
 ---
@@ -165,10 +173,11 @@ const response = await fetch(
 import requests
 
 response = requests.get(
-    "https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1",
-    headers={"x-api-key": "ora_test_your_api_key"}
+"https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1",
+headers={"x-api-key": "ora_test_your_api_key"}
 )
-```
+
+````
 ```json 200
 {
   "success": true,
@@ -184,7 +193,8 @@ response = requests.get(
     ]
   }
 }
-```
+````
+
 </ResponseExample>
 
 ---
@@ -211,10 +221,11 @@ const response = await fetch("https://api.orafi.app/paylink", {
 import requests
 
 response = requests.get(
-    "https://api.orafi.app/paylink",
-    headers={"x-api-key": "ora_test_your_api_key"}
+"https://api.orafi.app/paylink",
+headers={"x-api-key": "ora_test_your_api_key"}
 )
-```
+
+````
 ```json 200
 {
   "success": true,
@@ -227,6 +238,7 @@ response = requests.get(
       "mode": "test",
       "amount": 4000,
       "imageBlobIds": ["AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"],
+      "images": [],
       "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
     },
     {
@@ -236,11 +248,13 @@ response = requests.get(
       "mode": "test",
       "amount": 4000,
       "imageBlobIds": ["AaV6MqcXjdhL64Crb_OqGu9qyHXAaYFxDvKzyvOpgnY"],
+      "images": [],
       "profileId": "84a9f045-8a21-4ce4-a7a0-828265c0021b"
     }
   ]
 }
-```
+````
+
 </ResponseExample>
 
 ---
@@ -277,15 +291,17 @@ const response = await fetch(
 import requests
 
 response = requests.delete(
-    "https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1",
-    headers={"x-api-key": "ora_test_your_api_key"}
+"https://api.orafi.app/paylink/cmjwxuwpl0000v8fwozati4d1",
+headers={"x-api-key": "ora_test_your_api_key"}
 )
-```
+
+````
 ```json 200
 {
   "success": true,
   "message": "Paylink deleted successfully",
   "data": null
 }
-```
+````
+
 </ResponseExample>
