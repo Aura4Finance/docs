@@ -1352,22 +1352,6 @@ paths:
               "endDate": "2026-05-25"
             }
           schema:
-            properties:
-              - type:
-                  type:
-                    type: string
-                    enum:
-                      - range
-                  startDate:
-                    type: string
-                    format: date
-                  endDate:
-                    type: string
-                    format: date
-                required:
-                  - type
-                  - startDate
-                  - endDate
             oneOf:
               - type: object
                 properties:
@@ -1388,6 +1372,22 @@ paths:
                 required:
                   - type
                   - interval
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - range
+                  startDate:
+                    type: string
+                    format: date
+                  endDate:
+                    type: string
+                    format: date
+                required:
+                  - type
+                  - startDate
+                  - endDate
       responses:
         "200":
           description: List of transactions retrieved successfully
